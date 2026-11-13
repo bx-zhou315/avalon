@@ -87,6 +87,9 @@ input.code{letter-spacing:8px;text-align:center;font-size:24px}
 /* 页眉 */
 .navbar{display:flex;align-items:center;gap:8px;margin:0 -16px 14px;padding:10px 16px;background:rgba(19,15,41,.75);border-bottom:1px solid var(--line);backdrop-filter:blur(8px);position:sticky;top:0;z-index:4}
 .navbar .logo{font-size:24px}
+.navbar .btn{white-space:nowrap;flex:none}
+.navbar .btn .ico{margin-right:0}
+.navbar .btn .ico+*{margin-left:4px}
 .navbar .mid{flex:1;text-align:center}
 
 /* 首页 */
@@ -907,8 +910,9 @@ function viewGame(){
     <span class="logo">Avalon</span>
     <span class="chip gold"><span class="code">${esc(r.code)}</span></span>
     <div class="grow"></div>
-    <button class="btn small white" data-act="history">${I.scroll}记录</button>
+    <button class="btn small white" data-act="history" aria-label="记录">${I.scroll}</button>
     <button class="btn small white" data-act="rules" aria-label="规则">${I.book}</button>
+    ${me.host ? `<button class="btn small red" data-act="abort" style="box-shadow:none">结束</button>` : ''}
   </div>
   <div class="card">
     <div class="track">${track}</div>
@@ -930,12 +934,14 @@ function endReason(r){
     three_fails: '三个任务失败了，坏人获胜。',
     five_rejects: '连续 5 次组队被否决，坏人获胜。',
     merlin_killed: `刺客指认了 <b>${nm(t)}</b>——正是梅林！坏人反败为胜。`,
-    merlin_safe: `刺客指认了 <b>${nm(t)}</b>，但他不是梅林。好人获胜！`
+    merlin_safe: `刺客指认了 <b>${nm(t)}</b>，但他不是梅林。好人获胜！`,
+    aborted: '房主提前结束了这一局，没有胜负。'
   }[r.end_reason] || '';
 }
 function viewEnd(){
   const r = room(), me = meInfo();
   const goodWin = r.winner === 'good';
+  const aborted = !r.winner;
   const iWon = (me.side === r.winner);
   const ps = players();
   return `
@@ -945,12 +951,16 @@ function viewEnd(){
     <div class="grow"></div>
     <button class="btn small white" data-act="history">${I.scroll}记录</button>
   </div>
-  <div class="endbanner ${goodWin ? 'good' : 'evil'}">
+  ${aborted ? `<div class="endbanner" style="background:var(--card)">
+    <div style="width:130px;margin:0 auto">${ART.servant()}</div>
+    <h1 class="fun">本局已结束</h1>
+    <p style="margin:6px 0 0">${endReason(r)}</p>
+  </div>` : `<div class="endbanner ${goodWin ? 'good' : 'evil'}">
     <div style="width:130px;margin:0 auto">${goodWin ? ART.merlin() : ART.assassin()}</div>
     <h1 class="fun">${goodWin ? '好人胜利！' : '坏人胜利！'}</h1>
     <p style="margin:6px 0 0">${endReason(r)}</p>
     <p class="fun" style="margin:8px 0 0;font-size:20px">${iWon ? I.spark + '你赢了' : '下次加油'}</p>
-  </div>
+  </div>`}
   <div class="card" style="margin-top:16px">
     <h3 class="fun" style="margin-bottom:10px">身份揭晓</h3>
     <div class="rolesgrid">${ps.map(p => {
@@ -1120,12 +1130,17 @@ function testBar(){
     acts.push(`<button data-act="tvote" data-v="0">其他人都投反对</button>`);
   }
   if(r.phase === 'quest') acts.push(`<button data-act="tplay">其他队员都出成功</button>`);
+  if(r.status === 'playing' && hostId()) acts.push(`<button data-act="abort">提前结束本局</button>`);
   if(actor && actor.token !== cur) acts.push(`<button data-act="tswitch" data-t="${actor.token}">切到${actorWhy}（${esc(actor.name)}）</button>`);
   return `<div class="testbar">
     <div class="row"><b class="grow" style="color:#fff">${I.flask}测试模式 · 现在操作的是：${esc(meInfo().name)}</b></div>
     <div class="ids">${S.ids.map(x => `<button class="${x.token === cur ? 'on' : ''}" data-act="tswitch" data-t="${x.token}">${esc(x.name)}</button>`).join('')}</div>
     ${acts.length ? `<div class="acts">${acts.join('')}</div>` : ''}
   </div>`;
+}
+function hostId(){
+  const h = players().find(p => p.host);
+  return h ? S.ids.find(x => x.name === h.name) : null;
 }
 function saveIds(){ store.set('avalon_test_ids', S.ids); }
 function rememberMain(){
@@ -1204,6 +1219,11 @@ const actions = {
     act('avalon_claim_seat', { p_token: S.session.token, p_num: mine === num ? null : num });
   },
   cfno(){ pendingConfirm = null; renderConfirm(); },
+  abort(){
+    const tok = meInfo().host ? S.session.token : (hostId() || {}).token;
+    if(!tok){ toast('只有房主可以提前结束游戏'); return; }
+    ask('提前结束这一局？会公布所有人的身份，然后可以回到大厅重新开始。', '结束本局', () => act('avalon_abort', { p_token: tok }), true);
+  },
   testmode(){ readInputs(); S.test = !S.test; store.set('avalon_test', S.test); render(); toast(S.test ? '测试模式已开启：创建房间后可以加假玩家' : '测试模式已关闭'); },
   taddone(){ tbusy(addFake); },
   taddfill(){ tbusy(async () => { const need = 5 - players().length; for(let i = 0; i < need; i++) await addFake(); }); },
