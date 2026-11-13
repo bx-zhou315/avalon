@@ -101,7 +101,7 @@ input.code{letter-spacing:8px;text-align:center;font-size:24px}
 .table-scene .ch{position:absolute;animation:bob 3.2s ease-in-out infinite}
 .table-scene .ch:nth-child(2){animation-delay:-.6s}.table-scene .ch:nth-child(3){animation-delay:-1.2s}
 .table-scene .ch:nth-child(4){animation-delay:-1.8s}.table-scene .ch:nth-child(5){animation-delay:-2.4s}
-.table-scene .tbl{position:absolute;left:50%;transform:translateX(-50%);top:118px;width:340px;max-width:100%}
+.table-scene .tbl{position:absolute;left:50%;transform:translateX(-50%);top:112px;width:350px;max-width:100%}
 .table-scene .glow{position:absolute;left:50%;top:120px;width:120px;height:80px;transform:translateX(-50%);background:radial-gradient(rgba(255,200,90,.45),transparent 70%);animation:flick 2.4s ease-in-out infinite}
 .flame{transform-box:fill-box;transform-origin:50% 100%;animation:flame 1.2s ease-in-out infinite}
 .eyes{transform-box:fill-box;transform-origin:center;animation:blink 5s infinite}
@@ -112,6 +112,24 @@ input.code{letter-spacing:8px;text-align:center;font-size:24px}
 @keyframes flick{0%,100%{opacity:.85}50%{opacity:.55}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important}}
 .avatars{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
+.avatars button.on svg{animation:tap .35s ease-out}
+@keyframes tap{0%{transform:scale(1)}40%{transform:scale(1.18) translateY(-3px)}100%{transform:scale(1)}}
+.pickstage{position:relative;height:206px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;margin-bottom:10px;overflow:hidden;border-radius:16px;background:radial-gradient(ellipse at 50% 100%,rgba(255,214,107,.18),transparent 65%)}
+.pickstage .spot{position:absolute;bottom:30px;left:50%;width:150px;height:30px;transform:translateX(-50%);border-radius:50%;background:radial-gradient(rgba(255,214,107,.55),rgba(255,214,107,.08) 70%);border:1.5px solid rgba(255,214,107,.6)}
+.pickav{position:relative;z-index:1;width:118px;margin-bottom:12px;transform-origin:50% 92%;animation:idle 2.6s ease-in-out infinite}
+.pickav.pop{animation:hop .8s cubic-bezier(.3,1.4,.5,1),idle 2.6s ease-in-out .8s infinite}
+.pickav .arm-r,.pickav .arm-l{transform-box:fill-box}
+.pickav .arm-r{transform-origin:0% 0%;animation:wave 1.6s ease-in-out infinite}
+.pickav.pop .arm-r{animation:cheer .3s ease-in-out 4 alternate,wave 1.6s ease-in-out 1.2s infinite}
+.pickav.pop .arm-l{transform-origin:100% 0%;animation:cheerl .3s ease-in-out 4 alternate}
+.pickname{position:relative;z-index:1;color:var(--gold);font-size:18px;margin-bottom:4px;text-shadow:0 0 10px rgba(255,214,107,.4)}
+.spk{position:absolute;left:50%;top:48%;width:12px;height:12px;margin:-6px;background:var(--gold);clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%);animation:burst .75s ease-out forwards;z-index:2}
+@keyframes idle{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2deg) translateY(-3px)}}
+@keyframes hop{0%{transform:translateY(0) scale(1)}15%{transform:translateY(0) scale(1.14,.82)}42%{transform:translateY(-38px) scale(.92,1.1) rotate(-10deg)}62%{transform:translateY(-30px) rotate(10deg)}82%{transform:translateY(0) scale(1.12,.88)}100%{transform:translateY(0) scale(1)}}
+@keyframes wave{0%,60%,100%{transform:rotate(0)}70%{transform:rotate(-35deg)}80%{transform:rotate(-10deg)}90%{transform:rotate(-35deg)}}
+@keyframes cheer{from{transform:rotate(0)}to{transform:rotate(-110deg)}}
+@keyframes cheerl{from{transform:rotate(0)}to{transform:rotate(110deg)}}
+@keyframes burst{0%{transform:rotate(var(--a)) translateY(0) scale(.3);opacity:1}100%{transform:rotate(var(--a)) translateY(calc(var(--d) * -1)) scale(1);opacity:0}}
 .avatars button{border:1.5px solid transparent;border-radius:14px;background:rgba(255,255,255,.05);padding:2px}
 .avatars button.on{border-color:var(--gold);background:var(--gold-l);box-shadow:0 0 12px rgba(255,214,107,.35)}
 
@@ -311,13 +329,13 @@ function mouthSvg(kind){
   if(kind === 'open') return `<path d="M54 72 Q60 81 66 72 Z" fill="#E8687A" stroke="#6B3A3A" stroke-width="2" stroke-linejoin="round"/>`;
   return `<path d="M54 73 Q60 79 66 73" fill="none" stroke="#6B3A3A" stroke-width="2.5" stroke-linecap="round"/>`;
 }
-function chibi({body, hairBack='', hairFront='', hat='', front='', extra='', eyes='normal', mouth='smile', blush=true}){
+function chibi({body, skin=SK, hairBack='', hairFront='', hat='', front='', extra='', eyes='normal', mouth='smile', blush=true}){
   return `<svg class="chibi" viewBox="0 -6 120 126" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
     <ellipse cx="60" cy="115" rx="30" ry="4" fill="rgba(59,47,74,.13)"/>
     ${hairBack}
     <path d="M32 115 Q32 86 60 84 Q88 86 88 115 Z" fill="${body}" ${sw}/>
     ${extra}
-    <circle cx="60" cy="58" r="31" fill="${SK}" ${sw}/>
+    <circle cx="60" cy="58" r="31" fill="${skin}" ${sw}/>
     ${hairFront}
     ${eyesSvg(eyes)}
     ${blush ? '<ellipse cx="40" cy="70" rx="5.5" ry="3.2" fill="#FF9DB0" opacity=".6"/><ellipse cx="80" cy="70" rx="5.5" ry="3.2" fill="#FF9DB0" opacity=".6"/>' : ''}
@@ -430,65 +448,98 @@ const ICON = {
   crown: `<svg viewBox="0 0 40 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M4 26 L3 8 L13 16 L20 4 L27 16 L37 8 L36 26Z" fill="#FFC23D" stroke="${INK}" stroke-width="3" stroke-linejoin="round"/><circle cx="20" cy="19" r="3" fill="#E5535B" stroke="${INK}" stroke-width="1.5"/></svg>`,
   lady: () => `<svg viewBox="22 14 76 76" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">${ART.lady().replace(/^<svg[^>]*>|<\/svg>$/g, '')}</svg>`
 };
-const HAIRS = ['#8A5A3C','#2E2B3B','#E8B04B','#D9575A','#7A4FB8','#4F7BF0'];
-const BODIES = ['#FFB86B','#7FD1AE','#8FB3FF','#FF9DB0','#C3A6F2','#FFD66B'];
-const ACCS = [0,1,2,3,4,5,3,1,5,2,4,0];
-const curls = () => {
-  let c = '';
-  for(let a = 160; a >= 20; a -= 20){
-    const r = a * Math.PI / 180;
-    c += `<circle cx="${(60 + 27 * Math.cos(r)).toFixed(1)}" cy="${(57 - 27 * Math.sin(r)).toFixed(1)}" r="10" fill="#6B4A2E" ${sw}/>`;
-  }
-  return `<path d="M30 56 Q30 30 60 30 Q90 30 90 56 Q86 42 60 42 Q34 42 30 56Z" fill="#6B4A2E"/>` + c;
+/* ---------- 玩家形象：发型 × 服饰 × 配饰 ---------- */
+const SKINS = ['#FFE1C8', '#F7CDA6', '#DDA77C', '#A9714B'];
+const darken = (hex, k = .78) => '#' + [1,3,5].map(i => Math.round(parseInt(hex.slice(i, i+2), 16) * k).toString(16).padStart(2, '0')).join('');
+const HAIR = {
+  bowl:  c => ({ front: bowlHair(c) }),
+  side:  c => ({ front: `<path d="M29 57 Q27 25 62 25 Q93 27 91 57 Q88 40 76 37 Q58 39 44 33 Q36 41 29 57Z" fill="${c}" ${sw}/>` }),
+  short: c => ({ front: `<path d="M30 52 Q29 26 60 26 Q91 26 90 52 Q84 38 70 37 Q62 42 52 37 Q38 38 30 52Z" fill="${c}" ${sw}/>` }),
+  spiky: c => ({ front: `<path d="M29 58 Q27 38 34 31 L28 19 L42 26 L43 11 L54 23 L60 6 L66 23 L77 11 L78 26 L92 19 L86 31 Q93 38 91 58 Q86 46 60 44 Q34 46 29 58Z" fill="${c}" ${sw}/>` }),
+  long:  c => ({ back: `<path d="M27 58 Q23 100 31 110 L89 110 Q97 100 93 58 Q93 25 60 25 Q27 25 27 58Z" fill="${c}" ${sw}/>`,
+                 front: `<path d="M29 61 Q30 29 60 28 Q90 29 91 61 Q85 42 63 39 L60 46 L57 39 Q35 42 29 61Z" fill="${c}" ${sw}/>` }),
+  wavy:  c => ({ back: `<path d="M27 58 Q22 80 28 92 Q22 102 32 110 Q46 104 60 110 Q74 104 88 110 Q98 102 92 92 Q98 80 93 58 Q93 25 60 25 Q27 25 27 58Z" fill="${c}" ${sw}/>`,
+                 front: `<path d="M29 60 Q28 28 60 27 Q92 28 91 56 Q78 36 56 42 Q40 46 29 60Z" fill="${c}" ${sw}/>` }),
+  bob:   c => ({ back: `<path d="M26 60 Q24 86 34 90 L86 90 Q96 86 94 60 Q94 26 60 26 Q26 26 26 60Z" fill="${c}" ${sw}/>`,
+                 front: `<path d="M29 54 Q30 27 60 27 Q90 27 91 54 Q76 46 60 47 Q44 46 29 54Z" fill="${c}" ${sw}/>` }),
+  buns:  c => ({ back: `<circle cx="32" cy="31" r="12" fill="${c}" ${sw}/><circle cx="88" cy="31" r="12" fill="${c}" ${sw}/>`, front: bowlHair(c) }),
+  twin:  c => ({ back: `<path d="M32 44 Q10 58 16 96 Q26 84 34 64Z" fill="${c}" ${sw}/><path d="M88 44 Q110 58 104 96 Q94 84 86 64Z" fill="${c}" ${sw}/>
+                 <circle cx="31" cy="44" r="4" fill="#FF7A99" ${sw}/><circle cx="89" cy="44" r="4" fill="#FF7A99" ${sw}/>`, front: bowlHair(c) }),
+  pony:  c => ({ back: `<path d="M82 38 Q112 46 104 92 Q96 76 84 62Z" fill="${c}" ${sw}/>`, front: bowlHair(c) }),
+  curly: c => {
+    let k = '';
+    for(let a = 160; a >= 20; a -= 20){
+      const r = a * Math.PI / 180;
+      k += `<circle cx="${(60 + 27 * Math.cos(r)).toFixed(1)}" cy="${(57 - 27 * Math.sin(r)).toFixed(1)}" r="10" fill="${c}" ${sw}/>`;
+    }
+    return { front: `<path d="M30 56 Q30 30 60 30 Q90 30 90 56 Q86 42 60 42 Q34 42 30 56Z" fill="${c}"/>` + k };
+  },
+  afro:  c => ({ back: `<circle cx="60" cy="40" r="36" fill="${c}" ${sw}/>`, front: `<path d="M30 54 Q34 36 60 36 Q86 36 90 54 Q74 44 60 46 Q46 44 30 54Z" fill="${c}"/>` })
 };
-const AVATARS_EXTRA = [
-  // 丸子头 · 粉发 · 猫咪嘴
-  () => chibi({ body:'#FFD66B',
-    hairBack:`<circle cx="32" cy="31" r="12" fill="#FF8FB1" ${sw}/><circle cx="88" cy="31" r="12" fill="#FF8FB1" ${sw}/>
-      <path d="M26 24 Q32 18 38 24 M82 24 Q88 18 94 24" fill="none" stroke="#FFD1DE" stroke-width="2.5" stroke-linecap="round"/>`,
-    hairFront: bowlHair('#FF8FB1'), mouth:'cat' }),
-  // 刺猬头 · 运动发带
-  () => chibi({ body:'#7FD1AE',
-    hairFront:`<path d="M29 58 Q27 38 34 31 L28 19 L42 26 L43 11 L54 23 L60 6 L66 23 L77 11 L78 26 L92 19 L86 31 Q93 38 91 58 Q86 46 60 44 Q34 46 29 58Z" fill="#F28C38" ${sw}/>
-      <path d="M30 47 Q60 37 90 47 L90 54 Q60 44 30 54Z" fill="#E5535B" ${sw}/>`,
-    extra:`<path d="M48 92 L60 100 L72 92" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>`,
-    mouth:'grin' }),
-  // 黑长直 · 星星发卡 · 眨眼
-  () => chibi({ body:'#C3A6F2',
-    hairBack:`<path d="M27 58 Q23 100 31 110 L89 110 Q97 100 93 58 Q93 25 60 25 Q27 25 27 58Z" fill="#2E2B3B" ${sw}/>`,
-    hairFront:`<path d="M29 61 Q30 29 60 28 Q90 29 91 61 Q85 42 63 39 L60 46 L57 39 Q35 42 29 61Z" fill="#2E2B3B" ${sw}/>`,
-    hat: star(80, 40, 7, '#FFD66B'), eyes:'wink', mouth:'smile' }),
-  // 卷卷头 · 小雀斑
-  () => chibi({ body:'#FF9DB0', hairFront: curls(),
-    front:`<g fill="#C98B5E"><circle cx="38" cy="66" r="1.4"/><circle cx="42" cy="69" r="1.4"/><circle cx="37" cy="71" r="1.4"/><circle cx="82" cy="66" r="1.4"/><circle cx="78" cy="69" r="1.4"/><circle cx="83" cy="71" r="1.4"/></g>`,
-    eyes:'happy', mouth:'open', blush:false }),
-  // 大胡子大叔 · 侧分头 · 领结
-  () => chibi({ body:'#8FB3FF',
-    hairFront:`<path d="M29 57 Q27 25 62 25 Q93 27 91 57 Q88 40 76 37 Q58 39 44 33 Q36 41 29 57Z" fill="#4A4A5A" ${sw}/>`,
-    extra:`<path d="M60 92 L49 86 L49 98Z M60 92 L71 86 L71 98Z" fill="#E5535B" ${sw}/><circle cx="60" cy="92" r="3" fill="#E5535B" ${sw}/>`,
-    front:`<path d="M46 72 Q53 64 60 70 Q67 64 74 72 Q67 76 60 73 Q53 76 46 72Z" fill="#6B4A2E" ${sw}/>
-      <path d="M56 79 Q60 82 64 79" fill="none" stroke="#6B3A3A" stroke-width="2.2" stroke-linecap="round"/>`,
-    mouth:'none' }),
-  // 马尾辫 · 粉色耳机
-  () => chibi({ body:'#FFB86B',
-    hairBack:`<path d="M82 38 Q112 46 104 92 Q96 76 84 62Z" fill="#2FA4A0" ${sw}/>`,
-    hairFront: bowlHair('#2FA4A0'),
-    hat:`<path d="M28 58 Q27 16 60 16 Q93 16 92 58" fill="none" stroke="${INK}" stroke-width="7.5" stroke-linecap="round"/>
-      <path d="M28 58 Q27 16 60 16 Q93 16 92 58" fill="none" stroke="#FF7A99" stroke-width="3.5" stroke-linecap="round"/>
-      <rect x="19" y="50" width="15" height="21" rx="7" fill="#FF7A99" ${sw}/><rect x="86" y="50" width="15" height="21" rx="7" fill="#FF7A99" ${sw}/>`,
-    mouth:'smile' })
+const OUTFIT = {
+  tee:      (c) => ({ extra: `<path d="M50 86 Q60 93 70 86" fill="none" stroke="${darken(c)}" stroke-width="2.5" stroke-linecap="round"/>` }),
+  hoodie:   (c) => ({ extra: `<path d="M38 88 Q60 100 82 88 Q80 96 60 99 Q40 96 38 88Z" fill="${darken(c)}" ${sw}/><path d="M54 98 V108 M66 98 V108" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/><circle cx="54" cy="109" r="2" fill="#fff"/><circle cx="66" cy="109" r="2" fill="#fff"/>` }),
+  overalls: (c, c2 = '#4F7BF0') => ({ extra: `<path d="M44 115 V98 H76 V115Z" fill="${c2}" ${sw}/><path d="M44 98 L40 88 M76 98 L80 88" stroke="${c2}" stroke-width="5" stroke-linecap="round"/><circle cx="48" cy="102" r="2.2" fill="#FFD66B"/><circle cx="72" cy="102" r="2.2" fill="#FFD66B"/><rect x="53" y="104" width="14" height="7" rx="2" fill="${darken(c2)}"/>` }),
+  sweater:  (c, c2 = '#fff') => ({ extra: `<path d="M36 100 H84 M35 108 H85" stroke="${c2}" stroke-width="4"/><path d="M48 86 Q60 92 72 86" fill="none" stroke="${darken(c)}" stroke-width="4" stroke-linecap="round"/>` }),
+  bowtie:   (c, c2 = '#E5535B') => ({ extra: `<path d="M50 85 L60 93 L70 85" fill="#fff" ${sw}/><path d="M60 93 L51 88 L51 98Z M60 93 L69 88 L69 98Z" fill="${c2}" ${sw}/><circle cx="60" cy="93" r="2.6" fill="${c2}" ${sw}/><circle cx="60" cy="104" r="1.8" fill="${darken(c)}"/><circle cx="60" cy="111" r="1.8" fill="${darken(c)}"/>` }),
+  scarf:    (c, c2 = '#E5535B') => ({ extra: `<path d="M40 88 Q60 98 80 88 L80 94 Q60 104 40 94Z" fill="${c2}" ${sw}/><path d="M68 96 L74 114 L64 114 L62 98Z" fill="${c2}" ${sw}/><path d="M66 110 H72" stroke="#fff" stroke-width="2"/>` }),
+  jacket:   (c, c2 = '#fff') => ({ extra: `<path d="M52 86 L60 115 L68 86Z" fill="${c2}"/><path d="M52 86 L46 100 L54 102 L60 115 M68 86 L74 100 L66 102 L60 115" fill="none" ${sw}/><circle cx="56" cy="108" r="1.8" fill="${INK}"/>` }),
+  frill:    (c) => ({ extra: `<path d="M44 88 Q48 94 52 89 Q56 95 60 89 Q64 95 68 89 Q72 94 76 88" fill="#fff" ${sw}/><circle cx="60" cy="100" r="3" fill="#fff" ${sw}/>` }),
+  track:    (c) => ({ extra: `<path d="M60 86 V115" stroke="${INK}" stroke-width="2"/><path d="M52 86 L60 90 L68 86" fill="#fff" ${sw}/><path d="M37 98 L37 112 M83 98 L83 112" stroke="#fff" stroke-width="3" stroke-linecap="round"/>` }),
+  cape:     (c, c2 = '#E5535B') => ({ back: `<path d="M34 90 Q20 104 18 115 L102 115 Q100 104 86 90Z" fill="${c2}" ${sw}/>`, extra: `<circle cx="47" cy="90" r="3" fill="#FFD66B" ${sw}/><circle cx="73" cy="90" r="3" fill="#FFD66B" ${sw}/>` })
+};
+const ACC = {
+  none: () => ({}),
+  glasses: () => ({ front: `<circle cx="48" cy="62" r="9" fill="rgba(255,255,255,.25)" ${sw}/><circle cx="72" cy="62" r="9" fill="rgba(255,255,255,.25)" ${sw}/><path d="M57 62 H63" ${sw}/>` }),
+  bow: () => ({ hat: `<g transform="translate(84 34)"><path d="M0 0 L-12 -8 L-12 8Z" fill="#FF7A99" ${sw}/><path d="M0 0 L12 -8 L12 8Z" fill="#FF7A99" ${sw}/><circle r="4" fill="#FF9DB0" ${sw}/></g>` }),
+  beanie: (c = '#7FD1AE') => ({ hat: `<path d="M28 46 Q28 16 60 16 Q92 16 92 46Z" fill="${c}" ${sw}/><path d="M40 22 V44 M52 18 V44 M68 18 V44 M80 22 V44" stroke="${darken(c)}" stroke-width="2"/><rect x="26" y="40" width="68" height="10" rx="5" fill="#fff" ${sw}/><circle cx="60" cy="14" r="7" fill="#fff" ${sw}/>` }),
+  cat: (c) => ({ hat: `<path d="M33 40 L33 14 L52 30Z" fill="${c}" ${sw}/><path d="M87 40 L87 14 L68 30Z" fill="${c}" ${sw}/><path d="M37 32 L37 22 L45 29Z" fill="#FF9DB0"/><path d="M83 32 L83 22 L75 29Z" fill="#FF9DB0"/>` }),
+  flower: () => ({ hat: `<g transform="translate(36 36)">${[0,72,144,216,288].map(a=>`<circle cx="${(6*Math.cos(a*Math.PI/180)).toFixed(1)}" cy="${(6*Math.sin(a*Math.PI/180)).toFixed(1)}" r="5" fill="#fff" stroke="${INK}" stroke-width="1.8"/>`).join('')}<circle r="3.5" fill="#FFC23D" stroke="${INK}" stroke-width="1.5"/></g>` }),
+  headband: () => ({ hat: `<path d="M30 47 Q60 37 90 47 L90 54 Q60 44 30 54Z" fill="#E5535B" ${sw}/>` }),
+  star: () => ({ hat: star(80, 40, 7, '#FFD66B') }),
+  phones: () => ({ hat: `<path d="M28 58 Q27 16 60 16 Q93 16 92 58" fill="none" stroke="${INK}" stroke-width="7.5" stroke-linecap="round"/><path d="M28 58 Q27 16 60 16 Q93 16 92 58" fill="none" stroke="#FF7A99" stroke-width="3.5" stroke-linecap="round"/><rect x="19" y="50" width="15" height="21" rx="7" fill="#FF7A99" ${sw}/><rect x="86" y="50" width="15" height="21" rx="7" fill="#FF7A99" ${sw}/>` }),
+  cap: (c = '#E5535B') => ({ hat: `<path d="M28 46 Q28 17 60 17 Q92 17 92 46Z" fill="${c}" ${sw}/><path d="M60 44 Q92 40 104 50 Q86 54 60 50Z" fill="${darken(c)}" ${sw}/><circle cx="60" cy="18" r="3" fill="${darken(c)}"/>` }),
+  freckles: () => ({ front: `<g fill="#C98B5E"><circle cx="38" cy="66" r="1.4"/><circle cx="42" cy="69" r="1.4"/><circle cx="37" cy="71" r="1.4"/><circle cx="82" cy="66" r="1.4"/><circle cx="78" cy="69" r="1.4"/><circle cx="83" cy="71" r="1.4"/></g>` }),
+  stache: () => ({ front: `<path d="M46 72 Q53 64 60 70 Q67 64 74 72 Q67 76 60 73 Q53 76 46 72Z" fill="#6B4A2E" ${sw}/><path d="M56 79 Q60 82 64 79" fill="none" stroke="#6B3A3A" stroke-width="2.2" stroke-linecap="round"/>` })
+};
+const AVATARS = [
+  { n:'阳光少年', skin:0, hair:['bowl','#8A5A3C'], fit:['tee','#FFB86B'], acc:['none'] },
+  { n:'蝴蝶结',   skin:0, hair:['bob','#2E2B3B'], fit:['frill','#FF9DB0'], acc:['bow'], mouth:'cat' },
+  { n:'毛线帽',   skin:1, hair:['short','#E8B04B'], fit:['scarf','#8FB3FF','#E5535B'], acc:['beanie','#7FD1AE'] },
+  { n:'猫耳',     skin:0, hair:['bowl','#D9575A'], fit:['hoodie','#C3A6F2'], acc:['cat','#D9575A'], mouth:'open' },
+  { n:'小花',     skin:2, hair:['wavy','#7A4FB8'], fit:['overalls','#FFD66B','#4F7BF0'], acc:['flower'] },
+  { n:'书生',     skin:0, hair:['side','#3A3550'], fit:['bowtie','#7FD1AE','#E5535B'], acc:['glasses'] },
+  { n:'丸子头',   skin:0, hair:['buns','#FF8FB1'], fit:['tee','#FFD66B'], acc:['none'], mouth:'cat' },
+  { n:'运动健将', skin:1, hair:['spiky','#F28C38'], fit:['track','#7FD1AE'], acc:['headband'], mouth:'grin' },
+  { n:'星星发卡', skin:0, hair:['long','#2E2B3B'], fit:['jacket','#C3A6F2'], acc:['star'], eyes:'wink' },
+  { n:'卷卷',     skin:2, hair:['curly','#6B4A2E'], fit:['sweater','#FF9DB0'], acc:['freckles'], eyes:'happy', mouth:'open', blush:false },
+  { n:'大叔',     skin:1, hair:['side','#4A4A5A'], fit:['bowtie','#8FB3FF','#E5535B'], acc:['stache'], mouth:'none' },
+  { n:'耳机',     skin:0, hair:['pony','#2FA4A0'], fit:['hoodie','#FFB86B'], acc:['phones'] },
+  { n:'棒球小子', skin:3, hair:['short','#2E2B3B'], fit:['tee','#4F7BF0'], acc:['cap','#E5535B'], mouth:'grin' },
+  { n:'双马尾',   skin:0, hair:['twin','#8B5CC9'], fit:['frill','#7FD1D6'], acc:['none'], eyes:'happy' },
+  { n:'爆炸头',   skin:3, hair:['afro','#2E2B3B'], fit:['overalls','#FFB86B','#3DB37A'], acc:['none'], mouth:'open' },
+  { n:'小骑士',   skin:1, hair:['side','#8A5A3C'], fit:['cape','#FFD66B','#E5535B'], acc:['none'] },
+  { n:'酷妹',     skin:2, hair:['bob','#E5535B'], fit:['jacket','#3A3550','#FFD66B'], acc:['none'], eyes:'wink' },
+  { n:'小绅士',   skin:0, hair:['short','#E8B04B'], fit:['jacket','#4F7BF0','#fff'], acc:['glasses'], eyes:'happy' }
 ];
-function avatarSvg(i){
-  i = ((i|0) % 12 + 12) % 12;
-  if(i >= 6) return AVATARS_EXTRA[i - 6]();
-  const hair = HAIRS[i % 6], body = BODIES[(i + 2) % 6], acc = ACCS[i];
-  let hat = '', front = '';
-  if(acc === 1) hat = `<g transform="translate(84 34)"><path d="M0 0 L-12 -8 L-12 8Z" fill="#FF7A99" ${sw}/><path d="M0 0 L12 -8 L12 8Z" fill="#FF7A99" ${sw}/><circle r="4" fill="#FF9DB0" ${sw}/></g>`;
-  if(acc === 2) hat = `<path d="M28 46 Q28 16 60 16 Q92 16 92 46Z" fill="${BODIES[(i+4)%6]}" ${sw}/><rect x="26" y="40" width="68" height="10" rx="5" fill="#fff" ${sw}/><circle cx="60" cy="14" r="7" fill="#fff" ${sw}/>`;
-  if(acc === 3) hat = `<path d="M33 40 L33 14 L52 30Z" fill="${hair}" ${sw}/><path d="M87 40 L87 14 L68 30Z" fill="${hair}" ${sw}/><path d="M37 32 L37 22 L45 29Z" fill="#FF9DB0"/><path d="M83 32 L83 22 L75 29Z" fill="#FF9DB0"/>`;
-  if(acc === 4) hat = `<g transform="translate(36 36)">${[0,72,144,216,288].map(a=>`<circle cx="${(6*Math.cos(a*Math.PI/180)).toFixed(1)}" cy="${(6*Math.sin(a*Math.PI/180)).toFixed(1)}" r="5" fill="#fff" stroke="${INK}" stroke-width="1.8"/>`).join('')}<circle r="3.5" fill="#FFC23D" stroke="${INK}" stroke-width="1.5"/></g>`;
-  if(acc === 5) front = `<circle cx="48" cy="62" r="9" fill="rgba(255,255,255,.25)" ${sw}/><circle cx="72" cy="62" r="9" fill="rgba(255,255,255,.25)" ${sw}/><path d="M57 62 H63" ${sw}/>`;
-  return chibi({ body, hairFront: bowlHair(hair), hat, front, mouth: i % 3 === 1 ? 'open' : 'smile' });
+const AV_N = AVATARS.length;
+function avatarSvg(i, arms){
+  i = ((i|0) % AV_N + AV_N) % AV_N;
+  const a = AVATARS[i];
+  const h = HAIR[a.hair[0]](a.hair[1]);
+  const o = OUTFIT[a.fit[0]](a.fit[1], a.fit[2]);
+  const x = ACC[a.acc[0]](a.acc[1] || a.hair[1]);
+  const body = a.fit[1];
+  const armSvg = arms ? `<g class="arm-l"><path d="M36 94 Q24 100 24 108" fill="none" stroke="${INK}" stroke-width="9" stroke-linecap="round"/><path d="M36 94 Q24 100 24 108" fill="none" stroke="${body}" stroke-width="5" stroke-linecap="round"/><circle cx="24" cy="109" r="4.5" fill="${SKINS[a.skin]}" ${sw}/></g>
+    <g class="arm-r"><path d="M84 94 Q96 100 96 108" fill="none" stroke="${INK}" stroke-width="9" stroke-linecap="round"/><path d="M84 94 Q96 100 96 108" fill="none" stroke="${body}" stroke-width="5" stroke-linecap="round"/><circle cx="96" cy="109" r="4.5" fill="${SKINS[a.skin]}" ${sw}/></g>` : '';
+  return chibi({
+    body, skin: SKINS[a.skin],
+    hairBack: (o.back || '') + (h.back || ''),
+    hairFront: h.front || '',
+    extra: (o.extra || '') + armSvg,
+    hat: x.hat || '', front: x.front || '',
+    eyes: a.eyes || 'normal', mouth: a.mouth || 'smile', blush: a.blush !== false
+  });
 }
 
 /* ---------- 角色 ---------- */
@@ -610,6 +661,39 @@ function render(){
   renderModal();
 }
 
+function roundTable(){
+  const cx = 170, cy = 54, n = 16, R1 = 132, R2 = 33;
+  const pt = a => `${(cx + R1 * Math.cos(a)).toFixed(1)} ${(cy + R2 * Math.sin(a)).toFixed(1)}`;
+  let wedges = '';
+  for(let k = 0; k < n; k++){
+    const a1 = k / n * 2 * Math.PI, a2 = (k + 1) / n * 2 * Math.PI;
+    wedges += `<path d="M${cx} ${cy} L${pt(a1)} A${R1} ${R2} 0 0 1 ${pt(a2)}Z" fill="${k % 2 ? '#2F6B4F' : '#EFE2C0'}"/>`;
+  }
+  return `<svg class="tbl" viewBox="0 0 340 132">
+    <defs>
+      <radialGradient id="tw" cx="50%" cy="30%" r="75%"><stop offset="0" stop-color="#B07A44"/><stop offset="1" stop-color="#6B4426"/></radialGradient>
+      <linearGradient id="te" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#6B4426"/><stop offset="1" stop-color="#3A2210"/></linearGradient>
+      <radialGradient id="tl" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="rgba(255,214,120,.45)"/><stop offset="1" stop-color="rgba(255,214,120,0)"/></radialGradient>
+    </defs>
+    <ellipse cx="170" cy="96" rx="150" ry="22" fill="rgba(0,0,0,.35)"/>
+    <path d="M20 54 V68 A150 38 0 0 0 320 68 V54Z" fill="url(#te)" stroke="#2A170A" stroke-width="1.5"/>
+    <path d="M20 66 A150 38 0 0 0 320 66" fill="none" stroke="#C9A24A" stroke-width="1.5" opacity=".7"/>
+    <ellipse cx="170" cy="54" rx="150" ry="38" fill="url(#tw)" stroke="#E0B45A" stroke-width="3"/>
+    <ellipse cx="170" cy="54" rx="141" ry="35.5" fill="none" stroke="#5A361C" stroke-width="2"/>
+    ${wedges}
+    <ellipse cx="170" cy="54" rx="132" ry="33" fill="none" stroke="#E0B45A" stroke-width="2.5"/>
+    <ellipse cx="170" cy="54" rx="132" ry="33" fill="url(#tl)"/>
+    <ellipse cx="170" cy="54" rx="28" ry="7.5" fill="#E0B45A" stroke="#8A6417" stroke-width="1.5"/>
+    <ellipse cx="170" cy="54" rx="21" ry="5.4" fill="#B8323A"/>
+    <ellipse cx="170" cy="54" rx="12" ry="3.2" fill="#F1E6C8"/>
+    <ellipse cx="170" cy="54" rx="5" ry="1.5" fill="#B8323A"/>
+    <path d="M28 46 A145 34 0 0 1 120 22" fill="none" stroke="rgba(255,240,200,.35)" stroke-width="2" stroke-linecap="round"/>
+    <rect x="165" y="30" width="10" height="22" rx="3" fill="#FFF3D6" stroke="#C9A24A" stroke-width="1"/>
+    <path class="flame" d="M170 17 Q177 27 170 30 Q163 27 170 17Z" fill="#FFB43D"/>
+    <path class="flame" d="M170 22 Q173 27 170 29 Q167 27 170 22Z" fill="#FFF0B0"/>
+  </svg>`;
+}
+
 function viewHome(){
   const me = S.me;
   return `
@@ -621,13 +705,7 @@ function viewHome(){
       ${[['servant',-130,58,84],['percival',-68,22,90],['merlin',0,4,102],['assassin',68,22,90],['morgana',130,58,84]].map(([k, x, y, w]) =>
         `<div class="ch" style="left:calc(50% + ${x}px - ${w/2}px);top:${y}px;width:${w}px">${ART[k]()}</div>`).join('')}
       <div class="glow"></div>
-      <svg class="tbl" viewBox="0 0 340 120">
-        <ellipse cx="170" cy="58" rx="160" ry="44" fill="#6B4426" stroke="#E0B45A" stroke-width="4"/>
-        <ellipse cx="170" cy="52" rx="150" ry="36" fill="#8B5E34"/>
-        <ellipse cx="170" cy="52" rx="110" ry="24" fill="none" stroke="#A9773F" stroke-width="2"/>
-        <rect x="164" y="30" width="12" height="20" rx="3" fill="#FFF3D6"/>
-        <path class="flame" d="M170 18 Q177 28 170 31 Q163 28 170 18Z" fill="#FFB43D"/>
-      </svg>
+      ${roundTable()}
     </div>
   </div>
   <div class="card stack" style="margin-top:16px">
@@ -637,8 +715,14 @@ function viewHome(){
     </div>
     <div>
       <div class="small muted" style="margin-bottom:6px">选一个形象</div>
-      <div class="avatars">${Array.from({length:12}, (_, i) =>
-        `<button data-act="avatar" data-i="${i}" class="${me.avatar === i ? 'on' : ''}" aria-label="形象 ${i+1}">${avatarSvg(i)}</button>`).join('')}</div>
+      <div class="pickstage">
+        <div class="spot"></div>
+        <div class="pickav ${S.justPicked ? 'pop' : ''}">${avatarSvg(me.avatar, true)}</div>
+        ${S.justPicked ? Array.from({length:10}, (_, k) => `<i class="spk" style="--a:${k * 36}deg;--d:${70 + (k % 3) * 14}px;animation-delay:${(k % 2) * .05}s"></i>`).join('') : ''}
+        <div class="pickname fun">${esc(AVATARS[((me.avatar|0) % AV_N + AV_N) % AV_N].n)}</div>
+      </div>
+      <div class="avatars">${Array.from({length: AV_N}, (_, i) =>
+        `<button data-act="avatar" data-i="${i}" class="${me.avatar === i ? 'on' : ''}" aria-label="${AVATARS[i].n}">${avatarSvg(i)}</button>`).join('')}</div>
     </div>
   </div>
   <div class="card stack" style="margin-top:16px">
@@ -651,7 +735,7 @@ function viewHome(){
   </div>
   <div class="center" style="margin-top:14px"><button class="btn ghost" data-act="rules">${I.book}游戏规则</button></div>
   <div class="card" style="margin-top:14px">
-    <div class="toggle" style="border:none;padding:0"><div class="grow"><b>${I.flask}一个人测试</b><div class="small muted">开启后，在房间里可以添加假玩家，并随时切换成任何一个人来操作，一部手机就能走完整局流程。</div></div>
+    <div class="toggle" style="border:none;padding:0"><div class="grow"><b>${I.flask}测试模式</b></div>
     <button class="switch ${S.test ? 'on' : ''}" data-act="testmode" aria-label="测试模式"></button></div>
   </div>`;
 }
@@ -908,7 +992,6 @@ function viewGame(){
   return `
   <div class="navbar">
     <span class="logo">Avalon</span>
-    <span class="chip gold"><span class="code">${esc(r.code)}</span></span>
     <div class="grow"></div>
     <button class="btn small white" data-act="history" aria-label="记录">${I.scroll}</button>
     <button class="btn small white" data-act="rules" aria-label="规则">${I.book}</button>
@@ -947,7 +1030,6 @@ function viewEnd(){
   return `
   <div class="navbar">
     <span class="logo">Avalon</span>
-    <span class="chip gold"><span class="code">${esc(r.code)}</span></span>
     <div class="grow"></div>
     <button class="btn small white" data-act="history">${I.scroll}记录</button>
   </div>
@@ -1151,7 +1233,7 @@ function rememberMain(){
 async function addFake(){
   const used = new Set(players().map(p => p.name).concat(S.ids.map(x => x.name)));
   let k = 1; while(used.has('测试' + k)) k++;
-  const out = await rpc('avalon_join', { p_code: room().code, p_name: '测试' + k, p_avatar: (k * 5) % 12 });
+  const out = await rpc('avalon_join', { p_code: room().code, p_name: '测试' + k, p_avatar: (k * 5) % AV_N });
   S.ids.push({ name: '测试' + k, token: out.token }); saveIds();
 }
 async function others(fn, argsFor){
@@ -1191,7 +1273,7 @@ function enterRoom(out){
   S.state = null; S.sig = '';
 }
 const actions = {
-  avatar(d){ readInputs(); S.me.avatar = +d.i; store.set('avalon_me', S.me); render(); },
+  avatar(d){ readInputs(); S.me.avatar = +d.i; store.set('avalon_me', S.me); S.justPicked = true; render(); S.justPicked = false; },
   create(){
     readInputs();
     if(!S.me.name){ toast('先填一下你的名字'); return; }
@@ -1224,7 +1306,7 @@ const actions = {
     if(!tok){ toast('只有房主可以提前结束游戏'); return; }
     ask('提前结束这一局？会公布所有人的身份，然后可以回到大厅重新开始。', '结束本局', () => act('avalon_abort', { p_token: tok }), true);
   },
-  testmode(){ readInputs(); S.test = !S.test; store.set('avalon_test', S.test); render(); toast(S.test ? '测试模式已开启：创建房间后可以加假玩家' : '测试模式已关闭'); },
+  testmode(){ readInputs(); S.test = !S.test; store.set('avalon_test', S.test); render(); toast(S.test ? '测试模式已开启' : '测试模式已关闭'); },
   taddone(){ tbusy(addFake); },
   taddfill(){ tbusy(async () => { const need = 5 - players().length; for(let i = 0; i < need; i++) await addFake(); }); },
   tseats(){ tbusy(async () => {
