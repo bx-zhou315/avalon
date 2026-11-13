@@ -1,0 +1,1084 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#FFF4E4">
+<title>Avalon</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zhi+Mang+Xing&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FFF4E4; --bg2:#FFE9CC; --card:#FFFFFF; --ink:#3B2F4A; --ink2:#7A6B88; --line:#3B2F4A;
+  --good:#4F7BF0; --good-l:#E3EBFF; --evil:#E5535B; --evil-l:#FFE2E3; --gold:#FFC23D; --gold-l:#FFF1CC;
+  --green:#3DB37A; --green-l:#DDF5E8; --muted:#EFE5D7;
+  --r:20px; --shadow:0 4px 0 rgba(59,47,74,.9);
+  --hand:"STXingkai","华文行楷","Zhi Mang Xing",cursive;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0}
+body{
+  background:var(--bg);
+  background-image:radial-gradient(circle at 20px 20px, rgba(255,194,61,.18) 3px, transparent 4px);
+  background-size:40px 40px;
+  color:var(--ink);
+  font-family:var(--hand);
+  font-size:18px; line-height:1.5; min-height:100vh;
+  padding-bottom:env(safe-area-inset-bottom);
+}
+.fun{font-family:var(--hand);font-weight:400;letter-spacing:.5px}
+b,strong,.btn,.chip,.seatno,.qt,.seat .no,.roomcode{font-weight:400!important}
+b,strong{color:#5B3FA0}
+.small{font-size:16px}
+#app{max-width:560px;margin:0 auto;padding:16px 16px 110px}
+h1,h2,h3{margin:0}
+button{font:inherit;color:inherit;cursor:pointer}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  border:2.5px solid var(--line);border-radius:16px;background:var(--gold);
+  padding:12px 18px;font-weight:700;font-size:21px;box-shadow:var(--shadow);
+  transition:transform .08s, box-shadow .08s;min-height:52px;
+}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(59,47,74,.9)}
+.btn[disabled]{opacity:.45;pointer-events:none}
+.btn.block{width:100%}
+.btn.blue{background:var(--good);color:#fff}
+.btn.red{background:var(--evil);color:#fff}
+.btn.green{background:var(--green);color:#fff}
+.btn.white{background:#fff}
+.btn.small{min-height:38px;padding:6px 12px;font-size:14px;border-radius:12px;box-shadow:0 3px 0 rgba(59,47,74,.9)}
+.btn.ghost{background:transparent;box-shadow:none;border-color:transparent;text-decoration:underline;min-height:auto;padding:6px}
+.card{background:var(--card);border:2.5px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:16px}
+.stack>*+*{margin-top:14px}
+.row{display:flex;gap:10px;align-items:center}
+.row.wrap{flex-wrap:wrap}
+.grow{flex:1}
+.muted{color:var(--ink2)}
+.center{text-align:center}
+input.field{
+  width:100%;font:inherit;font-size:18px;padding:12px 14px;border:2.5px solid var(--line);
+  border-radius:14px;background:#fff;color:var(--ink);outline:none;
+}
+input.field:focus{border-color:var(--good);box-shadow:0 0 0 4px var(--good-l)}
+input.code{text-transform:uppercase;letter-spacing:8px;text-align:center;font-weight:800;font-size:24px}
+.chip{display:inline-flex;align-items:center;gap:4px;padding:2px 10px;border-radius:999px;border:2px solid var(--line);font-size:15px;font-weight:700;background:#fff;white-space:nowrap}
+.chip.good{background:var(--good-l);color:#2A4FB8}
+.chip.evil{background:var(--evil-l);color:#B32B33}
+.chip.gold{background:var(--gold-l)}
+.chip.green{background:var(--green-l);color:#1F7A4E}
+.chibi{display:block;width:100%;height:auto;overflow:visible}
+
+/* 首页 */
+.hero{text-align:center;padding:8px 0 4px}
+.hero h1{font-size:64px;line-height:1.1;color:var(--ink);text-shadow:3px 3px 0 var(--gold);letter-spacing:2px}
+.hero .sub{color:var(--ink2);margin-top:4px}
+.hero-art{display:flex;justify-content:center;gap:0;margin:10px auto 0;max-width:340px}
+.hero-art>div{width:33%}
+.hero-art>div:nth-child(2){transform:translateY(-8px) scale(1.08)}
+.avatars{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
+.avatars button{border:2.5px solid transparent;border-radius:14px;background:var(--bg);padding:2px}
+.avatars button.on{border-color:var(--line);background:var(--gold-l)}
+
+/* 大厅 */
+.roomcode{font-size:44px;letter-spacing:10px;font-weight:900;text-align:center;line-height:1.1}
+.plist{list-style:none;margin:0;padding:0}
+.plist li{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:2px dashed var(--muted)}
+.plist li:last-child{border-bottom:none}
+.plist .av{width:44px;flex:none}
+.seatno{width:30px;height:30px;flex:none;border-radius:50%;border:2.5px solid var(--line);display:grid;place-items:center;font-weight:800;background:var(--gold-l);font-size:14px}
+.toggle{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:2px dashed var(--muted)}
+.toggle:last-child{border-bottom:none}
+.toggle .av{width:46px;flex:none}
+.switch{width:52px;height:30px;border-radius:999px;border:2.5px solid var(--line);background:var(--muted);position:relative;flex:none;padding:0}
+.switch::after{content:"";position:absolute;top:2px;left:2px;width:21px;height:21px;border-radius:50%;background:#fff;border:2px solid var(--line);transition:left .15s}
+.switch.on{background:var(--green)}
+.switch.on::after{left:24px}
+.switch[disabled]{opacity:.4}
+.comp{display:flex;flex-wrap:wrap;gap:6px}
+
+/* 游戏 */
+.topbar{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.topbar .code{font-weight:800;letter-spacing:2px}
+.track{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.qt{aspect-ratio:1;border-radius:50%;border:2.5px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;background:#fff;position:relative;font-weight:900;font-size:20px}
+.qt small{font-size:12px;font-weight:700;line-height:1}
+.qt.cur{background:var(--gold);box-shadow:0 0 0 4px var(--gold-l)}
+.qt.ok{background:var(--good);color:#fff}
+.qt.bad{background:var(--evil);color:#fff}
+.qt .two{position:absolute;bottom:-8px;background:var(--evil);color:#fff;border:2px solid var(--line);border-radius:8px;font-size:10px;padding:0 4px;line-height:14px}
+.rejects{display:flex;align-items:center;gap:6px;margin-top:14px;font-size:15px;color:var(--ink2)}
+.rejects i{width:16px;height:16px;border-radius:50%;border:2px solid var(--line);display:inline-block;background:#fff}
+.rejects i.on{background:var(--evil)}
+.rejects i.last{border-style:dashed}
+.step{border-width:3px}
+.step .kicker{font-size:15px;font-weight:800;color:var(--ink2);letter-spacing:1px}
+.step h2{font-size:26px;margin:2px 0 6px}
+.step p{margin:0}
+.warn{background:var(--evil-l);border:2px solid var(--evil);border-radius:12px;padding:8px 12px;font-weight:700;color:#A3262E;font-size:14px}
+.tip{background:var(--gold-l);border:2px dashed #E0A41F;border-radius:12px;padding:8px 12px;font-size:14px}
+.seats{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.seat{position:relative;border:2.5px solid var(--line);border-radius:16px;background:#fff;padding:6px 4px 6px;text-align:center;box-shadow:0 3px 0 rgba(59,47,74,.9)}
+.seat .av{width:100%;max-width:64px;margin:0 auto}
+.seat .nm{font-size:15px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.seat .no{position:absolute;top:-8px;left:-6px;width:22px;height:22px;border-radius:50%;background:var(--gold-l);border:2px solid var(--line);font-size:11px;font-weight:900;display:grid;place-items:center}
+.seat .badges{position:absolute;top:-10px;right:-6px;display:flex;gap:2px}
+.seat .badges span{width:24px;height:24px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;background:#fff;font-size:12px}
+.seat.me{background:var(--gold-l)}
+.seat.team{background:var(--good-l);border-color:var(--good)}
+.seat.pick{background:var(--good);color:#fff;transform:translateY(-3px)}
+.seat.pickable{cursor:pointer}
+.seat.dim{opacity:.4}
+.seat.evil{background:var(--evil-l)}
+.seat .st{font-size:13px;font-weight:800;margin-top:2px}
+.seat .st.yes{color:var(--green)}
+.seat .st.wait{color:var(--ink2)}
+.seat .role{font-size:13px;font-weight:800}
+.bigchoice{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.bigchoice .btn{min-height:84px;font-size:22px;flex-direction:column;gap:0}
+.bigchoice .btn small{font-size:12px;font-weight:600;opacity:.9}
+.bigchoice .btn.sel{outline:4px solid var(--gold);outline-offset:3px}
+.qcard{min-height:150px!important;border-radius:18px!important}
+.dots::after{content:"";display:inline-block;width:1.2em;text-align:left;animation:dots 1.2s steps(4) infinite}
+@keyframes dots{0%{content:""}25%{content:"."}50%{content:".."}75%{content:"..."}}
+.mebar{position:fixed;left:0;right:0;bottom:0;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:rgba(255,244,228,.95);border-top:2.5px solid var(--line);backdrop-filter:blur(6px);z-index:5}
+.mebar .in{max-width:560px;margin:0 auto;display:flex;align-items:center;gap:10px}
+.mebar .av{width:46px;flex:none}
+
+/* 弹窗 */
+.mask{position:fixed;inset:0;background:rgba(59,47,74,.55);z-index:20;display:flex;align-items:flex-end;justify-content:center;animation:fade .15s}
+@media (min-width:600px){.mask{align-items:center}}
+.sheet{background:var(--bg);width:100%;max-width:520px;max-height:92vh;overflow:auto;border:3px solid var(--line);border-radius:26px 26px 0 0;padding:20px 18px calc(20px + env(safe-area-inset-bottom));animation:up .2s ease-out}
+@media (min-width:600px){.sheet{border-radius:26px}}
+@keyframes up{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.sheet h2{font-size:26px;text-align:center}
+.flip{perspective:900px;cursor:pointer}
+.flip .inner{display:grid;transition:transform .5s;transform-style:preserve-3d}
+.flip.open .inner{transform:rotateY(180deg)}
+.flip .face{grid-area:1/1;min-height:300px;backface-visibility:hidden;-webkit-backface-visibility:hidden;border:3px solid var(--line);border-radius:22px;padding:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.flip .back{background:repeating-linear-gradient(45deg,#5B4E8C 0 12px,#6A5C9E 12px 24px);color:#fff}
+.flip .back .seal{width:96px;height:96px;border-radius:50%;background:var(--gold);border:3px solid var(--line);display:grid;place-items:center;font-size:44px;color:var(--ink)}
+.flip .front{transform:rotateY(180deg);background:#fff;justify-content:flex-start}
+.flip .front.good{background:linear-gradient(#E3EBFF,#fff 55%)}
+.flip .front.evil{background:linear-gradient(#FFE2E3,#fff 55%)}
+.rolebig{width:150px;margin:0 auto}
+.knows{width:100%;text-align:left;margin-top:8px}
+.knows li{margin:4px 0}
+.qcards{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin:14px 0}
+.qc{width:64px;height:90px;border-radius:12px;border:3px solid var(--line);display:grid;place-items:center;font-weight:900;font-size:16px;animation:pop .35s both}
+.qc.s{background:var(--good);color:#fff}
+.qc.f{background:var(--evil);color:#fff}
+@keyframes pop{from{transform:scale(.3) rotate(-12deg);opacity:0}to{transform:none;opacity:1}}
+.vlist{display:grid;grid-template-columns:1fr 1fr;gap:6px 12px;margin-top:10px}
+.vlist div{display:flex;justify-content:space-between;align-items:center;gap:6px;border-bottom:2px dashed var(--muted);padding:3px 0;font-size:15px}
+.toast{position:fixed;left:50%;top:16px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:14px;z-index:40;font-weight:700;max-width:90vw;text-align:center;animation:up .2s}
+.hist{border-left:3px solid var(--muted);padding-left:12px;margin:8px 0}
+.hist .h{font-weight:800}
+.endbanner{text-align:center;padding:20px 12px;border-radius:24px;border:3px solid var(--line);box-shadow:var(--shadow)}
+.endbanner.good{background:linear-gradient(var(--good-l),#fff)}
+.endbanner.evil{background:linear-gradient(var(--evil-l),#fff)}
+.endbanner h1{font-size:40px}
+.rolesgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:10px}
+.rolesgrid .rc{border:2.5px solid var(--line);border-radius:16px;background:#fff;padding:6px;text-align:center}
+.rolesgrid .rc.good{background:var(--good-l)}
+.rolesgrid .rc.evil{background:var(--evil-l)}
+.rolesgrid .rc .av{width:70px;margin:0 auto}
+.rules h3{margin-top:16px;font-size:18px}
+.rules p,.rules li{font-size:15px}
+.rules table{border-collapse:collapse;width:100%;font-size:13px;margin-top:6px}
+.rules td,.rules th{border:2px solid var(--line);padding:4px;text-align:center;background:#fff}
+.rules th{background:var(--gold-l)}
+.loading{display:grid;place-items:center;min-height:60vh}
+.roomcode,input.code,.topbar .code{font-family:"Arial Rounded MT Bold","Helvetica Neue",Arial,sans-serif!important;font-weight:800!important}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="modal"></div>
+<script>
+'use strict';
+const SB_URL = 'https://usnfsfvarljsogrikcqa.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVzbmZzZnZhcmxqc29ncmlrY3FhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ1ODIxNDEsImV4cCI6MjExMDE1ODE0MX0.S-EwGAkFdCmS-fH04b-rqo4KeSMXAvYqhR3QXSnTJzw';
+const POLL_MS = 1500;
+
+/* ---------- 存储 ---------- */
+const store = {
+  get(k, d){ try{ const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; }catch(e){ return d; } },
+  set(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} },
+  del(k){ try{ localStorage.removeItem(k); }catch(e){} }
+};
+
+/* ---------- 后端 ---------- */
+async function rpc(fn, args){
+  let res;
+  try{
+    res = await fetch(`${SB_URL}/rest/v1/rpc/${fn}`, {
+      method:'POST',
+      headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json'},
+      body:JSON.stringify(args || {})
+    });
+  }catch(e){ throw new Error('连不上服务器，请检查网络'); }
+  const txt = await res.text();
+  let data = null; try{ data = txt ? JSON.parse(txt) : null; }catch(e){}
+  if(!res.ok) throw new Error((data && data.message) || '出错了，请重试');
+  return data;
+}
+
+/* ---------- Q版形象 ---------- */
+const INK = '#3B2F4A', SK = '#FFE1C8';
+const sw = `stroke="${INK}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"`;
+function star(x, y, r, fill){
+  let d = '';
+  for(let i=0;i<10;i++){
+    const a = Math.PI/5*i - Math.PI/2, rr = i%2 ? r*0.45 : r;
+    d += (i?'L':'M') + (x + rr*Math.cos(a)).toFixed(1) + ' ' + (y + rr*Math.sin(a)).toFixed(1);
+  }
+  return `<path d="${d}Z" fill="${fill}" stroke="${INK}" stroke-width="1.5" stroke-linejoin="round"/>`;
+}
+function eyesSvg(kind){
+  if(kind === 'wink') return `<path d="M43 63 Q48 57 53 63" fill="none" stroke="#2B2235" stroke-width="3" stroke-linecap="round"/>
+    <ellipse cx="72" cy="62" rx="4.6" ry="5.6" fill="#2B2235"/><circle cx="73.6" cy="59.6" r="1.7" fill="#fff"/>`;
+  if(kind === 'happy') return `<path d="M43 63 Q48 57 53 63 M67 63 Q72 57 77 63" fill="none" stroke="#2B2235" stroke-width="3" stroke-linecap="round"/>`;
+  const col = kind === 'red' ? '#D9364A' : '#2B2235';
+  const e = `<ellipse cx="48" cy="62" rx="4.6" ry="5.6" fill="${col}"/><ellipse cx="72" cy="62" rx="4.6" ry="5.6" fill="${col}"/>
+    <circle cx="49.6" cy="59.6" r="1.7" fill="#fff"/><circle cx="73.6" cy="59.6" r="1.7" fill="#fff"/>`;
+  const brows = (kind === 'evil' || kind === 'red')
+    ? `<path d="M40 51 L53 55 M80 51 L67 55" stroke="${INK}" stroke-width="3" stroke-linecap="round"/>` : '';
+  return e + brows;
+}
+function mouthSvg(kind){
+  if(kind === 'none') return '';
+  if(kind === 'cat') return `<path d="M53 72 Q56.5 77 60 72 Q63.5 77 67 72" fill="none" stroke="#6B3A3A" stroke-width="2.5" stroke-linecap="round"/>`;
+  if(kind === 'grin') return `<path d="M52 71 Q60 72 68 71 Q66 81 60 81 Q54 81 52 71Z" fill="#fff" stroke="#6B3A3A" stroke-width="2" stroke-linejoin="round"/>`;
+  if(kind === 'smirk') return `<path d="M54 75 Q61 77 67 71" fill="none" stroke="#6B3A3A" stroke-width="2.5" stroke-linecap="round"/>`;
+  if(kind === 'open') return `<path d="M54 72 Q60 81 66 72 Z" fill="#E8687A" stroke="#6B3A3A" stroke-width="2" stroke-linejoin="round"/>`;
+  return `<path d="M54 73 Q60 79 66 73" fill="none" stroke="#6B3A3A" stroke-width="2.5" stroke-linecap="round"/>`;
+}
+function chibi({body, hairBack='', hairFront='', hat='', front='', extra='', eyes='normal', mouth='smile', blush=true}){
+  return `<svg class="chibi" viewBox="0 -6 120 126" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <ellipse cx="60" cy="115" rx="30" ry="4" fill="rgba(59,47,74,.13)"/>
+    ${hairBack}
+    <path d="M32 115 Q32 86 60 84 Q88 86 88 115 Z" fill="${body}" ${sw}/>
+    ${extra}
+    <circle cx="60" cy="58" r="31" fill="${SK}" ${sw}/>
+    ${hairFront}
+    ${eyesSvg(eyes)}
+    ${blush ? '<ellipse cx="40" cy="70" rx="5.5" ry="3.2" fill="#FF9DB0" opacity=".6"/><ellipse cx="80" cy="70" rx="5.5" ry="3.2" fill="#FF9DB0" opacity=".6"/>' : ''}
+    ${mouthSvg(mouth)}
+    ${hat}${front}
+  </svg>`;
+}
+const bowlHair = c => `<path d="M29 58 Q28 26 60 26 Q92 26 91 58 Q86 44 74 42 Q66 50 52 44 Q40 46 29 58Z" fill="${c}" ${sw}/>`;
+const ART = {
+  merlin: () => chibi({
+    body:'#6E80FF',
+    extra: star(60,103,6,'#FFD66B'),
+    hairFront:`<path d="M30 64 Q27 42 38 36 L44 50 Q36 52 34 68Z" fill="#fff" ${sw}/><path d="M90 64 Q93 42 82 36 L76 50 Q84 52 86 68Z" fill="#fff" ${sw}/>
+      <path d="M41 74 Q43 99 60 104 Q77 99 79 74 Q70 81 60 81 Q50 81 41 74Z" fill="#fff" ${sw}/>`,
+    hat:`<path d="M33 34 Q50 14 57 0 Q61 -6 66 1 Q73 17 87 34Z" fill="#6E80FF" ${sw}/>
+      <ellipse cx="60" cy="35" rx="38" ry="8.5" fill="#5466E8" ${sw}/>${star(55,20,5,'#FFD66B')}${star(70,11,3.5,'#FFD66B')}`,
+    mouth:'smile'
+  }),
+  percival: () => chibi({
+    body:'#5B9BF0',
+    extra:`<path d="M60 92 V112 M51 101 H69" stroke="#fff" stroke-width="4" stroke-linecap="round"/>`,
+    hat:`<path d="M27 58 Q26 21 60 20 Q94 21 93 58 L85 58 Q84 36 60 35 Q36 36 35 58Z" fill="#D6DEEC" ${sw}/>
+      <path d="M36 40 Q60 30 84 40" stroke="#A9B6CC" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M60 21 Q61 3 80 0 Q74 11 69 21Z" fill="#F06A6A" ${sw}/>`,
+    mouth:'smile'
+  }),
+  servant: () => chibi({
+    body:'#7FB5F5',
+    hairFront: bowlHair('#8A5A3C'),
+    front:`<g transform="translate(76 88)"><path d="M0 0 H22 V12 Q22 24 11 28 Q0 24 0 12Z" fill="#4F7BF0" ${sw}/><path d="M11 5 V22 M4 12 H18" stroke="#FFD66B" stroke-width="3" stroke-linecap="round"/></g>`,
+    mouth:'open'
+  }),
+  assassin: () => chibi({
+    body:'#3B3652',
+    hairBack:`<path d="M22 74 Q18 16 60 14 Q102 16 98 74 Q96 92 86 96 L34 96 Q24 92 22 74Z" fill="#45405E" ${sw}/>`,
+    hairFront:`<path d="M27 66 Q26 26 60 25 Q94 26 93 66 Q90 44 60 42 Q30 44 27 66Z" fill="#544E70" ${sw}/>
+      <path d="M33 69 Q60 77 87 69 Q86 85 60 89 Q34 85 33 69Z" fill="#2E2A42" ${sw}/>`,
+    front:`<g transform="translate(86 96) rotate(28)"><path d="M-2 0 L-2 -18 L1 -23 L4 -18 L4 0Z" fill="#DDE3EE" stroke="${INK}" stroke-width="2"/><rect x="-7" y="0" width="14" height="4" rx="2" fill="#C58B3C" stroke="${INK}" stroke-width="2"/><rect x="-1.5" y="4" width="5" height="9" rx="2" fill="#6B4A2E" stroke="${INK}" stroke-width="2"/></g>`,
+    eyes:'evil', mouth:'none', blush:false
+  }),
+  morgana: () => chibi({
+    body:'#6A44A8',
+    hairBack:`<path d="M26 60 Q21 101 34 109 L86 109 Q99 101 94 60 Q94 26 60 25 Q26 26 26 60Z" fill="#7A4FB8" ${sw}/>`,
+    hairFront:`<path d="M30 56 Q32 32 60 30 Q88 32 90 56 Q80 44 66 42 Q60 50 50 44 Q38 46 30 56Z" fill="#8B5CC9" ${sw}/>`,
+    hat:`<path d="M38 33 Q44 10 62 3 Q74 -1 83 7 Q71 8 71 14 Q76 24 82 33Z" fill="#5E3B96" ${sw}/>
+      <ellipse cx="60" cy="34" rx="40" ry="8" fill="#4B2F7A" ${sw}/>
+      <path d="M58 16 a6.5 6.5 0 1 0 7 8 a5 5 0 1 1 -7 -8z" fill="#FFD66B" stroke="${INK}" stroke-width="1.5"/>`,
+    eyes:'evil', mouth:'smirk'
+  }),
+  mordred: () => chibi({
+    body:'#8E2F43',
+    hairFront:`<path d="M29 58 Q26 28 60 27 Q94 28 91 58 L84 46 L78 53 L70 42 L62 50 L54 42 L46 53 L40 46 Z" fill="#2E2B3B" ${sw}/>`,
+    hat:`<path d="M38 33 L39 12 L50 24 L60 6 L70 24 L81 12 L82 33Z" fill="#3A3550" stroke="#FFC23D" stroke-width="3" stroke-linejoin="round"/>
+      <circle cx="60" cy="26" r="3.5" fill="#E5535B" stroke="${INK}" stroke-width="1.5"/>`,
+    eyes:'red', mouth:'smirk'
+  }),
+  oberon: () => chibi({
+    body:'#4E6B5A',
+    hairFront:`<path d="M29 58 Q27 27 60 27 Q93 27 91 58 Q84 40 72 46 Q64 36 54 45 Q42 38 29 58Z" fill="#9AA3B5" ${sw}/>
+      <path d="M31 56 Q46 47 60 55 Q74 47 89 56 Q89 71 74 71 Q66 71 60 65 Q54 71 46 71 Q31 71 31 56Z" fill="#EDE7F7" ${sw}/>`,
+    hat:`<path d="M40 32 Q29 17 35 7 Q40 21 49 27Z" fill="#6B5A86" ${sw}/><path d="M80 32 Q91 17 85 7 Q80 21 71 27Z" fill="#6B5A86" ${sw}/>`,
+    eyes:'evil', mouth:'smirk', blush:false
+  }),
+  minion: () => chibi({
+    body:'#C44B4F',
+    hairBack:`<path d="M24 72 Q20 18 60 16 Q100 18 96 72 Q94 90 86 94 L34 94 Q26 90 24 72Z" fill="#D9575A" ${sw}/>`,
+    hairFront:`<path d="M28 64 Q27 27 60 26 Q93 27 92 64 Q89 43 60 41 Q31 43 28 64Z" fill="#E86A6D" ${sw}/>`,
+    hat:`<path d="M38 26 Q32 10 38 4 Q42 15 47 21Z" fill="#FFE1C8" ${sw}/><path d="M82 26 Q88 10 82 4 Q78 15 73 21Z" fill="#FFE1C8" ${sw}/>`,
+    eyes:'evil', mouth:'smirk'
+  }),
+  unknown: () => chibi({ body:'#C9BFD6', hairFront: bowlHair('#9C8FB0'), eyes:'normal', mouth:'smile' })
+};
+const HAIRS = ['#8A5A3C','#2E2B3B','#E8B04B','#D9575A','#7A4FB8','#4F7BF0'];
+const BODIES = ['#FFB86B','#7FD1AE','#8FB3FF','#FF9DB0','#C3A6F2','#FFD66B'];
+const ACCS = [0,1,2,3,4,5,3,1,5,2,4,0];
+const curls = () => {
+  let c = '';
+  for(let a = 160; a >= 20; a -= 20){
+    const r = a * Math.PI / 180;
+    c += `<circle cx="${(60 + 27 * Math.cos(r)).toFixed(1)}" cy="${(57 - 27 * Math.sin(r)).toFixed(1)}" r="10" fill="#6B4A2E" ${sw}/>`;
+  }
+  return `<path d="M30 56 Q30 30 60 30 Q90 30 90 56 Q86 42 60 42 Q34 42 30 56Z" fill="#6B4A2E"/>` + c;
+};
+const AVATARS_EXTRA = [
+  // 丸子头 · 粉发 · 猫咪嘴
+  () => chibi({ body:'#FFD66B',
+    hairBack:`<circle cx="32" cy="31" r="12" fill="#FF8FB1" ${sw}/><circle cx="88" cy="31" r="12" fill="#FF8FB1" ${sw}/>
+      <path d="M26 24 Q32 18 38 24 M82 24 Q88 18 94 24" fill="none" stroke="#FFD1DE" stroke-width="2.5" stroke-linecap="round"/>`,
+    hairFront: bowlHair('#FF8FB1'), mouth:'cat' }),
+  // 刺猬头 · 运动发带
+  () => chibi({ body:'#7FD1AE',
+    hairFront:`<path d="M29 58 Q27 38 34 31 L28 19 L42 26 L43 11 L54 23 L60 6 L66 23 L77 11 L78 26 L92 19 L86 31 Q93 38 91 58 Q86 46 60 44 Q34 46 29 58Z" fill="#F28C38" ${sw}/>
+      <path d="M30 47 Q60 37 90 47 L90 54 Q60 44 30 54Z" fill="#E5535B" ${sw}/>`,
+    extra:`<path d="M48 92 L60 100 L72 92" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>`,
+    mouth:'grin' }),
+  // 黑长直 · 星星发卡 · 眨眼
+  () => chibi({ body:'#C3A6F2',
+    hairBack:`<path d="M27 58 Q23 100 31 110 L89 110 Q97 100 93 58 Q93 25 60 25 Q27 25 27 58Z" fill="#2E2B3B" ${sw}/>`,
+    hairFront:`<path d="M29 61 Q30 29 60 28 Q90 29 91 61 Q85 42 63 39 L60 46 L57 39 Q35 42 29 61Z" fill="#2E2B3B" ${sw}/>`,
+    hat: star(80, 40, 7, '#FFD66B'), eyes:'wink', mouth:'smile' }),
+  // 卷卷头 · 小雀斑
+  () => chibi({ body:'#FF9DB0', hairFront: curls(),
+    front:`<g fill="#C98B5E"><circle cx="38" cy="66" r="1.4"/><circle cx="42" cy="69" r="1.4"/><circle cx="37" cy="71" r="1.4"/><circle cx="82" cy="66" r="1.4"/><circle cx="78" cy="69" r="1.4"/><circle cx="83" cy="71" r="1.4"/></g>`,
+    eyes:'happy', mouth:'open', blush:false }),
+  // 大胡子大叔 · 侧分头 · 领结
+  () => chibi({ body:'#8FB3FF',
+    hairFront:`<path d="M29 57 Q27 25 62 25 Q93 27 91 57 Q88 40 76 37 Q58 39 44 33 Q36 41 29 57Z" fill="#4A4A5A" ${sw}/>`,
+    extra:`<path d="M60 92 L49 86 L49 98Z M60 92 L71 86 L71 98Z" fill="#E5535B" ${sw}/><circle cx="60" cy="92" r="3" fill="#E5535B" ${sw}/>`,
+    front:`<path d="M46 72 Q53 64 60 70 Q67 64 74 72 Q67 76 60 73 Q53 76 46 72Z" fill="#6B4A2E" ${sw}/>
+      <path d="M56 79 Q60 82 64 79" fill="none" stroke="#6B3A3A" stroke-width="2.2" stroke-linecap="round"/>`,
+    mouth:'none' }),
+  // 马尾辫 · 粉色耳机
+  () => chibi({ body:'#FFB86B',
+    hairBack:`<path d="M82 38 Q112 46 104 92 Q96 76 84 62Z" fill="#2FA4A0" ${sw}/>`,
+    hairFront: bowlHair('#2FA4A0'),
+    hat:`<path d="M28 58 Q27 16 60 16 Q93 16 92 58" fill="none" stroke="${INK}" stroke-width="7.5" stroke-linecap="round"/>
+      <path d="M28 58 Q27 16 60 16 Q93 16 92 58" fill="none" stroke="#FF7A99" stroke-width="3.5" stroke-linecap="round"/>
+      <rect x="19" y="50" width="15" height="21" rx="7" fill="#FF7A99" ${sw}/><rect x="86" y="50" width="15" height="21" rx="7" fill="#FF7A99" ${sw}/>`,
+    mouth:'smile' })
+];
+function avatarSvg(i){
+  i = ((i|0) % 12 + 12) % 12;
+  if(i >= 6) return AVATARS_EXTRA[i - 6]();
+  const hair = HAIRS[i % 6], body = BODIES[(i + 2) % 6], acc = ACCS[i];
+  let hat = '', front = '';
+  if(acc === 1) hat = `<g transform="translate(84 34)"><path d="M0 0 L-12 -8 L-12 8Z" fill="#FF7A99" ${sw}/><path d="M0 0 L12 -8 L12 8Z" fill="#FF7A99" ${sw}/><circle r="4" fill="#FF9DB0" ${sw}/></g>`;
+  if(acc === 2) hat = `<path d="M28 46 Q28 16 60 16 Q92 16 92 46Z" fill="${BODIES[(i+4)%6]}" ${sw}/><rect x="26" y="40" width="68" height="10" rx="5" fill="#fff" ${sw}/><circle cx="60" cy="14" r="7" fill="#fff" ${sw}/>`;
+  if(acc === 3) hat = `<path d="M33 40 L33 14 L52 30Z" fill="${hair}" ${sw}/><path d="M87 40 L87 14 L68 30Z" fill="${hair}" ${sw}/><path d="M37 32 L37 22 L45 29Z" fill="#FF9DB0"/><path d="M83 32 L83 22 L75 29Z" fill="#FF9DB0"/>`;
+  if(acc === 4) hat = `<g transform="translate(36 36)">${[0,72,144,216,288].map(a=>`<circle cx="${(6*Math.cos(a*Math.PI/180)).toFixed(1)}" cy="${(6*Math.sin(a*Math.PI/180)).toFixed(1)}" r="5" fill="#fff" stroke="${INK}" stroke-width="1.8"/>`).join('')}<circle r="3.5" fill="#FFC23D" stroke="${INK}" stroke-width="1.5"/></g>`;
+  if(acc === 5) front = `<circle cx="48" cy="62" r="9" fill="rgba(255,255,255,.25)" ${sw}/><circle cx="72" cy="62" r="9" fill="rgba(255,255,255,.25)" ${sw}/><path d="M57 62 H63" ${sw}/>`;
+  return chibi({ body, hairFront: bowlHair(hair), hat, front, mouth: i % 3 === 1 ? 'open' : 'smile' });
+}
+
+/* ---------- 角色 ---------- */
+const ROLES = {
+  merlin:   { name:'梅林', side:'good', desc:'你知道谁是坏人（莫德雷德除外）。用发言和投票暗中引导好人，但千万别暴露自己——好人完成 3 个任务后，刺客还有一次刺杀梅林的机会。' },
+  percival: { name:'派西维尔', side:'good', desc:'你能看到梅林。但如果场上有莫甘娜，她也会出现在你的视野里，你分不清谁是真梅林。找出真梅林，并帮他打掩护。' },
+  servant:  { name:'亚瑟的忠臣', side:'good', desc:'你没有额外信息。仔细观察每个人的组队、投票和任务结果，找出坏人，让 3 个任务成功。' },
+  assassin: { name:'刺客', side:'evil', desc:'你是坏人，认识其他坏人（奥伯伦除外）。如果好人完成了 3 个任务，你要指认谁是梅林——指认正确，坏人反败为胜。' },
+  morgana:  { name:'莫甘娜', side:'evil', desc:'你是坏人，认识其他坏人（奥伯伦除外）。在派西维尔眼中，你和梅林一模一样。假装自己是梅林，把他引错方向。' },
+  mordred:  { name:'莫德雷德', side:'evil', desc:'你是坏人首领，认识其他坏人（奥伯伦除外）。梅林看不到你，大胆伪装成好人吧。' },
+  oberon:   { name:'奥伯伦', side:'evil', desc:'你是坏人，但你不认识其他坏人，他们也不认识你。梅林能看到你。想办法让任务失败，同时找到你的队友。' },
+  minion:   { name:'莫德雷德的爪牙', side:'evil', desc:'你是坏人，认识其他坏人（奥伯伦除外）。隐藏身份，混进任务队伍，让任务失败。' }
+};
+const SIDE_NAME = { good:'好人阵营', evil:'坏人阵营' };
+const EVIL_COUNT = { 5:2, 6:2, 7:3, 8:3, 9:3, 10:4 };
+const TEAM_SIZES = { 5:[2,3,2,3,3], 6:[2,3,4,3,4], 7:[2,3,3,4,4], 8:[3,4,4,5,5], 9:[3,4,4,5,5], 10:[3,4,4,5,5] };
+const REC = {
+  5:{percival:true,morgana:true,mordred:false,oberon:false},
+  6:{percival:true,morgana:true,mordred:false,oberon:false},
+  7:{percival:true,morgana:true,mordred:false,oberon:true},
+  8:{percival:true,morgana:true,mordred:false,oberon:false},
+  9:{percival:true,morgana:true,mordred:true,oberon:false},
+  10:{percival:true,morgana:true,mordred:true,oberon:true}
+};
+
+/* ---------- 状态 ---------- */
+const S = {
+  session: store.get('avalon_session', null),
+  me: store.get('avalon_me', { name:'', avatar: Math.floor(Math.random()*12) }),
+  settings: store.get('avalon_settings', { percival:true, morgana:true, mordred:false, oberon:false, lady:false }),
+  state: null, sig: '', busy: false,
+  pick: [], pickKey: '',
+  modal: null, queue: [],
+  joinCode: ''
+};
+
+/* ---------- 工具 ---------- */
+const $app = document.getElementById('app');
+const $modal = document.getElementById('modal');
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const room = () => S.state && S.state.room;
+const players = () => (S.state && S.state.players) || [];
+const meInfo = () => S.state && S.state.me;
+const P = seat => players().find(p => p.seat === seat);
+const nm = seat => { const p = P(seat); return p ? esc(p.name) : '?'; };
+const names = arr => (arr || []).map(s => `<b>${nm(s)}</b>`).join('、');
+let toastTimer;
+function toast(msg){
+  document.querySelectorAll('.toast').forEach(t => t.remove());
+  const t = document.createElement('div'); t.className = 'toast'; t.textContent = msg;
+  document.body.appendChild(t); clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.remove(), 2800);
+}
+async function act(fn, args, after){
+  if(S.busy) return;
+  S.busy = true; render();
+  try{
+    const out = await rpc(fn, args);
+    if(after) await after(out);
+    await refresh(true);
+  }catch(e){
+    if(e.message === 'NO_PLAYER'){ leaveLocal('房间已经不存在了'); }
+    else toast(e.message);
+  }finally{ S.busy = false; render(); }
+}
+function leaveLocal(msg){
+  S.session = null; S.state = null; S.sig = ''; S.queue = []; S.modal = null;
+  store.del('avalon_session'); if(msg) toast(msg); render();
+}
+
+/* ---------- 轮询 ---------- */
+async function refresh(force){
+  if(!S.session) return;
+  try{
+    const st = await rpc('avalon_state', { p_token: S.session.token });
+    const prev = S.state;
+    S.state = st;
+    detectEvents(prev, st);
+    const sig = JSON.stringify(st);
+    if(force || sig !== S.sig){ S.sig = sig; render(); }
+  }catch(e){
+    if(e.message === 'NO_PLAYER') leaveLocal('房间已经解散了');
+  }
+}
+setInterval(() => { if(!document.hidden && !S.busy) refresh(false); }, POLL_MS);
+document.addEventListener('visibilitychange', () => { if(!document.hidden) refresh(false); });
+
+function detectEvents(prev, st){
+  const r = st.room;
+  const seenKey = `avalon_seen_${r.code}_${r.game_no}`;
+  if(r.status !== 'lobby' && st.me.role && !store.get(seenKey, false)){
+    store.set(seenKey, true);
+    S.queue.push({ type:'night' });
+  }
+  if(prev && prev.room.code === r.code && prev.room.game_no === r.game_no){
+    const pr = prev.room;
+    if(r.history.length > pr.history.length) S.queue.push({ type:'vote', h: r.history[r.history.length-1] });
+    if(r.quest_results.length > pr.quest_results.length) S.queue.push({ type:'quest', q: r.quest_results[r.quest_results.length-1] });
+    if(r.lady_log.length > pr.lady_log.length) S.queue.push({ type:'lady', l: r.lady_log[r.lady_log.length-1] });
+  }
+  if(!S.modal && S.queue.length){ S.modal = S.queue.shift(); }
+}
+function closeModal(){
+  S.modal = S.queue.length ? S.queue.shift() : null;
+  renderModal();
+}
+
+/* ---------- 渲染 ---------- */
+function render(){
+  if(!S.session) $app.innerHTML = viewHome();
+  else if(!S.state) $app.innerHTML = `<div class="loading"><div class="center"><div style="width:110px;margin:0 auto">${ART.merlin()}</div><p class="fun dots">正在进入房间</p></div></div>`;
+  else if(room().status === 'lobby') $app.innerHTML = viewLobby();
+  else $app.innerHTML = viewGame();
+  renderModal();
+}
+
+function viewHome(){
+  const me = S.me;
+  return `
+  <div class="hero">
+    <div class="hero-art"><div>${ART.percival()}</div><div>${ART.merlin()}</div><div>${ART.assassin()}</div></div>
+    <h1 class="fun">Avalon</h1>
+  </div>
+  <div class="card stack" style="margin-top:16px">
+    <div>
+      <label class="small muted" for="nameInput">你的名字</label>
+      <input id="nameInput" class="field" maxlength="12" placeholder="例如：小周" value="${esc(me.name)}" autocomplete="off">
+    </div>
+    <div>
+      <div class="small muted" style="margin-bottom:6px">选一个形象</div>
+      <div class="avatars">${Array.from({length:12}, (_, i) =>
+        `<button data-act="avatar" data-i="${i}" class="${me.avatar === i ? 'on' : ''}" aria-label="形象 ${i+1}">${avatarSvg(i)}</button>`).join('')}</div>
+    </div>
+  </div>
+  <div class="card stack" style="margin-top:16px">
+    <button class="btn block blue" data-act="create" ${S.busy ? 'disabled' : ''}>🏰 创建房间</button>
+    <div class="center muted small">—— 或者加入朋友的房间 ——</div>
+    <div class="row">
+      <input id="codeInput" class="field code grow" maxlength="4" placeholder="房间号" value="${esc(S.joinCode)}" autocomplete="off" autocapitalize="characters">
+      <button class="btn" data-act="join" ${S.busy ? 'disabled' : ''}>加入</button>
+    </div>
+  </div>
+  <div class="center" style="margin-top:14px"><button class="btn ghost" data-act="rules">📖 游戏规则</button></div>`;
+}
+
+function composition(n, s){
+  const ev = EVIL_COUNT[n];
+  if(!ev) return null;
+  const good = ['merlin'], evil = ['assassin'];
+  if(s.percival) good.push('percival');
+  if(s.morgana) evil.push('morgana');
+  if(s.mordred) evil.push('mordred');
+  if(s.oberon) evil.push('oberon');
+  if(evil.length > ev) return { error:`${n} 人局只有 ${ev} 个坏人（含刺客），特殊坏人选多了`, good, evil };
+  while(good.length < n - ev) good.push('servant');
+  while(evil.length < ev) evil.push('minion');
+  return { good, evil };
+}
+function roleChips(list){
+  const counts = {};
+  list.forEach(r => counts[r] = (counts[r] || 0) + 1);
+  return Object.keys(counts).map(r =>
+    `<span class="chip ${ROLES[r].side}">${ROLES[r].name}${counts[r] > 1 ? ' ×' + counts[r] : ''}</span>`).join('');
+}
+
+function viewLobby(){
+  const r = room(), me = meInfo(), ps = players(), n = ps.length, host = me.host, s = S.settings;
+  const comp = composition(n, s);
+  const sizes = TEAM_SIZES[n];
+  const toggles = [
+    ['percival','派西维尔','好人。能看到梅林（和莫甘娜）'],
+    ['morgana','莫甘娜','坏人。在派西维尔眼中伪装成梅林'],
+    ['mordred','莫德雷德','坏人。梅林看不到他'],
+    ['oberon','奥伯伦','坏人。和其他坏人互不认识'],
+  ];
+  return `
+  <div class="topbar">
+    <button class="btn small white" data-act="leave">← 离开</button>
+    <div class="grow"></div>
+    <button class="btn small white" data-act="rules">📖 规则</button>
+  </div>
+  <div class="card center">
+    <div class="small muted">房间号（告诉朋友，打开同一个网页输入）</div>
+    <div class="roomcode fun">${esc(r.code)}</div>
+    <div class="row" style="justify-content:center;margin-top:6px">
+      <button class="btn small white" data-act="share">🔗 分享链接</button>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <div class="row"><h3 class="fun grow">玩家（${n}/10）</h3>${n < 5 ? `<span class="chip gold">还差 ${5-n} 人</span>` : ''}</div>
+    <div class="tip" style="margin:8px 0">${host
+      ? '请按大家<b>实际围坐的顺时针顺序</b>排好座位，队长会按这个顺序轮换。'
+      : '房主会按大家实际围坐的顺时针顺序排座位。'}</div>
+    <ul class="plist">${ps.map((p, i) => `
+      <li>
+        <span class="seatno">${p.seat + 1}</span>
+        <span class="av">${avatarSvg(p.avatar)}</span>
+        <span class="grow"><b>${esc(p.name)}</b>${p.host ? ' <span class="chip gold">房主</span>' : ''}${p.seat === me.seat ? ' <span class="chip">我</span>' : ''}</span>
+        ${host ? `
+          <button class="btn small white" data-act="move" data-i="${i}" data-d="-1" ${i === 0 ? 'disabled' : ''} aria-label="上移">↑</button>
+          <button class="btn small white" data-act="move" data-i="${i}" data-d="1" ${i === n-1 ? 'disabled' : ''} aria-label="下移">↓</button>
+          ${!p.host ? `<button class="btn small white" data-act="kick" data-seat="${p.seat}" aria-label="移出">✕</button>` : ''}` : ''}
+      </li>`).join('')}
+    </ul>
+  </div>
+
+  ${!host ? `<div class="card" style="margin-top:16px"><h3 class="fun">角色配置</h3><p class="small muted" style="margin:6px 0 0">房主正在设置本局角色。开局后可以在「📜 记录」里看到本局有哪些角色。</p></div>` : `<div class="card" style="margin-top:16px">
+    <div class="row"><h3 class="fun grow">角色配置</h3>${host && REC[n] ? `<button class="btn small white" data-act="rec">✨ 按人数推荐</button>` : ''}</div>
+    <div class="toggle"><span class="av">${ART.merlin()}</span><div class="grow"><b>梅林 + 刺客</b><div class="small muted">标准规则必备，固定加入</div></div><span class="chip green">必选</span></div>
+    ${toggles.map(([k, label, d]) => `
+      <div class="toggle"><span class="av">${ART[k]()}</span>
+        <div class="grow"><b>${label}</b><div class="small muted">${d}</div></div>
+        <button class="switch ${s[k] ? 'on' : ''}" data-act="set" data-k="${k}" ${host ? '' : 'disabled'} aria-label="${label}"></button>
+      </div>`).join('')}
+    <div class="toggle"><span class="av" style="font-size:34px;text-align:center">🧜‍♀️</span>
+      <div class="grow"><b>湖中仙女</b><div class="small muted">7 人及以上可用。第 2、3、4 个任务后查验一人阵营</div></div>
+      <button class="switch ${s.lady && n >= 7 ? 'on' : ''}" data-act="set" data-k="lady" ${host && n >= 7 ? '' : 'disabled'} aria-label="湖中仙女"></button>
+    </div>
+    ${comp ? `
+      <div style="margin-top:12px">
+        <div class="small"><b>${n} 人局：</b>好人 ${comp.good.length} 个，坏人 ${comp.evil.length} 个</div>
+        <div class="comp" style="margin-top:6px">${roleChips(comp.good)}${roleChips(comp.evil)}</div>
+        ${comp.error ? `<div class="warn" style="margin-top:8px">${comp.error}</div>` : ''}
+        <div class="small muted" style="margin-top:8px">每轮任务人数：${sizes.map((x, i) => `${x}${i === 3 && n >= 7 ? '（需 2 张失败）' : ''}`).join(' / ')}</div>
+      </div>` : `<div class="small muted" style="margin-top:10px">满 5 人后显示本局角色配置。</div>`}
+  </div>`}
+
+  <div style="margin-top:18px">
+    ${host
+      ? `<button class="btn block green" data-act="start" ${n < 5 || !comp || comp.error || S.busy ? 'disabled' : ''}>开始游戏</button>`
+      : `<div class="card center"><span class="fun dots">等待房主开始游戏</span></div>`}
+  </div>`;
+}
+
+function phaseView(){
+  const r = room(), me = meInfo(), n = r.n, q = r.quest_no, size = r.sizes[q-1];
+  const leader = r.leader, isLeader = me.seat === leader;
+  const needTwo = r.fails_needed[q-1] === 2;
+  if(r.phase === 'team_build'){
+    const lastChance = r.reject_count === 4;
+    if(isLeader){
+      const ok = S.pick.length === size;
+      return `
+        <div class="kicker">第 ${q} 个任务 · 第 ${r.reject_count+1}/5 次组队</div>
+        <h2 class="fun">👑 你是队长，请选 ${size} 名队员</h2>
+        <p>先和大家讨论，然后<b>点下面的座位</b>选人（可以选自己）。已选 ${S.pick.length}/${size}。</p>
+        ${lastChance ? `<div class="warn" style="margin-top:8px">这是第 5 次组队！如果再被否决，坏人直接获胜。</div>` : ''}
+        ${needTwo ? `<div class="tip" style="margin-top:8px">这个任务需要 <b>2 张失败牌</b> 才算失败。</div>` : ''}
+        <button class="btn block blue" style="margin-top:12px" data-act="propose" ${ok && !S.busy ? '' : 'disabled'}>提交队伍，大家投票</button>`;
+    }
+    return `
+      <div class="kicker">第 ${q} 个任务 · 第 ${r.reject_count+1}/5 次组队</div>
+      <h2 class="fun">队长 ${nm(leader)} 正在组队</h2>
+      <p>这个任务需要 <b>${size} 人</b>。大家可以自由讨论、给建议，最终由队长在手机上提交。</p>
+      ${lastChance ? `<div class="warn" style="margin-top:8px">这是第 5 次组队！如果再被否决，坏人直接获胜。</div>` : ''}
+      ${needTwo ? `<div class="tip" style="margin-top:8px">这个任务需要 <b>2 张失败牌</b> 才算失败。</div>` : ''}`;
+  }
+  if(r.phase === 'team_vote'){
+    const voted = players().filter(p => p.voted).length;
+    const mv = me.my_vote;
+    return `
+      <div class="kicker">第 ${q} 个任务 · 第 ${r.reject_count+1}/5 次组队</div>
+      <h2 class="fun">🗳️ 全员投票</h2>
+      <p>队长 ${nm(leader)} 提议的队伍：${names(r.team)}</p>
+      <p class="small muted" style="margin-top:4px">每个人都要投票（包括队长和队员）。超过半数同意才通过，平票算否决。全部投完后同时公开每个人的票。</p>
+      <div class="bigchoice" style="margin-top:12px">
+        <button class="btn green ${mv === true ? 'sel' : ''}" data-act="vote" data-v="1" ${S.busy ? 'disabled' : ''}>👍 同意</button>
+        <button class="btn red ${mv === false ? 'sel' : ''}" data-act="vote" data-v="0" ${S.busy ? 'disabled' : ''}>👎 反对</button>
+      </div>
+      <p class="center small" style="margin-top:10px">${mv == null ? '你还没投票' : `你投了 <b>${mv ? '同意' : '反对'}</b>，所有人投完前可以改`} · 已投 ${voted}/${n}</p>`;
+  }
+  if(r.phase === 'quest'){
+    const inTeam = r.team.includes(me.seat);
+    const played = players().filter(p => p.played).length;
+    if(inTeam && !me.played){
+      const good = me.side === 'good';
+      return `
+        <div class="kicker">第 ${q} 个任务 · 执行任务</div>
+        <h2 class="fun">⚔️ 秘密出任务牌</h2>
+        <p>不要让别人看到你的屏幕。${good ? '你是好人，只能出「成功」。' : '你是坏人，可以选择「成功」或「失败」。'}</p>
+        ${needTwo ? `<div class="tip" style="margin-top:8px">本任务需要 <b>2 张失败牌</b> 才会失败。</div>` : ''}
+        <div class="bigchoice" style="margin-top:12px">
+          <button class="btn blue qcard" data-act="play" data-v="1" ${S.busy ? 'disabled' : ''}>✨ 成功<small>任务成功</small></button>
+          <button class="btn red qcard" data-act="play" data-v="0" ${good || S.busy ? 'disabled' : ''}>💥 失败<small>${good ? '好人不能出' : '破坏任务'}</small></button>
+        </div>`;
+    }
+    return `
+      <div class="kicker">第 ${q} 个任务 · 执行任务</div>
+      <h2 class="fun">队员正在秘密出牌</h2>
+      <p>队员：${names(r.team)}</p>
+      <p style="margin-top:6px">${inTeam ? '你已经出牌了，' : ''}已出 ${played}/${r.team.length}<span class="dots"></span></p>
+      ${needTwo ? `<div class="tip" style="margin-top:8px">本任务需要 <b>2 张失败牌</b> 才会失败。</div>` : ''}`;
+  }
+  if(r.phase === 'lady'){
+    const holder = r.lady_holder;
+    if(me.seat === holder){
+      return `
+        <div class="kicker">湖中仙女</div>
+        <h2 class="fun">🧜‍♀️ 选择一名玩家查验阵营</h2>
+        <p><b>点下面的座位</b>选一个人。只有你会看到他是好人还是坏人。之前拿过湖中仙女的人不能被查验。</p>
+        <p class="small muted" style="margin-top:4px">查验完，湖中仙女交给被查验的人。你可以如实公布结果，也可以撒谎。</p>`;
+    }
+    return `
+      <div class="kicker">湖中仙女</div>
+      <h2 class="fun">🧜‍♀️ ${nm(holder)} 正在查验</h2>
+      <p>湖中仙女持有者正在选择一名玩家查看阵营，请稍等<span class="dots"></span></p>`;
+  }
+  if(r.phase === 'assassin'){
+    if(me.role === 'assassin'){
+      return `
+        <div class="kicker">最后的机会</div>
+        <h2 class="fun">🗡️ 刺客，指认梅林</h2>
+        <p>好人完成了 3 个任务！坏人现在<b>亮明身份</b>，可以一起讨论。由你<b>点下面的座位</b>做最终选择——找到梅林，坏人就赢。</p>`;
+    }
+    return `
+      <div class="kicker">最后的机会</div>
+      <h2 class="fun">🗡️ 刺客正在寻找梅林</h2>
+      <p>好人完成了 3 个任务！坏人（红色座位）现在亮明身份，可以公开讨论谁是梅林，由刺客做最终指认。好人请保持沉默。</p>`;
+  }
+  return '';
+}
+
+function seatView(p){
+  const r = room(), me = meInfo();
+  const isMe = p.seat === me.seat;
+  const badges = [];
+  if(r.leader === p.seat && r.phase !== 'assassin' && r.status === 'playing') badges.push('<span title="队长">👑</span>');
+  if(r.lady_enabled && r.lady_holder === p.seat && r.status === 'playing') badges.push('<span title="湖中仙女">🧜‍♀️</span>');
+  let cls = 'seat', st = '', clickable = false, act = '';
+  const inTeam = r.team.includes(p.seat);
+  if(r.phase === 'team_build' && me.seat === r.leader){
+    clickable = true; act = 'pick';
+    if(S.pick.includes(p.seat)) cls += ' pick';
+  } else if(inTeam){ cls += ' team'; }
+  if(r.phase === 'team_vote') st = p.voted ? '<div class="st yes">已投票</div>' : '<div class="st wait">未投</div>';
+  if(r.phase === 'quest' && inTeam) st = p.played ? '<div class="st yes">已出牌</div>' : '<div class="st wait">出牌中</div>';
+  if(r.phase === 'lady' && me.seat === r.lady_holder){
+    if(p.seat === me.seat || r.lady_previous.includes(p.seat)) cls += ' dim';
+    else { clickable = true; act = 'lady'; }
+  }
+  if(r.phase === 'assassin'){
+    if(p.evil) cls += ' evil';
+    if(p.evil) st = `<div class="st" style="color:var(--evil)">${p.assassin ? '刺客' : '坏人'}</div>`;
+    if(me.role === 'assassin'){
+      if(p.evil || isMe) cls += ' dim'; else { clickable = true; act = 'kill'; }
+    }
+  }
+  if(isMe && !cls.includes('pick')) cls += ' me';
+  if(clickable) cls += ' pickable';
+  return `<div class="${cls}" ${clickable ? `data-act="${act}" data-seat="${p.seat}" role="button"` : ''}>
+    <span class="no">${p.seat + 1}</span>
+    ${badges.length ? `<span class="badges">${badges.join('')}</span>` : ''}
+    <div class="av">${avatarSvg(p.avatar)}</div>
+    <div class="nm">${esc(p.name)}${isMe ? '（我）' : ''}</div>
+    ${st}
+  </div>`;
+}
+
+function viewGame(){
+  const r = room(), me = meInfo();
+  if(r.status === 'ended') return viewEnd();
+  const q = r.quest_no;
+  const keyNow = `${r.game_no}-${q}-${r.reject_count}`;
+  if(S.pickKey !== keyNow){ S.pick = []; S.pickKey = keyNow; }
+  const track = r.sizes.map((sz, i) => {
+    const res = r.quest_results[i];
+    const cls = res ? (res.success ? 'ok' : 'bad') : (i + 1 === q && r.phase !== 'assassin' ? 'cur' : '');
+    return `<div class="qt ${cls}">${res ? (res.success ? '✓' : '✗') : sz}<small>${res ? (res.success ? '成功' : res.fails + '张败') : '第' + (i+1) + '轮'}</small>${r.fails_needed[i] === 2 ? '<span class="two">需2败</span>' : ''}</div>`;
+  }).join('');
+  const rejects = Array.from({length:5}, (_, i) => `<i class="${i < r.reject_count ? 'on' : ''} ${i === 4 ? 'last' : ''}"></i>`).join('');
+  const role = ROLES[me.role] || null;
+  return `
+  <div class="topbar">
+    <span class="chip gold">房间 <span class="code">${esc(r.code)}</span></span>
+    <span class="chip">${r.n} 人局</span>
+    <div class="grow"></div>
+    <button class="btn small white" data-act="history">📜 记录</button>
+    <button class="btn small white" data-act="rules">📖</button>
+  </div>
+  <div class="card">
+    <div class="track">${track}</div>
+    <div class="rejects">连续否决 ${rejects} <span>${r.reject_count}/5</span></div>
+  </div>
+  <div class="card step" style="margin-top:16px">${phaseView()}</div>
+  <div class="seats" style="margin-top:20px">${players().map(seatView).join('')}</div>
+  <p class="small muted center" style="margin-top:12px">座位按顺时针排列，队长按 1→2→3… 的顺序轮换。</p>
+  <div class="mebar"><div class="in">
+    <span class="av">${avatarSvg(players().find(p => p.seat === me.seat)?.avatar)}</span>
+    <div class="grow"><b>${esc(me.name)}</b><div class="small muted">${me.seat + 1} 号位</div></div>
+    <button class="btn blue" data-act="myrole">🔒 查看我的身份</button>
+  </div></div>`;
+}
+
+function endReason(r){
+  const t = r.assassin_target;
+  return {
+    three_fails: '三个任务失败了，坏人获胜。',
+    five_rejects: '连续 5 次组队被否决，坏人获胜。',
+    merlin_killed: `刺客指认了 <b>${nm(t)}</b>——正是梅林！坏人反败为胜。`,
+    merlin_safe: `刺客指认了 <b>${nm(t)}</b>，但他不是梅林。好人获胜！`
+  }[r.end_reason] || '';
+}
+function viewEnd(){
+  const r = room(), me = meInfo();
+  const goodWin = r.winner === 'good';
+  const iWon = (me.side === r.winner);
+  const ps = players();
+  return `
+  <div class="topbar">
+    <span class="chip gold">房间 <span class="code">${esc(r.code)}</span></span>
+    <div class="grow"></div>
+    <button class="btn small white" data-act="history">📜 记录</button>
+  </div>
+  <div class="endbanner ${goodWin ? 'good' : 'evil'}">
+    <div style="width:130px;margin:0 auto">${goodWin ? ART.merlin() : ART.assassin()}</div>
+    <h1 class="fun">${goodWin ? '好人胜利！' : '坏人胜利！'}</h1>
+    <p style="margin:6px 0 0">${endReason(r)}</p>
+    <p class="fun" style="margin:8px 0 0;font-size:20px">${iWon ? '🎉 你赢了' : '下次加油'}</p>
+  </div>
+  <div class="card" style="margin-top:16px">
+    <h3 class="fun" style="margin-bottom:10px">身份揭晓</h3>
+    <div class="rolesgrid">${ps.map(p => {
+      const ro = ROLES[p.role] || { name:'?', side:'' };
+      return `<div class="rc ${ro.side}"><div class="av">${(ART[p.role] || ART.unknown)()}</div>
+        <div class="small"><b>${esc(p.name)}</b></div><div class="small">${ro.name}</div>
+        ${r.assassin_target === p.seat ? '<span class="chip evil">被刺杀</span>' : ''}</div>`;
+    }).join('')}</div>
+  </div>
+  <div class="stack" style="margin-top:18px">
+    ${me.host ? `<button class="btn block green" data-act="again" ${S.busy ? 'disabled' : ''}>🔁 再来一局（回到大厅）</button>`
+              : `<div class="card center"><span class="fun dots">等房主开始下一局</span></div>`}
+    <button class="btn block white" data-act="leave">离开房间</button>
+  </div>`;
+}
+
+/* ---------- 弹窗 ---------- */
+function roleCard(open){
+  const me = meInfo(), ro = ROLES[me.role];
+  if(!ro) return '';
+  const sees = me.sees || [];
+  let know = '';
+  if(me.role === 'merlin') know = sees.length
+    ? `<p><b>你看到的坏人：</b></p><ul class="knows">${sees.map(x => `<li><span class="chip evil">坏人</span> ${x.seat+1} 号 ${nm(x.seat)}</li>`).join('')}</ul>${room().settings.mordred ? '<p class="small muted">莫德雷德也在场，但你看不到他。</p>' : ''}`
+    : '<p>你没看到任何坏人（他们都藏起来了）。</p>';
+  else if(me.role === 'percival') know = `<p><b>${sees.length > 1 ? '其中一位是梅林，另一位是莫甘娜：' : '梅林是：'}</b></p><ul class="knows">${sees.map(x => `<li><span class="chip good">${sees.length > 1 ? '梅林？' : '梅林'}</span> ${x.seat+1} 号 ${nm(x.seat)}</li>`).join('')}</ul>`;
+  else if(me.role === 'oberon') know = '<p>你看不到其他坏人，他们也看不到你。</p>';
+  else if(ro.side === 'evil') know = sees.length
+    ? `<p><b>你的坏人同伴：</b></p><ul class="knows">${sees.map(x => `<li><span class="chip evil">同伴</span> ${x.seat+1} 号 ${nm(x.seat)}</li>`).join('')}</ul>${room().settings.oberon ? '<p class="small muted">奥伯伦也是坏人，但你不知道是谁。</p>' : ''}`
+    : '<p>你没有看到同伴。</p>';
+  else know = '<p class="muted">你没有额外信息，靠观察和推理吧。</p>';
+  return `
+  <div class="flip ${open ? 'open' : ''}" data-act="flip">
+    <div class="inner">
+      <div class="face back"><div class="seal fun">?</div><p class="fun" style="font-size:22px;margin:16px 0 4px">点击翻开身份</p><p class="small" style="margin:0;opacity:.85">确认旁边没人偷看</p></div>
+      <div class="face front ${ro.side}">
+        <div class="rolebig">${ART[me.role]()}</div>
+        <h2 class="fun" style="margin-top:4px">${ro.name}</h2>
+        <span class="chip ${ro.side}">${SIDE_NAME[ro.side]}</span>
+        <p class="small" style="margin:10px 0 0">${ro.desc}</p>
+        <div style="width:100%;text-align:left;margin-top:8px;border-top:2px dashed var(--muted);padding-top:8px">${know}</div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderModal(){
+  const m = S.modal;
+  if(!m){ $modal.innerHTML = ''; return; }
+  let body = '';
+  const r = room();
+  if(m.type === 'night'){
+    body = `
+      <h2 class="fun">🌙 第 ${r.game_no} 局开始</h2>
+      <p class="center small muted" style="margin:6px 0 12px">不用闭眼！每个人在自己手机上偷偷看身份，看完点「我记住了」。</p>
+      ${roleCard(!!m.open)}
+      <button class="btn block blue" style="margin-top:16px" data-act="close">我记住了</button>`;
+  } else if(m.type === 'myrole'){
+    body = `${roleCard(!!m.open)}<button class="btn block white" style="margin-top:16px" data-act="close">收起</button>`;
+  } else if(m.type === 'vote'){
+    const h = m.h, yes = h.votes.filter(Boolean).length;
+    body = `
+      <h2 class="fun">${h.approved ? '✅ 组队通过' : '❌ 组队被否决'}</h2>
+      <p class="center">第 ${h.quest} 个任务 · 队长 ${nm(h.leader)}<br>队伍：${names(h.team)}</p>
+      <p class="center"><span class="chip green">同意 ${yes}</span> <span class="chip evil">反对 ${h.votes.length - yes}</span></p>
+      <div class="vlist">${h.votes.map((v, i) => `<div><span>${i+1}. ${nm(i)}</span><span class="chip ${v ? 'green' : 'evil'}">${v ? '同意' : '反对'}</span></div>`).join('')}</div>
+      <p class="center small muted" style="margin-top:10px">${h.approved ? '队员接下来秘密出任务牌。' : (r.status === 'ended' ? '' : `队长交给下一位：${nm(r.leader)}。`)}</p>
+      <button class="btn block" style="margin-top:12px" data-act="close">知道了</button>`;
+  } else if(m.type === 'quest'){
+    const q = m.q, total = q.team.length;
+    const cards = Array.from({length: total}, (_, i) => i < total - q.fails ? 's' : 'f');
+    for(let i = cards.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); [cards[i], cards[j]] = [cards[j], cards[i]]; }
+    body = `
+      <h2 class="fun">${q.success ? '✨ 任务成功' : '💥 任务失败'}</h2>
+      <p class="center">第 ${q.quest} 个任务 · 队员：${names(q.team)}</p>
+      <div class="qcards">${cards.map((c, i) => `<div class="qc ${c}" style="animation-delay:${i*0.25}s">${c === 's' ? '成功' : '失败'}</div>`).join('')}</div>
+      <p class="center"><b>${q.fails}</b> 张失败牌${q.needed === 2 ? '（本任务需 2 张才失败）' : ''}</p>
+      <button class="btn block" style="margin-top:12px" data-act="close">知道了</button>`;
+  } else if(m.type === 'lady'){
+    const l = m.l, mine = l.loyalty;
+    body = mine ? `
+      <h2 class="fun">🧜‍♀️ 查验结果</h2>
+      <div style="width:120px;margin:10px auto">${avatarSvg(P(l.target)?.avatar)}</div>
+      <p class="center" style="font-size:20px"><b>${nm(l.target)}</b> 是 <span class="chip ${mine}" style="font-size:18px">${mine === 'good' ? '好人' : '坏人'}</span></p>
+      <p class="center small muted">只有你知道这个结果。你可以如实告诉大家，也可以撒谎。湖中仙女已经交给 ${nm(l.target)}。</p>
+      <button class="btn block" style="margin-top:12px" data-act="close">知道了</button>`
+    : `
+      <h2 class="fun">🧜‍♀️ 湖中仙女</h2>
+      <p class="center">${nm(l.holder)} 查验了 ${nm(l.target)} 的阵营。<br>只有 ${nm(l.holder)} 知道结果，听听他怎么说吧。</p>
+      <button class="btn block" style="margin-top:12px" data-act="close">知道了</button>`;
+  } else if(m.type === 'history'){
+    const rl = (r.settings && r.settings.roles) || [];
+    body = `<h2 class="fun">📜 本局记录</h2>${rl.length ? `<p class="center small" style="margin:6px 0 0">本局角色</p><div class="comp" style="justify-content:center;margin-top:4px">${roleChips(rl)}</div>` : ''}${historyHtml()}<button class="btn block white" style="margin-top:12px" data-act="close">关闭</button>`;
+  } else if(m.type === 'rules'){
+    body = rulesHtml() + `<button class="btn block white" style="margin-top:12px" data-act="close">关闭</button>`;
+  }
+  $modal.innerHTML = `<div class="mask" data-act="maskclose"><div class="sheet" role="dialog" aria-modal="true">${body}</div></div>`;
+}
+
+function historyHtml(){
+  const r = room();
+  if(!r || !r.history.length) return '<p class="center muted">还没有记录。</p>';
+  let html = '';
+  for(let q = 1; q <= 5; q++){
+    const hs = r.history.filter(h => h.quest === q);
+    if(!hs.length) continue;
+    const res = r.quest_results.find(x => x.quest === q);
+    html += `<div class="card" style="margin-top:10px;padding:12px"><div class="row"><b class="fun grow">第 ${q} 个任务</b>${res ? `<span class="chip ${res.success ? 'good' : 'evil'}">${res.success ? '成功' : '失败'} · ${res.fails} 张败</span>` : ''}</div>`;
+    hs.forEach(h => {
+      html += `<div class="hist"><div class="h">${h.attempt}. 队长 ${nm(h.leader)} → ${names(h.team)} <span class="chip ${h.approved ? 'green' : 'evil'}">${h.approved ? '通过' : '否决'}</span></div>
+        <div class="small muted">同意：${h.votes.map((v, i) => v ? nm(i) : null).filter(Boolean).join('、') || '无'}<br>反对：${h.votes.map((v, i) => !v ? nm(i) : null).filter(Boolean).join('、') || '无'}</div></div>`;
+    });
+    r.lady_log.filter(l => l.quest === q).forEach(l => {
+      html += `<div class="hist small">🧜‍♀️ ${nm(l.holder)} 查验了 ${nm(l.target)}${l.loyalty ? `：<span class="chip ${l.loyalty}">${l.loyalty === 'good' ? '好人' : '坏人'}</span>` : ''}</div>`;
+    });
+    html += `</div>`;
+  }
+  return html;
+}
+
+function rulesHtml(){
+  return `<div class="rules">
+  <h2 class="fun">📖 Avalon 规则</h2>
+  <h3>目标</h3>
+  <p><b>好人</b>：让 3 个任务成功，并且在最后不让刺客找到梅林。<br><b>坏人</b>：让 3 个任务失败；或者连续 5 次组队都被否决；或者在好人成功 3 次后由刺客刺中梅林。</p>
+  <h3>人数配置</h3>
+  <table><tr><th>人数</th><th>好人</th><th>坏人</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr>
+  ${[5,6,7,8,9,10].map(n => `<tr><td>${n}</td><td>${n - EVIL_COUNT[n]}</td><td>${EVIL_COUNT[n]}</td>${TEAM_SIZES[n].map((x, i) => `<td>${x}${i === 3 && n >= 7 ? '*' : ''}</td>`).join('')}</tr>`).join('')}
+  </table>
+  <p class="small">1–5 列是每个任务需要的人数。* 7 人及以上的第 4 个任务需要 <b>2 张失败牌</b> 才算失败。</p>
+  <h3>开局（夜晚）</h3>
+  <ul><li>梅林看到所有坏人，但看不到莫德雷德。</li><li>派西维尔看到梅林和莫甘娜，分不清谁是谁。</li><li>坏人互相认识，但不认识奥伯伦；奥伯伦也不认识他们。</li></ul>
+  <p class="small muted">这个 App 里不用闭眼：每个人在自己手机上看身份即可。</p>
+  <h3>每一轮</h3>
+  <ol>
+    <li><b>组队</b>：队长挑出本轮人数的队员（可以选自己）。大家可以讨论。</li>
+    <li><b>投票</b>：所有人同时投同意或反对，公开每个人的票。<b>超过半数</b>同意才通过，平票算否决。</li>
+    <li>否决：队长顺时针交给下一位，重新组队。<b>连续 5 次否决，坏人直接获胜。</b></li>
+    <li><b>执行任务</b>：通过后，队员秘密出牌。好人只能出成功，坏人可以出成功或失败。只公布失败牌数量，不公布是谁出的。</li>
+    <li>有 1 张失败牌任务就失败（*的任务需要 2 张）。之后队长顺时针轮换，进入下一个任务。</li>
+  </ol>
+  <h3>刺杀梅林</h3>
+  <p>好人完成 3 个任务后，坏人亮明身份一起讨论，由刺客指认一名好人。指中梅林，坏人获胜；否则好人获胜。</p>
+  <h3>湖中仙女（可选，7 人以上）</h3>
+  <p>开局交给第一位队长右手边的玩家。第 2、3、4 个任务结束后，持有者查验一名玩家的阵营（只有他知道结果，可以说谎），然后把湖中仙女交给被查验者。拿过湖中仙女的人不能被查验。</p>
+  </div>`;
+}
+
+/* ---------- 交互 ---------- */
+function readInputs(){
+  const ni = document.getElementById('nameInput'); if(ni) S.me.name = ni.value.trim();
+  const ci = document.getElementById('codeInput'); if(ci) S.joinCode = ci.value.trim().toUpperCase();
+  store.set('avalon_me', S.me);
+}
+function enterRoom(out){
+  S.session = { code: out.code, token: out.token };
+  store.set('avalon_session', S.session);
+  S.state = null; S.sig = '';
+}
+const actions = {
+  avatar(d){ readInputs(); S.me.avatar = +d.i; store.set('avalon_me', S.me); render(); },
+  create(){
+    readInputs();
+    if(!S.me.name){ toast('先填一下你的名字'); return; }
+    act('avalon_create_room', { p_name: S.me.name, p_avatar: S.me.avatar }, enterRoom);
+  },
+  join(){
+    readInputs();
+    if(!S.me.name){ toast('先填一下你的名字'); return; }
+    if(S.joinCode.length !== 4){ toast('房间号是 4 个字母'); return; }
+    act('avalon_join', { p_code: S.joinCode, p_name: S.me.name, p_avatar: S.me.avatar }, enterRoom);
+  },
+  leave(){
+    const me = meInfo();
+    const isEnded = room() && room().status === 'ended';
+    const msg = me && me.host && !isEnded ? '你是房主，离开会解散整个房间。确定吗？' : '确定离开房间吗？';
+    if(!confirm(msg)) return;
+    if(me && room().status !== 'playing'){
+      act('avalon_remove', { p_token: S.session.token, p_seat: me.seat }, () => leaveLocal());
+    } else leaveLocal();
+  },
+  share(){
+    const url = location.origin + location.pathname + '?room=' + room().code;
+    if(navigator.share) navigator.share({ title:'Avalon', text:`来玩 Avalon！房间号 ${room().code}`, url }).catch(() => {});
+    else if(navigator.clipboard) navigator.clipboard.writeText(url).then(() => toast('链接已复制'), () => toast(url));
+    else toast(url);
+  },
+  move(d){
+    const ps = players(), i = +d.i, j = i + (+d.d);
+    if(j < 0 || j >= ps.length) return;
+    const order = ps.map(p => p.seat);
+    [order[i], order[j]] = [order[j], order[i]];
+    act('avalon_reorder', { p_token: S.session.token, p_order: order });
+  },
+  kick(d){
+    const p = P(+d.seat);
+    if(!confirm(`把 ${p ? p.name : ''} 移出房间？`)) return;
+    act('avalon_remove', { p_token: S.session.token, p_seat: +d.seat });
+  },
+  set(d){
+    if(!meInfo().host) return;
+    S.settings[d.k] = !S.settings[d.k];
+    store.set('avalon_settings', S.settings); render();
+  },
+  rec(){
+    const n = players().length;
+    if(!REC[n]) return;
+    Object.assign(S.settings, REC[n]);
+    store.set('avalon_settings', S.settings); render();
+    toast('已按 ' + n + ' 人局常用配置设置');
+  },
+  start(){
+    act('avalon_start', { p_token: S.session.token, p_settings: { ...S.settings, lady: S.settings.lady && players().length >= 7 } });
+  },
+  pick(d){
+    const seat = +d.seat, size = room().sizes[room().quest_no - 1];
+    const i = S.pick.indexOf(seat);
+    if(i >= 0) S.pick.splice(i, 1);
+    else if(S.pick.length < size) S.pick.push(seat);
+    else toast(`这个任务只需要 ${size} 人，先取消一个`);
+    render();
+  },
+  propose(){ act('avalon_propose', { p_token: S.session.token, p_team: S.pick }); },
+  vote(d){ act('avalon_vote', { p_token: S.session.token, p_approve: d.v === '1' }); },
+  play(d){
+    if(d.v === '0' && !confirm('确定出「失败」牌吗？')) return;
+    act('avalon_quest_play', { p_token: S.session.token, p_success: d.v === '1' });
+  },
+  lady(d){
+    if(!confirm(`查验 ${nm(+d.seat).replace(/<[^>]+>/g,'')} 的阵营？`)) return;
+    act('avalon_lady', { p_token: S.session.token, p_target: +d.seat });
+  },
+  kill(d){
+    const p = P(+d.seat);
+    if(!confirm(`最终指认 ${p ? p.name : ''} 是梅林？这个决定不能撤回。`)) return;
+    act('avalon_assassinate', { p_token: S.session.token, p_target: +d.seat });
+  },
+  again(){ act('avalon_back_to_lobby', { p_token: S.session.token }); },
+  myrole(){ S.modal = { type:'myrole', open:false }; renderModal(); },
+  flip(){ if(S.modal){ S.modal.open = !S.modal.open; const f = document.querySelector('.flip'); if(f) f.classList.toggle('open', S.modal.open); } },
+  history(){ S.modal = { type:'history' }; renderModal(); },
+  rules(){ readInputs(); S.modal = { type:'rules' }; renderModal(); },
+  close(){ closeModal(); },
+  maskclose(d, el, e){ if(e.target === el && S.modal && S.modal.type !== 'night') closeModal(); }
+};
+document.addEventListener('click', e => {
+  const el = e.target.closest('[data-act]');
+  if(!el) return;
+  const fn = actions[el.dataset.act];
+  if(fn) fn(el.dataset, el, e);
+});
+document.addEventListener('keydown', e => {
+  if(e.key !== 'Enter') return;
+  if(e.target.id === 'codeInput') actions.join();
+});
+document.addEventListener('input', e => {
+  if(e.target.id === 'codeInput') e.target.value = e.target.value.toUpperCase().replace(/[^A-Z]/g, '');
+});
+
+/* ---------- 启动 ---------- */
+(function init(){
+  const q = new URLSearchParams(location.search).get('room');
+  if(q) S.joinCode = q.toUpperCase().slice(0, 4);
+  render();
+  if(S.session) refresh(true);
+})();
+</script>
+</body>
+</html>
