@@ -24,6 +24,7 @@
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0}
+html{background:#130F29}
 body{
   background:radial-gradient(ellipse at 50% -10%,#3A2F72 0%,#1B1638 55%,#130F29 100%) fixed;
   color:var(--ink);font-family:var(--hand);font-size:18px;line-height:1.5;min-height:100vh;
@@ -76,6 +77,9 @@ input.field{
 input.field::placeholder{color:#7D72A8}
 input.field:focus{border-color:var(--gold);box-shadow:0 0 0 4px rgba(255,214,107,.18)}
 input.code{letter-spacing:8px;text-align:center;font-size:24px}
+.codebox{display:flex;gap:8px;min-width:0}
+.digit{flex:1;min-width:0;width:100%;height:56px;text-align:center;font-family:"Cinzel",Georgia,serif;font-size:28px;font-weight:700;color:var(--gold);background:#120E28;border:1.5px solid #6B5FA0;border-radius:12px;outline:none;caret-color:var(--gold);padding:0}
+.digit:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(255,214,107,.2)}
 .chip{display:inline-flex;align-items:center;gap:4px;padding:1px 10px;border-radius:999px;border:1.5px solid var(--line);font-size:15px;background:rgba(255,255,255,.06);white-space:nowrap;color:var(--ink)}
 .chip.good{background:var(--good-l);color:#C2D3FF;border-color:#5B86F5}
 .chip.evil{background:var(--evil-l);color:#FFB8BC;border-color:#E5535B}
@@ -97,15 +101,19 @@ input.code{letter-spacing:8px;text-align:center;font-size:24px}
 .hero .logo{font-size:60px;margin-top:34px}
 .hero .moon{position:absolute;top:6px;right:8px;width:46px;filter:drop-shadow(0 0 12px rgba(255,226,154,.6))}
 .divider{display:block;width:200px;margin:8px auto 0}
-.table-scene{position:relative;height:250px;margin-top:4px}
-.table-scene .ch{position:absolute;animation:bob 3.2s ease-in-out infinite}
-.table-scene .ch:nth-child(2){animation-delay:-.6s}.table-scene .ch:nth-child(3){animation-delay:-1.2s}
-.table-scene .ch:nth-child(4){animation-delay:-1.8s}.table-scene .ch:nth-child(5){animation-delay:-2.4s}
-.table-scene .tbl{position:absolute;left:50%;transform:translateX(-50%);top:112px;width:350px;max-width:100%}
-.table-scene .glow{position:absolute;left:50%;top:120px;width:120px;height:80px;transform:translateX(-50%);background:radial-gradient(rgba(255,200,90,.45),transparent 70%);animation:flick 2.4s ease-in-out infinite}
+.scene{display:block;width:calc(100% + 32px);margin:-58px -16px 0;position:relative;z-index:0}
+.hero .logo,.hero .divider,.hero .moon{position:relative;z-index:1}
+.hero .moon{position:absolute}
+.scene .ch{animation:bob 3.4s ease-in-out infinite}
+.ripple{animation:ripple 5s ease-in-out infinite alternate}
+.ripple.r2{animation-duration:3s}
+@keyframes ripple{from{transform:translateX(-7px);opacity:.6}to{transform:translateX(7px);opacity:1}}
+.win{animation:winfl 4s ease-in-out infinite}
+@keyframes winfl{0%,100%{opacity:1}45%{opacity:.75}55%{opacity:.95}}
+.halo{animation:flick 2.4s ease-in-out infinite}
 .flame{transform-box:fill-box;transform-origin:50% 100%;animation:flame 1.2s ease-in-out infinite}
 .eyes{transform-box:fill-box;transform-origin:center;animation:blink 5s infinite}
-.table-scene .ch:nth-child(2) .eyes{animation-delay:-1.5s}.table-scene .ch:nth-child(4) .eyes{animation-delay:-3s}
+.scene .ch:nth-child(2n) .eyes{animation-delay:-2.2s}
 @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
 @keyframes blink{0%,93%,100%{transform:scaleY(1)}96%{transform:scaleY(.1)}}
 @keyframes flame{0%,100%{transform:scale(1,1)}50%{transform:scale(.9,1.12)}}
@@ -114,7 +122,7 @@ input.code{letter-spacing:8px;text-align:center;font-size:24px}
 .avatars{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
 .avatars button.on svg{animation:tap .35s ease-out}
 @keyframes tap{0%{transform:scale(1)}40%{transform:scale(1.18) translateY(-3px)}100%{transform:scale(1)}}
-.pickstage{position:relative;height:206px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;margin-bottom:10px;overflow:hidden;border-radius:16px;background:radial-gradient(ellipse at 50% 100%,rgba(255,214,107,.18),transparent 65%)}
+.pickstage{position:relative;height:184px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;margin-bottom:10px;overflow:hidden;border-radius:16px;background:radial-gradient(ellipse at 50% 100%,rgba(255,214,107,.18),transparent 65%)}
 .pickstage .spot{position:absolute;bottom:30px;left:50%;width:150px;height:30px;transform:translateX(-50%);border-radius:50%;background:radial-gradient(rgba(255,214,107,.55),rgba(255,214,107,.08) 70%);border:1.5px solid rgba(255,214,107,.6)}
 .pickav{position:relative;z-index:1;width:118px;margin-bottom:12px;transform-origin:50% 92%;animation:idle 2.6s ease-in-out infinite}
 .pickav.pop{animation:hop .8s cubic-bezier(.3,1.4,.5,1),idle 2.6s ease-in-out .8s infinite}
@@ -661,36 +669,82 @@ function render(){
   renderModal();
 }
 
-function roundTable(){
-  const cx = 170, cy = 54, n = 16, R1 = 132, R2 = 33;
+const CASTLE_SVG = (fill, stroke, win, cls = '') => `
+  <g fill="${fill}" stroke="${stroke}" stroke-width="2" stroke-linejoin="round">
+    <rect x="140" y="70" width="110" height="90"/><rect x="118" y="44" width="34" height="116"/><rect x="238" y="44" width="34" height="116"/><rect x="176" y="22" width="38" height="138"/>
+    <path d="M114 44 L135 10 L156 44Z M234 44 L255 10 L276 44Z M172 22 L195 -14 L218 22Z"/>
+    <path d="M140 70 h10 v-8 h10 v8 h10 v-8 h10 v8 h10 M210 70 h10 v-8 h10 v8 h10 v-8 h10 v8"/>
+  </g>
+  <g fill="${win}" class="${cls}"><rect x="130" y="70" width="8" height="12" rx="4"/><rect x="250" y="70" width="8" height="12" rx="4"/><rect x="190" y="44" width="10" height="16" rx="5"/><rect x="186" y="110" width="18" height="50" rx="9"/><rect x="156" y="96" width="8" height="12" rx="4"/><rect x="226" y="96" width="8" height="12" rx="4"/></g>`;
+
+function coverScene(){
+  const TX = 200, TY = 292, RX = 178, RY = 44;
+  const edgeY = x => TY - RY * Math.sqrt(Math.max(0, 1 - ((x - TX) / RX) ** 2));
+  const seats = [['servant', 74, 74], ['percival', 137, 80], ['merlin', 200, 88], ['assassin', 263, 80], ['morgana', 326, 74]];
+  const place = (svg, x, y, w, h) => svg.replace('<svg class="chibi"', `<svg x="${x}" y="${y}" width="${w}" height="${h}" class="chibi"`);
+  let chairs = '', chars = '';
+  seats.forEach(([k, x, w], i) => {
+    const h = w * 126 / 120, e = edgeY(x), y = e - 0.84 * h, cw = w * 0.8, top = y + 0.16 * h - 12;
+    chairs += `<path d="M${x - cw/2} ${e + 4} V${top + 16} Q${x - cw/2} ${top} ${x} ${top - 6} Q${x + cw/2} ${top} ${x + cw/2} ${top + 16} V${e + 4}Z" fill="url(#chair)" stroke="#C9A24A" stroke-width="1.5"/>
+      <path d="M${x - cw/2 + 6} ${e} V${top + 20} Q${x - cw/2 + 6} ${top + 8} ${x} ${top + 3} Q${x + cw/2 - 6} ${top + 8} ${x + cw/2 - 6} ${top + 20} V${e}" fill="none" stroke="rgba(201,162,74,.35)" stroke-width="1"/>
+      <circle cx="${x}" cy="${top - 9}" r="3.5" fill="#E0B45A"/>`;
+    chars += `<g class="ch" style="animation-delay:${-i * 0.6}s">${place(ART[k](), x - w/2, y, w, h)}</g>`;
+  });
+  const cx = TX, cy = TY, R1 = 156, R2 = 38.5, n = 12;
   const pt = a => `${(cx + R1 * Math.cos(a)).toFixed(1)} ${(cy + R2 * Math.sin(a)).toFixed(1)}`;
   let wedges = '';
   for(let k = 0; k < n; k++){
     const a1 = k / n * 2 * Math.PI, a2 = (k + 1) / n * 2 * Math.PI;
-    wedges += `<path d="M${cx} ${cy} L${pt(a1)} A${R1} ${R2} 0 0 1 ${pt(a2)}Z" fill="${k % 2 ? '#2F6B4F' : '#EFE2C0'}"/>`;
+    wedges += `<path d="M${cx} ${cy} L${pt(a1)} A${R1} ${R2} 0 0 1 ${pt(a2)}Z" fill="${k % 2 ? 'rgba(0,0,0,.16)' : 'rgba(255,230,180,.04)'}" stroke="rgba(201,162,74,.28)" stroke-width="1"/>`;
   }
-  return `<svg class="tbl" viewBox="0 0 340 132">
+  const candle = (x, y) => `<ellipse cx="${x}" cy="${y + 6}" rx="34" ry="8" fill="url(#pool)"/>
+    <ellipse cx="${x}" cy="${y}" rx="8" ry="2.6" fill="#E0B45A" stroke="#8A6417" stroke-width="1"/>
+    <rect x="${x - 2}" y="${y - 8}" width="4" height="8" fill="#C9A24A"/>
+    <ellipse cx="${x}" cy="${y - 8}" rx="6" ry="2" fill="#E0B45A"/>
+    <rect x="${x - 3.5}" y="${y - 28}" width="7" height="20" rx="2" fill="#FFF3D6"/>
+    <circle cx="${x}" cy="${y - 34}" r="14" fill="url(#halo)" class="halo"/>
+    <path class="flame" d="M${x} ${y - 41} Q${x + 5} ${y - 33} ${x} ${y - 28} Q${x - 5} ${y - 33} ${x} ${y - 41}Z" fill="#FFB43D"/>
+    <path class="flame" d="M${x} ${y - 36} Q${x + 2.2} ${y - 32} ${x} ${y - 29.5} Q${x - 2.2} ${y - 32} ${x} ${y - 36}Z" fill="#FFF0B0"/>`;
+  const goblet = (x, y) => `<path d="M${x - 6} ${y - 14} Q${x - 6} ${y - 4} ${x} ${y - 3} Q${x + 6} ${y - 4} ${x + 6} ${y - 14}Z" fill="#E0B45A" stroke="#8A6417" stroke-width="1"/>
+    <rect x="${x - 1.2}" y="${y - 3}" width="2.4" height="6" fill="#C9A24A"/><ellipse cx="${x}" cy="${y + 3}" rx="5" ry="1.6" fill="#E0B45A"/>
+    <ellipse cx="${x}" cy="${y - 14}" rx="6" ry="1.6" fill="#8E2F43"/>`;
+  return `<svg class="scene" viewBox="0 0 400 350" aria-hidden="true">
     <defs>
-      <radialGradient id="tw" cx="50%" cy="30%" r="75%"><stop offset="0" stop-color="#B07A44"/><stop offset="1" stop-color="#6B4426"/></radialGradient>
-      <linearGradient id="te" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#6B4426"/><stop offset="1" stop-color="#3A2210"/></linearGradient>
-      <radialGradient id="tl" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="rgba(255,214,120,.45)"/><stop offset="1" stop-color="rgba(255,214,120,0)"/></radialGradient>
+      <linearGradient id="lake" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#22386A"/><stop offset="1" stop-color="#121434"/></linearGradient>
+      <linearGradient id="chair" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#5A3820"/><stop offset="1" stop-color="#2E1B0E"/></linearGradient>
+      <radialGradient id="ttop" cx="50%" cy="40%" r="70%"><stop offset="0" stop-color="#6E472A"/><stop offset=".7" stop-color="#4A2E19"/><stop offset="1" stop-color="#33200F"/></radialGradient>
+      <linearGradient id="tedge" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#3E2614"/><stop offset="1" stop-color="#1E1209"/></linearGradient>
+      <radialGradient id="warm" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="rgba(255,190,90,.22)"/><stop offset="1" stop-color="rgba(255,190,90,0)"/></radialGradient>
+      <radialGradient id="pool" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="rgba(255,200,110,.45)"/><stop offset="1" stop-color="rgba(255,200,110,0)"/></radialGradient>
+      <radialGradient id="halo" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="rgba(255,210,120,.55)"/><stop offset="1" stop-color="rgba(255,210,120,0)"/></radialGradient>
+      <clipPath id="lakeclip"><rect x="0" y="186" width="400" height="164"/></clipPath>
     </defs>
-    <ellipse cx="170" cy="96" rx="150" ry="22" fill="rgba(0,0,0,.35)"/>
-    <path d="M20 54 V68 A150 38 0 0 0 320 68 V54Z" fill="url(#te)" stroke="#2A170A" stroke-width="1.5"/>
-    <path d="M20 66 A150 38 0 0 0 320 66" fill="none" stroke="#C9A24A" stroke-width="1.5" opacity=".7"/>
-    <ellipse cx="170" cy="54" rx="150" ry="38" fill="url(#tw)" stroke="#E0B45A" stroke-width="3"/>
-    <ellipse cx="170" cy="54" rx="141" ry="35.5" fill="none" stroke="#5A361C" stroke-width="2"/>
+    <path d="M0 188 Q50 166 104 180 Q150 164 196 176 Q250 160 300 178 Q350 162 400 184 V192 H0Z" fill="#221D4A"/>
+    <rect x="0" y="186" width="400" height="164" fill="url(#lake)"/>
+    <g transform="translate(98.6 102.8) scale(.52)">${CASTLE_SVG('#3B4B7A', '#5D73A8', '#FFE29A', 'win')}</g>
+    <ellipse cx="200" cy="187" rx="74" ry="7" fill="#1B2246"/>
+    <g clip-path="url(#lakeclip)" opacity=".22"><g transform="translate(98.6 271.2) scale(.52 -.52)">${CASTLE_SVG('#3B4B7A', '#5D73A8', '#FFE29A')}</g></g>
+    <g class="ripple" stroke="rgba(190,220,255,.35)" stroke-width="1.6" stroke-linecap="round">
+      <path d="M40 200 H100 M290 206 H360 M150 214 H190 M226 220 H262 M70 224 H120"/>
+    </g>
+    <g class="ripple r2" stroke="rgba(255,230,160,.45)" stroke-width="2" stroke-linecap="round">
+      <path d="M332 196 H352 M326 204 H358 M334 212 H350"/>
+    </g>
+    ${chairs}
+    ${chars}
+    <ellipse cx="200" cy="246" rx="190" ry="70" fill="url(#warm)" class="halo"/>
+    <ellipse cx="200" cy="336" rx="176" ry="12" fill="rgba(0,0,0,.45)"/>
+    <path d="M${TX - RX} ${TY} V${TY + 16} A${RX} ${RY} 0 0 0 ${TX + RX} ${TY + 16} V${TY}Z" fill="url(#tedge)" stroke="#1A0F07" stroke-width="1.5"/>
+    <path d="M${TX - RX} ${TY + 9} A${RX} ${RY} 0 0 0 ${TX + RX} ${TY + 9}" fill="none" stroke="#C9A24A" stroke-width="1.6" opacity=".8"/>
+    <ellipse cx="${TX}" cy="${TY}" rx="${RX}" ry="${RY}" fill="url(#ttop)" stroke="#E0B45A" stroke-width="2.5"/>
+    <ellipse cx="${TX}" cy="${TY}" rx="${RX - 9}" ry="${RY - 3}" fill="none" stroke="#2A170A" stroke-width="2"/>
     ${wedges}
-    <ellipse cx="170" cy="54" rx="132" ry="33" fill="none" stroke="#E0B45A" stroke-width="2.5"/>
-    <ellipse cx="170" cy="54" rx="132" ry="33" fill="url(#tl)"/>
-    <ellipse cx="170" cy="54" rx="28" ry="7.5" fill="#E0B45A" stroke="#8A6417" stroke-width="1.5"/>
-    <ellipse cx="170" cy="54" rx="21" ry="5.4" fill="#B8323A"/>
-    <ellipse cx="170" cy="54" rx="12" ry="3.2" fill="#F1E6C8"/>
-    <ellipse cx="170" cy="54" rx="5" ry="1.5" fill="#B8323A"/>
-    <path d="M28 46 A145 34 0 0 1 120 22" fill="none" stroke="rgba(255,240,200,.35)" stroke-width="2" stroke-linecap="round"/>
-    <rect x="165" y="30" width="10" height="22" rx="3" fill="#FFF3D6" stroke="#C9A24A" stroke-width="1"/>
-    <path class="flame" d="M170 17 Q177 27 170 30 Q163 27 170 17Z" fill="#FFB43D"/>
-    <path class="flame" d="M170 22 Q173 27 170 29 Q167 27 170 22Z" fill="#FFF0B0"/>
+    <ellipse cx="${cx}" cy="${cy}" rx="${R1}" ry="${R2}" fill="none" stroke="#C9A24A" stroke-width="1.5" opacity=".85"/>
+    <ellipse cx="${cx}" cy="${cy}" rx="44" ry="11" fill="#1E2A5A" stroke="#E0B45A" stroke-width="2"/>
+    <g transform="translate(${cx} ${cy}) scale(1 .26)">${(() => { let d = ''; for(let i = 0; i < 16; i++){ const a = Math.PI / 8 * i - Math.PI / 2, r = i % 2 ? 11 : 32; d += (i ? 'L' : 'M') + (r * Math.cos(a)).toFixed(1) + ' ' + (r * Math.sin(a)).toFixed(1); } return `<path d="${d}Z" fill="#FFD66B" stroke="#8A6417" stroke-width="2"/>`; })()}</g>
+    <path d="M40 282 A170 38 0 0 1 120 258" fill="none" stroke="rgba(255,235,190,.25)" stroke-width="2" stroke-linecap="round"/>
+    ${candle(138, 286)}${candle(262, 286)}
+    ${goblet(96, 304)}${goblet(304, 304)}
   </svg>`;
 }
 
@@ -701,12 +755,7 @@ function viewHome(){
     <svg class="moon" viewBox="0 0 40 40" aria-hidden="true"><path d="M26 4 A16 16 0 1 0 36 28 A13 13 0 1 1 26 4Z" fill="#FFE29A"/></svg>
     <h1 class="logo">Avalon</h1>
     <svg class="divider" viewBox="0 0 220 24" aria-hidden="true"><path d="M0 12 H84 M136 12 H220" stroke="#C9A24A" stroke-width="1.5"/><circle cx="84" cy="12" r="2.5" fill="#C9A24A"/><circle cx="136" cy="12" r="2.5" fill="#C9A24A"/><path d="M95 12 H128" stroke="#E8EDF5" stroke-width="3.5" stroke-linecap="round"/><path d="M95 12 H128" stroke="#9AA6BC" stroke-width="1" stroke-linecap="round"/><path d="M95 4 V20" stroke="#FFD66B" stroke-width="3.5" stroke-linecap="round"/><path d="M88 12 H94" stroke="#C58B3C" stroke-width="3.5" stroke-linecap="round"/></svg>
-    <div class="table-scene" aria-hidden="true">
-      ${[['servant',-130,58,84],['percival',-68,22,90],['merlin',0,4,102],['assassin',68,22,90],['morgana',130,58,84]].map(([k, x, y, w]) =>
-        `<div class="ch" style="left:calc(50% + ${x}px - ${w/2}px);top:${y}px;width:${w}px">${ART[k]()}</div>`).join('')}
-      <div class="glow"></div>
-      ${roundTable()}
-    </div>
+    ${coverScene()}
   </div>
   <div class="card stack" style="margin-top:16px">
     <div>
@@ -729,7 +778,7 @@ function viewHome(){
     <button class="btn block blue" data-act="create" ${S.busy ? 'disabled' : ''}>${I.castle}创建房间</button>
     <div class="center muted small">—— 或者加入朋友的房间 ——</div>
     <div class="row">
-      <input id="codeInput" class="field code grow" maxlength="4" inputmode="numeric" pattern="[0-9]*" placeholder="4位数字" value="${esc(S.joinCode)}" autocomplete="off">
+      <div class="codebox grow">${[0,1,2,3].map(i => `<input class="digit" data-i="${i}" maxlength="1" inputmode="numeric" pattern="[0-9]*" value="${esc(S.joinCode[i] || '')}" aria-label="房间号第 ${i+1} 位" autocomplete="off">`).join('')}</div>
       <button class="btn" data-act="join" ${S.busy ? 'disabled' : ''}>加入</button>
     </div>
   </div>
@@ -1263,7 +1312,7 @@ function renderConfirm(){
 /* ---------- 交互 ---------- */
 function readInputs(){
   const ni = document.getElementById('nameInput'); if(ni) S.me.name = ni.value.trim();
-  const ci = document.getElementById('codeInput'); if(ci) S.joinCode = ci.value.replace(/[^0-9]/g, '');
+  const ds = document.querySelectorAll('.digit'); if(ds.length) S.joinCode = Array.from(ds).map(d => d.value.replace(/[^0-9]/g, '')).join('');
   store.set('avalon_me', S.me);
 }
 function enterRoom(out){
@@ -1384,12 +1433,23 @@ document.addEventListener('click', e => {
   if(fn) fn(el.dataset, el, e);
 });
 document.addEventListener('keydown', e => {
-  if(e.key !== 'Enter') return;
-  if(e.target.id === 'codeInput') actions.join();
+  if(!e.target.classList || !e.target.classList.contains('digit')) return;
+  const ds = document.querySelectorAll('.digit'), i = +e.target.dataset.i;
+  if(e.key === 'Enter') actions.join();
+  if(e.key === 'Backspace' && !e.target.value && i > 0){ ds[i - 1].focus(); ds[i - 1].value = ''; e.preventDefault(); }
+  if(e.key === 'ArrowLeft' && i > 0) ds[i - 1].focus();
+  if(e.key === 'ArrowRight' && i < 3) ds[i + 1].focus();
 });
 document.addEventListener('input', e => {
-  if(e.target.id === 'codeInput') e.target.value = e.target.value.replace(/[^0-9]/g, '').slice(0, 4);
+  if(!e.target.classList || !e.target.classList.contains('digit')) return;
+  const ds = document.querySelectorAll('.digit'), v = e.target.value.replace(/[^0-9]/g, '');
+  let i = +e.target.dataset.i;
+  if(v.length > 1){ for(const ch of v){ if(i > 3) break; ds[i].value = ch; i++; } }
+  else { e.target.value = v; if(v) i++; }
+  if(i <= 3 && v) ds[i].focus();
+  if(i > 3) ds[3].blur();
 });
+document.addEventListener('focusin', e => { if(e.target.classList && e.target.classList.contains('digit')) e.target.select(); });
 
 /* ---------- 启动 ---------- */
 (function init(){
