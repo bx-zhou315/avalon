@@ -5,16 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#FFF4E4">
 <title>Avalon</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Zhi+Mang+Xing&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/lxgwwenkai-regular.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/lxgwwenkai-bold.css">
 <style>
 :root{
   --bg:#FFF4E4; --bg2:#FFE9CC; --card:#FFFFFF; --ink:#3B2F4A; --ink2:#7A6B88; --line:#3B2F4A;
   --good:#4F7BF0; --good-l:#E3EBFF; --evil:#E5535B; --evil-l:#FFE2E3; --gold:#FFC23D; --gold-l:#FFF1CC;
   --green:#3DB37A; --green-l:#DDF5E8; --muted:#EFE5D7;
   --r:20px; --shadow:0 4px 0 rgba(59,47,74,.9);
-  --hand:"STXingkai","华文行楷","Zhi Mang Xing",cursive;
+  --hand:"LXGW WenKai","霞鹜文楷","KaiTi","STKaiti",serif;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0}
@@ -28,8 +28,6 @@ body{
   padding-bottom:env(safe-area-inset-bottom);
 }
 .fun{font-family:var(--hand);font-weight:400;letter-spacing:.5px}
-b,strong,.btn,.chip,.seatno,.qt,.seat .no,.roomcode{font-weight:400!important}
-b,strong{color:#5B3FA0}
 .small{font-size:16px}
 #app{max-width:560px;margin:0 auto;padding:16px 16px 110px}
 h1,h2,h3{margin:0}
@@ -190,12 +188,20 @@ input.code{text-transform:uppercase;letter-spacing:8px;text-align:center;font-we
 .rules td,.rules th{border:2px solid var(--line);padding:4px;text-align:center;background:#fff}
 .rules th{background:var(--gold-l)}
 .loading{display:grid;place-items:center;min-height:60vh}
+.seatpick{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:10px}
+.seatpick button{border:2.5px solid var(--line);border-radius:14px;background:#fff;padding:6px 2px;min-height:76px;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 3px 0 rgba(59,47,74,.9)}
+.seatpick button .n{font-size:24px;font-weight:800;line-height:1}
+.seatpick button .who{font-size:12px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:4px}
+.seatpick button.mine{background:var(--good);color:#fff}
+.seatpick button.taken{background:var(--muted);color:var(--ink2);box-shadow:none}
+.seatpick button.free .who{color:var(--ink2)}
 .roomcode,input.code,.topbar .code{font-family:"Arial Rounded MT Bold","Helvetica Neue",Arial,sans-serif!important;font-weight:800!important}
 </style>
 </head>
 <body>
 <div id="app"></div>
 <div id="modal"></div>
+<div id="confirm"></div>
 <script>
 'use strict';
 const SB_URL = 'https://usnfsfvarljsogrikcqa.supabase.co';
@@ -538,6 +544,14 @@ function viewHome(){
   <div class="center" style="margin-top:14px"><button class="btn ghost" data-act="rules">📖 游戏规则</button></div>`;
 }
 
+function seatIssue(ps, n){
+  if(n < 5) return '';
+  const missing = ps.filter(p => !p.claimed).map(p => p.name);
+  if(missing.length) return '还没选座位号：' + missing.map(esc).join('、');
+  const bad = ps.filter(p => p.claimed > n);
+  if(bad.length) return `现在 ${n} 个人，座位号只能是 1 到 ${n}。请 ${bad.map(p => esc(p.name)).join('、')} 重新选。`;
+  return '';
+}
 function composition(n, s){
   const ev = EVIL_COUNT[n];
   if(!ev) return null;
@@ -584,20 +598,21 @@ function viewLobby(){
 
   <div class="card" style="margin-top:16px">
     <div class="row"><h3 class="fun grow">玩家（${n}/10）</h3>${n < 5 ? `<span class="chip gold">还差 ${5-n} 人</span>` : ''}</div>
-    <div class="tip" style="margin:8px 0">${host
-      ? '请按大家<b>实际围坐的顺时针顺序</b>排好座位，队长会按这个顺序轮换。'
-      : '房主会按大家实际围坐的顺时针顺序排座位。'}</div>
-    <ul class="plist">${ps.map((p, i) => `
+    <ul class="plist">${ps.slice().sort((a, b) => (a.claimed || 99) - (b.claimed || 99) || a.seat - b.seat).map((p, i) => `
       <li>
-        <span class="seatno">${p.seat + 1}</span>
+        <span class="seatno" ${p.claimed ? '' : 'style="background:#fff;color:var(--ink2)"'}>${p.claimed || '?'}</span>
         <span class="av">${avatarSvg(p.avatar)}</span>
         <span class="grow"><b>${esc(p.name)}</b>${p.host ? ' <span class="chip gold">房主</span>' : ''}${p.seat === me.seat ? ' <span class="chip">我</span>' : ''}</span>
-        ${host ? `
-          <button class="btn small white" data-act="move" data-i="${i}" data-d="-1" ${i === 0 ? 'disabled' : ''} aria-label="上移">↑</button>
-          <button class="btn small white" data-act="move" data-i="${i}" data-d="1" ${i === n-1 ? 'disabled' : ''} aria-label="下移">↓</button>
-          ${!p.host ? `<button class="btn small white" data-act="kick" data-seat="${p.seat}" aria-label="移出">✕</button>` : ''}` : ''}
+        ${p.claimed ? '' : '<span class="chip">未选座位</span>'}
+        ${host && !p.host ? `<button class="btn small white" data-act="kick" data-seat="${p.seat}" aria-label="移出">✕</button>` : ''}
       </li>`).join('')}
     </ul>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <h3 class="fun">选你的座位号</h3>
+    <div class="tip" style="margin-top:8px">大家围坐一圈，随便定一个人是 <b>1 号</b>，然后<b>顺时针</b>依次是 2 号、3 号…… 每个人点下面自己的号码。队长会按这个顺序轮换。</div>
+    ${seatPickHtml()}
   </div>
 
   ${!host ? `<div class="card" style="margin-top:16px"><h3 class="fun">角色配置</h3><p class="small muted" style="margin:6px 0 0">房主正在设置本局角色。开局后可以在「📜 记录」里看到本局有哪些角色。</p></div>` : `<div class="card" style="margin-top:16px">
@@ -623,9 +638,22 @@ function viewLobby(){
 
   <div style="margin-top:18px">
     ${host
-      ? `<button class="btn block green" data-act="start" ${n < 5 || !comp || comp.error || S.busy ? 'disabled' : ''}>开始游戏</button>`
+      ? `${seatIssue(ps, n) ? `<div class="warn" style="margin-bottom:10px">${seatIssue(ps, n)}</div>` : ''}<button class="btn block green" data-act="start" ${n < 5 || !comp || comp.error || seatIssue(ps, n) || S.busy ? 'disabled' : ''}>开始游戏</button>`
       : `<div class="card center"><span class="fun dots">等待房主开始游戏</span></div>`}
   </div>`;
+}
+
+function seatPickHtml(){
+  const ps = players(), me = meInfo(), n = Math.max(ps.length, 5);
+  const mine = (ps.find(p => p.seat === me.seat) || {}).claimed;
+  const cells = Array.from({length: Math.min(n, 10)}, (_, k) => {
+    const num = k + 1, owner = ps.find(p => p.claimed === num);
+    const cls = owner ? (owner.seat === me.seat ? 'mine' : 'taken') : 'free';
+    return `<button class="${cls}" data-act="claim" data-n="${num}" ${owner && owner.seat !== me.seat ? 'disabled' : ''}>
+      <span class="n">${num}</span><span class="who">${owner ? esc(owner.name) : '空'}</span></button>`;
+  }).join('');
+  return `<div class="seatpick">${cells}</div>
+    <p class="small muted center" style="margin:10px 0 0">${mine ? `你是 <b>${mine} 号</b>，再点一次可以取消` : '你还没选座位号'}</p>`;
 }
 
 function phaseView(){
@@ -961,6 +989,20 @@ function rulesHtml(){
   </div>`;
 }
 
+/* ---------- 确认框 ---------- */
+let pendingConfirm = null;
+function ask(msg, okLabel, fn, danger){ pendingConfirm = { msg, okLabel, fn, danger }; renderConfirm(); }
+function renderConfirm(){
+  const el = document.getElementById('confirm');
+  if(!pendingConfirm){ el.innerHTML = ''; return; }
+  const c = pendingConfirm;
+  el.innerHTML = `<div class="mask" style="z-index:30;align-items:center"><div class="sheet" style="border-radius:26px;max-width:400px;margin:16px">
+    <p class="center" style="font-size:20px;margin:6px 0 18px">${esc(c.msg)}</p>
+    <div class="row"><button class="btn white grow" data-act="cfno">取消</button>
+    <button class="btn ${c.danger ? 'red' : 'blue'} grow" data-act="cfyes">${esc(c.okLabel)}</button></div>
+  </div></div>`;
+}
+
 /* ---------- 交互 ---------- */
 function readInputs(){
   const ni = document.getElementById('nameInput'); if(ni) S.me.name = ni.value.trim();
@@ -989,28 +1031,28 @@ const actions = {
     const me = meInfo();
     const isEnded = room() && room().status === 'ended';
     const msg = me && me.host && !isEnded ? '你是房主，离开会解散整个房间。确定吗？' : '确定离开房间吗？';
-    if(!confirm(msg)) return;
-    if(me && room().status !== 'playing'){
-      act('avalon_remove', { p_token: S.session.token, p_seat: me.seat }, () => leaveLocal());
-    } else leaveLocal();
+    ask(msg, me && me.host && !isEnded ? '解散并离开' : '离开', async () => {
+      const token = S.session && S.session.token;
+      const canRemove = me && room() && room().status !== 'playing';
+      leaveLocal();
+      if(token && canRemove){ try{ await rpc('avalon_remove', { p_token: token, p_seat: me.seat }); }catch(e){} }
+    }, true);
   },
+  claim(d){
+    const num = +d.n, mine = (players().find(p => p.seat === meInfo().seat) || {}).claimed;
+    act('avalon_claim_seat', { p_token: S.session.token, p_num: mine === num ? null : num });
+  },
+  cfno(){ pendingConfirm = null; renderConfirm(); },
+  cfyes(){ const f = pendingConfirm && pendingConfirm.fn; pendingConfirm = null; renderConfirm(); if(f) f(); },
   share(){
     const url = location.origin + location.pathname + '?room=' + room().code;
     if(navigator.share) navigator.share({ title:'Avalon', text:`来玩 Avalon！房间号 ${room().code}`, url }).catch(() => {});
     else if(navigator.clipboard) navigator.clipboard.writeText(url).then(() => toast('链接已复制'), () => toast(url));
     else toast(url);
   },
-  move(d){
-    const ps = players(), i = +d.i, j = i + (+d.d);
-    if(j < 0 || j >= ps.length) return;
-    const order = ps.map(p => p.seat);
-    [order[i], order[j]] = [order[j], order[i]];
-    act('avalon_reorder', { p_token: S.session.token, p_order: order });
-  },
   kick(d){
     const p = P(+d.seat);
-    if(!confirm(`把 ${p ? p.name : ''} 移出房间？`)) return;
-    act('avalon_remove', { p_token: S.session.token, p_seat: +d.seat });
+    ask(`把 ${p ? p.name : ''} 移出房间？`, '移出', () => act('avalon_remove', { p_token: S.session.token, p_seat: +d.seat }), true);
   },
   set(d){
     if(!meInfo().host) return;
@@ -1038,17 +1080,16 @@ const actions = {
   propose(){ act('avalon_propose', { p_token: S.session.token, p_team: S.pick }); },
   vote(d){ act('avalon_vote', { p_token: S.session.token, p_approve: d.v === '1' }); },
   play(d){
-    if(d.v === '0' && !confirm('确定出「失败」牌吗？')) return;
-    act('avalon_quest_play', { p_token: S.session.token, p_success: d.v === '1' });
+    const go = () => act('avalon_quest_play', { p_token: S.session.token, p_success: d.v === '1' });
+    if(d.v === '0') ask('确定出「失败」牌吗？', '出失败牌', go, true); else go();
   },
   lady(d){
-    if(!confirm(`查验 ${nm(+d.seat).replace(/<[^>]+>/g,'')} 的阵营？`)) return;
-    act('avalon_lady', { p_token: S.session.token, p_target: +d.seat });
+    const p = P(+d.seat);
+    ask(`查验 ${p ? p.name : ''} 的阵营？`, '查验', () => act('avalon_lady', { p_token: S.session.token, p_target: +d.seat }));
   },
   kill(d){
     const p = P(+d.seat);
-    if(!confirm(`最终指认 ${p ? p.name : ''} 是梅林？这个决定不能撤回。`)) return;
-    act('avalon_assassinate', { p_token: S.session.token, p_target: +d.seat });
+    ask(`最终指认 ${p ? p.name : ''} 是梅林？这个决定不能撤回。`, '刺杀', () => act('avalon_assassinate', { p_token: S.session.token, p_target: +d.seat }), true);
   },
   again(){ act('avalon_back_to_lobby', { p_token: S.session.token }); },
   myrole(){ S.modal = { type:'myrole', open:false }; renderModal(); },
