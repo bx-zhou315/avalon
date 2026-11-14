@@ -38,9 +38,8 @@ body::before{
     radial-gradient(1.6px 1.6px at 200px 150px,#FFE9A8 50%,transparent 51%),
     radial-gradient(1px 1px at 60px 190px,#fff 50%,transparent 51%),
     radial-gradient(1.3px 1.3px at 170px 230px,#fff 50%,transparent 51%);
-  background-size:240px 260px;animation:twinkle 6s ease-in-out infinite alternate;
+  background-size:240px 260px;
 }
-@keyframes twinkle{from{opacity:.35}to{opacity:.8}}
 #app,#modal,#confirm{position:relative;z-index:1}
 .fun{font-family:var(--hand);font-weight:700;letter-spacing:.5px}
 .small{font-size:16px}
@@ -104,107 +103,8 @@ input.code{letter-spacing:8px;text-align:center;font-size:24px}
 .scene{display:block;width:calc(100% + 32px);margin:-58px -16px 0;position:relative;z-index:0}
 .hero .logo,.hero .divider,.hero .moon{position:relative;z-index:1}
 .hero .moon{position:absolute}
-.scene .ch{animation:bob 3.4s ease-in-out infinite}
-.ripple{animation:ripple 5s ease-in-out infinite alternate}
-.ripple.r2{animation-duration:3s}
-@keyframes ripple{from{transform:translateX(-7px);opacity:.6}to{transform:translateX(7px);opacity:1}}
-.win{animation:winfl 4s ease-in-out infinite}
-@keyframes winfl{0%,100%{opacity:1}45%{opacity:.75}55%{opacity:.95}}
-.halo{animation:flick 2.4s ease-in-out infinite}
-.flame{transform-box:fill-box;transform-origin:50% 100%;animation:flame 1.2s ease-in-out infinite}
-.eyes{transform-box:fill-box;transform-origin:center;animation:blink 5s infinite}
-.scene .ch:nth-child(2n) .eyes{animation-delay:-2.2s}
-@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
-@keyframes blink{0%,93%,100%{transform:scaleY(1)}96%{transform:scaleY(.1)}}
-@keyframes flame{0%,100%{transform:scale(1,1)}50%{transform:scale(.9,1.12)}}
-@keyframes flick{0%,100%{opacity:.85}50%{opacity:.55}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important}}
 .avatars{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
-.avatars button.on svg{animation:tap .35s ease-out}
-@keyframes tap{0%{transform:scale(1)}40%{transform:scale(1.18) translateY(-3px)}100%{transform:scale(1)}}
-.pickstage{position:relative;height:184px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;margin-bottom:10px;overflow:hidden;border-radius:16px;background:radial-gradient(ellipse at 50% 100%,rgba(255,214,107,.18),transparent 65%)}
-.pickstage .spot{position:absolute;bottom:30px;left:50%;width:150px;height:30px;transform:translateX(-50%);border-radius:50%;background:radial-gradient(rgba(255,214,107,.55),rgba(255,214,107,.08) 70%);border:1.5px solid rgba(255,214,107,.6)}
-.pickav{position:relative;z-index:1;width:118px;margin-bottom:14px}
-.pickav.pop{animation:popin .5s cubic-bezier(.3,1.5,.5,1)}
-.actor{transform-origin:50% 92%}
-.actor .arm-r,.actor .arm-l{transform-box:fill-box}
-.actor .arm-r{transform-origin:0% 0%}
-.actor .arm-l{transform-origin:100% 0%}
-@keyframes popin{0%{transform:scale(.6)}100%{transform:scale(1)}}
-/* 每个形象一个动作 */
-.act-wave{animation:idle 2.6s ease-in-out infinite}
-.act-wave .arm-r{animation:a-wave .45s ease-in-out infinite alternate}
-.act-wavel{animation:idle 2.6s ease-in-out infinite}
-.act-wavel .arm-l{animation:a-wavel .45s ease-in-out infinite alternate}
-.act-jump{animation:jump 1.1s ease-in-out infinite}
-.act-jump .arm-r{animation:a-up 1.1s ease-in-out infinite}
-.act-jump .arm-l{animation:a-upl 1.1s ease-in-out infinite}
-.act-spin{animation:spin 2s ease-in-out infinite}
-.act-twirl{animation:twirl 2.2s ease-in-out infinite}
-.act-twirl .arm-r{transform:rotate(-80deg)}
-.act-twirl .arm-l{transform:rotate(80deg)}
-.act-fist{animation:dip .9s ease-in-out infinite}
-.act-fist .arm-r{animation:fist .9s ease-in-out infinite}
-.act-fist .arm-l{animation:fistl .9s ease-in-out infinite}
-.act-cheer{animation:bounce .5s ease-in-out infinite alternate}
-.act-cheer .arm-r{animation:cheer .5s ease-in-out infinite alternate}
-.act-cheer .arm-l{animation:cheerl .5s ease-in-out infinite alternate}
-.act-clap .arm-r{animation:clap .28s ease-in-out infinite alternate}
-.act-clap .arm-l{animation:clapl .28s ease-in-out infinite alternate}
-.act-bow{animation:bow 2.4s ease-in-out infinite}
-.act-bow .arm-r{transform:rotate(95deg)}
-.act-sway{animation:sway 1.8s ease-in-out infinite}
-.act-sway .arm-r{animation:a-swing 1.8s ease-in-out infinite}
-.act-sway .arm-l{animation:a-swingl 1.8s ease-in-out infinite}
-.act-flex{animation:flexb 1.2s ease-in-out infinite}
-.act-flex .arm-r{transform:rotate(-100deg)}
-.act-flex .arm-l{transform:rotate(100deg)}
-.act-salute .arm-r{animation:salute 2.4s ease-in-out infinite}
-.act-point{animation:lean 1.6s ease-in-out infinite}
-.act-point .arm-r{transform:rotate(-105deg)}
-.act-shake{animation:shake .7s ease-in-out infinite}
-.act-shake .arm-r{animation:a-swing .7s ease-in-out infinite}
-.act-shake .arm-l{animation:a-swingl .7s ease-in-out infinite}
-.act-nod{animation:nod 1s ease-in-out infinite}
-.act-squat{animation:squat 1.4s ease-in-out infinite}
-.act-squat .arm-r{animation:fwd 1.4s ease-in-out infinite}
-.act-squat .arm-l{animation:fwdl 1.4s ease-in-out infinite}
-.act-stretch{animation:stretch 2.4s ease-in-out infinite}
-.act-stretch .arm-r{animation:a-up 2.4s ease-in-out infinite}
-.act-stretch .arm-l{animation:a-upl 2.4s ease-in-out infinite}
-.act-hopside{animation:hopside 1.4s ease-in-out infinite}
-@keyframes a-wave{from{transform:rotate(-115deg)}to{transform:rotate(-155deg)}}
-@keyframes a-wavel{from{transform:rotate(115deg)}to{transform:rotate(155deg)}}
-@keyframes a-up{0%,100%{transform:rotate(0)}50%{transform:rotate(-160deg)}}
-@keyframes a-upl{0%,100%{transform:rotate(0)}50%{transform:rotate(160deg)}}
-@keyframes jump{0%,100%{transform:translateY(0) scale(1)}15%{transform:translateY(0) scale(1.1,.88)}50%{transform:translateY(-34px) scale(.95,1.06)}85%{transform:translateY(0) scale(1.08,.92)}}
-@keyframes spin{0%,35%{transform:rotateY(0)}100%{transform:rotateY(360deg)}}
-@keyframes twirl{0%,30%{transform:rotate(0)}100%{transform:rotate(360deg)}}
-@keyframes dip{0%,100%{transform:translateY(0)}50%{transform:translateY(4px) scaleY(.96)}}
-@keyframes fist{0%,100%{transform:rotate(100deg)}50%{transform:rotate(112deg)}}
-@keyframes fistl{0%,100%{transform:rotate(-100deg)}50%{transform:rotate(-112deg)}}
-@keyframes bounce{from{transform:translateY(0)}to{transform:translateY(-8px)}}
-@keyframes clap{from{transform:rotate(55deg)}to{transform:rotate(100deg)}}
-@keyframes clapl{from{transform:rotate(-55deg)}to{transform:rotate(-100deg)}}
-@keyframes bow{0%,20%,100%{transform:perspective(300px) rotateX(0)}45%,70%{transform:perspective(300px) rotateX(32deg)}}
-@keyframes sway{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(8deg)}}
-@keyframes a-swing{0%,100%{transform:rotate(-40deg)}50%{transform:rotate(0)}}
-@keyframes a-swingl{0%,100%{transform:rotate(0)}50%{transform:rotate(40deg)}}
-@keyframes flexb{0%,100%{transform:scale(1)}50%{transform:scale(1.07,.95)}}
-@keyframes salute{0%,15%,100%{transform:rotate(0)}25%,80%{transform:rotate(-140deg)}}
-@keyframes lean{0%,100%{transform:rotate(0)}50%{transform:rotate(-6deg) translateY(-3px)}}
-@keyframes shake{0%,100%{transform:rotate(-7deg)}50%{transform:rotate(7deg)}}
-@keyframes nod{0%,100%{transform:translateY(0)}50%{transform:translateY(5px) scaleY(.94)}}
-@keyframes squat{0%,100%{transform:scale(1)}50%{transform:translateY(6px) scale(1.08,.8)}}
-@keyframes fwd{0%,100%{transform:rotate(0)}50%{transform:rotate(-75deg)}}
-@keyframes fwdl{0%,100%{transform:rotate(0)}50%{transform:rotate(75deg)}}
-@keyframes stretch{0%,100%{transform:scale(1)}50%{transform:scale(.95,1.1) translateY(-4px)}}
-@keyframes hopside{0%,100%{transform:translate(-14px,0)}25%{transform:translate(0,-16px)}50%{transform:translate(14px,0)}75%{transform:translate(0,-16px)}}
-.spk{position:absolute;left:50%;top:48%;width:12px;height:12px;margin:-6px;background:var(--gold);clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%);animation:burst .75s ease-out forwards;z-index:2}
-@keyframes idle{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2deg) translateY(-3px)}}
-@keyframes cheer{from{transform:rotate(-120deg)}to{transform:rotate(-160deg)}}
-@keyframes cheerl{from{transform:rotate(120deg)}to{transform:rotate(160deg)}}
-@keyframes burst{0%{transform:rotate(var(--a)) translateY(0) scale(.3);opacity:1}100%{transform:rotate(var(--a)) translateY(calc(var(--d) * -1)) scale(1);opacity:0}}
 .avatars button{border:1.5px solid transparent;border-radius:14px;background:rgba(255,255,255,.05);padding:2px}
 .avatars button.on{border-color:var(--gold);background:var(--gold-l);box-shadow:0 0 12px rgba(255,214,107,.35)}
 
@@ -226,7 +126,7 @@ input.code{letter-spacing:8px;text-align:center;font-size:24px}
 .comp{display:flex;flex-wrap:wrap;gap:6px}
 
 /* 游戏 */
-.track{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.track{display:grid;grid-template-columns:repeat(5,minmax(0,52px));justify-content:space-between;gap:6px}
 .qt{aspect-ratio:1;border-radius:50%;border:1.5px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(#3A3172,#241D4C);position:relative;font-size:22px;color:var(--ink)}
 .qt small{font-size:12px;line-height:1;color:var(--ink2)}
 .qt.cur{background:radial-gradient(#FFE08A,#E0A92E);color:#2A1E05;box-shadow:0 0 0 4px rgba(255,214,107,.2),0 0 18px rgba(255,214,107,.45);border-color:#8A6417}
@@ -235,14 +135,17 @@ input.code{letter-spacing:8px;text-align:center;font-size:24px}
 .qt.bad{background:radial-gradient(#FF7E85,#D9424B);color:#fff;border-color:#9A2830}
 .qt.ok small,.qt.bad small{color:#fff}
 .qt .two{position:absolute;bottom:-9px;background:var(--evil);color:#fff;border-radius:8px;font-size:11px;padding:0 5px;line-height:16px}
-.rejects{display:flex;align-items:center;gap:6px;margin-top:16px;font-size:15px;color:var(--ink2)}
-.rejects i{width:16px;height:16px;border-radius:50%;border:1.5px solid var(--line);display:inline-block;background:#120E28}
-.rejects i.on{background:var(--evil);border-color:var(--evil);box-shadow:0 0 8px rgba(229,83,91,.6)}
-.rejects i.last{border-style:dashed}
-.step{border-color:var(--gold);box-shadow:var(--shadow),0 0 0 4px rgba(255,214,107,.08),0 0 24px rgba(255,214,107,.12)}
-.step .kicker{font-size:15px;color:var(--ink2);letter-spacing:1px}
-.step h2{font-size:26px;margin:2px 0 6px;color:var(--gold)}
-.step p{margin:0}
+.progress{padding:12px 16px;text-align:center}
+.rejects{margin:12px 0 0;font-size:15px;color:var(--ink2)}
+.rejects.danger{color:#FFC2C5}
+.step{margin:12px 0 0;border-color:var(--gold);padding:12px 14px;overflow-wrap:anywhere}
+.step h2{font-size:22px;line-height:1.3;color:var(--gold)}
+.step p{margin:4px 0 0;font-size:16px}
+.step .essential{color:#FFE7A6}
+.step .danger{color:#FFC2C5}
+.step .bigchoice{margin-top:10px}
+.game-seats{margin-top:14px}
+.game-submit{margin-top:12px}
 .warn{background:var(--evil-l);border:1.5px solid var(--evil);border-radius:12px;padding:8px 12px;color:#FFC2C5;font-size:15px}
 .tip{background:var(--gold-l);border:1.5px dashed var(--gold2);border-radius:12px;padding:8px 12px;font-size:15px}
 .seats{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
@@ -260,17 +163,15 @@ input.code{letter-spacing:8px;text-align:center;font-size:24px}
 .seat.evil{background:linear-gradient(rgba(229,83,91,.38),var(--card2));border-color:var(--evil)}
 .seat .st{font-size:13px;margin-top:2px}
 .seat .st.yes{color:#7FE0AE}
-.seat .st.wait{color:var(--ink2)}
 .bigchoice{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.bigchoice .btn{min-height:84px;font-size:22px;flex-direction:column;gap:0}
-.bigchoice .btn small{font-size:13px;opacity:.9}
+.bigchoice .btn{min-height:52px;font-size:20px}
 .bigchoice .btn.sel{outline:3px solid var(--gold);outline-offset:3px}
-.qcard{min-height:150px!important;border-radius:18px!important}
 .dots::after{content:"";display:inline-block;width:1.2em;text-align:left;animation:dots 1.2s steps(4) infinite}
 @keyframes dots{0%{content:""}25%{content:"."}50%{content:".."}75%{content:"..."}}
 .mebar{position:fixed;left:0;right:0;bottom:0;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:rgba(19,15,41,.94);border-top:1px solid var(--line);backdrop-filter:blur(8px);z-index:5}
 .mebar .in{max-width:560px;margin:0 auto;display:flex;align-items:center;gap:10px}
 .mebar .av{width:46px;flex:none}
+.mebar .grow{min-width:0;overflow-wrap:anywhere}
 
 /* 弹窗 */
 .mask{position:fixed;inset:0;background:rgba(8,6,20,.7);z-index:20;display:flex;align-items:flex-end;justify-content:center;animation:fade .15s}
@@ -390,7 +291,7 @@ function eyesSvg(kind){
     <ellipse cx="72" cy="62" rx="4.6" ry="5.6" fill="#2B2235"/><circle cx="73.6" cy="59.6" r="1.7" fill="#fff"/>`;
   if(kind === 'happy') return `<path d="M43 63 Q48 57 53 63 M67 63 Q72 57 77 63" fill="none" stroke="#2B2235" stroke-width="3" stroke-linecap="round"/>`;
   const col = kind === 'red' ? '#D9364A' : '#2B2235';
-  const e = `<g class="eyes"><ellipse cx="48" cy="62" rx="4.6" ry="5.6" fill="${col}"/><ellipse cx="72" cy="62" rx="4.6" ry="5.6" fill="${col}"/>
+  const e = `<g><ellipse cx="48" cy="62" rx="4.6" ry="5.6" fill="${col}"/><ellipse cx="72" cy="62" rx="4.6" ry="5.6" fill="${col}"/>
     <circle cx="49.6" cy="59.6" r="1.7" fill="#fff"/><circle cx="73.6" cy="59.6" r="1.7" fill="#fff"/></g>`;
   const brows = (kind === 'evil' || kind === 'red')
     ? `<path d="M40 51 L53 55 M80 51 L67 55" stroke="${INK}" stroke-width="3" stroke-linecap="round"/>` : '';
@@ -578,40 +479,38 @@ const ACC = {
   stache: () => ({ front: `<path d="M46 72 Q53 64 60 70 Q67 64 74 72 Q67 76 60 73 Q53 76 46 72Z" fill="#6B4A2E" ${sw}/><path d="M56 79 Q60 82 64 79" fill="none" stroke="#6B3A3A" stroke-width="2.2" stroke-linecap="round"/>` })
 };
 const AVATARS = [
-  { n:'阳光少年', skin:0, hair:['bowl','#8A5A3C'], fit:['tee','#FFB86B'], acc:['none'], act:'wave' },
-  { n:'蝴蝶结',   skin:0, hair:['bob','#2E2B3B'], fit:['frill','#FF9DB0'], acc:['bow'], mouth:'cat', act:'twirl' },
-  { n:'毛线帽',   skin:1, hair:['short','#E8B04B'], fit:['scarf','#8FB3FF','#E5535B'], acc:['beanie','#7FD1AE'], act:'clap' },
-  { n:'猫耳',     skin:0, hair:['bowl','#D9575A'], fit:['hoodie','#C3A6F2'], acc:['cat','#D9575A'], mouth:'open', act:'hopside' },
-  { n:'小花',     skin:2, hair:['wavy','#7A4FB8'], fit:['overalls','#FFD66B','#4F7BF0'], acc:['flower'], act:'stretch' },
-  { n:'书生',     skin:0, hair:['side','#3A3550'], fit:['bowtie','#7FD1AE','#E5535B'], acc:['glasses'], act:'fist' },
-  { n:'丸子头',   skin:0, hair:['buns','#FF8FB1'], fit:['tee','#FFD66B'], acc:['none'], mouth:'cat', act:'jump' },
-  { n:'运动健将', skin:1, hair:['spiky','#F28C38'], fit:['track','#7FD1AE'], acc:['headband'], mouth:'grin', act:'flex' },
-  { n:'星星发卡', skin:0, hair:['long','#2E2B3B'], fit:['jacket','#C3A6F2'], acc:['star'], eyes:'wink', act:'point' },
-  { n:'卷卷',     skin:2, hair:['curly','#6B4A2E'], fit:['sweater','#FF9DB0'], acc:['freckles'], eyes:'happy', mouth:'open', blush:false, act:'shake' },
-  { n:'大叔',     skin:1, hair:['side','#4A4A5A'], fit:['bowtie','#8FB3FF','#E5535B'], acc:['stache'], mouth:'none', act:'nod' },
-  { n:'耳机',     skin:0, hair:['pony','#2FA4A0'], fit:['hoodie','#FFB86B'], acc:['phones'], act:'sway' },
-  { n:'棒球小子', skin:3, hair:['short','#2E2B3B'], fit:['tee','#4F7BF0'], acc:['cap','#E5535B'], mouth:'grin', act:'squat' },
-  { n:'双马尾',   skin:0, hair:['twin','#8B5CC9'], fit:['frill','#7FD1D6'], acc:['none'], eyes:'happy', act:'spin' },
-  { n:'爆炸头',   skin:3, hair:['afro','#2E2B3B'], fit:['overalls','#FFB86B','#3DB37A'], acc:['none'], mouth:'open', act:'cheer' },
-  { n:'小骑士',   skin:1, hair:['side','#8A5A3C'], fit:['cape','#FFD66B','#E5535B'], acc:['none'], act:'salute' },
-  { n:'酷妹',     skin:2, hair:['bob','#E5535B'], fit:['jacket','#3A3550','#FFD66B'], acc:['none'], eyes:'wink', act:'wavel' },
-  { n:'小绅士',   skin:0, hair:['short','#E8B04B'], fit:['jacket','#4F7BF0','#fff'], acc:['glasses'], eyes:'happy', act:'bow' }
+  { n:'阳光少年', skin:0, hair:['bowl','#8A5A3C'], fit:['tee','#FFB86B'], acc:['none'] },
+  { n:'蝴蝶结',   skin:0, hair:['bob','#2E2B3B'], fit:['frill','#FF9DB0'], acc:['bow'], mouth:'cat' },
+  { n:'毛线帽',   skin:1, hair:['short','#E8B04B'], fit:['scarf','#8FB3FF','#E5535B'], acc:['beanie','#7FD1AE'] },
+  { n:'猫耳',     skin:0, hair:['bowl','#D9575A'], fit:['hoodie','#C3A6F2'], acc:['cat','#D9575A'], mouth:'open' },
+  { n:'小花',     skin:2, hair:['wavy','#7A4FB8'], fit:['overalls','#FFD66B','#4F7BF0'], acc:['flower'] },
+  { n:'书生',     skin:0, hair:['side','#3A3550'], fit:['bowtie','#7FD1AE','#E5535B'], acc:['glasses'] },
+  { n:'丸子头',   skin:0, hair:['buns','#FF8FB1'], fit:['tee','#FFD66B'], acc:['none'], mouth:'cat' },
+  { n:'运动健将', skin:1, hair:['spiky','#F28C38'], fit:['track','#7FD1AE'], acc:['headband'], mouth:'grin' },
+  { n:'星星发卡', skin:0, hair:['long','#2E2B3B'], fit:['jacket','#C3A6F2'], acc:['star'], eyes:'wink' },
+  { n:'卷卷',     skin:2, hair:['curly','#6B4A2E'], fit:['sweater','#FF9DB0'], acc:['freckles'], eyes:'happy', mouth:'open', blush:false },
+  { n:'大叔',     skin:1, hair:['side','#4A4A5A'], fit:['bowtie','#8FB3FF','#E5535B'], acc:['stache'], mouth:'none' },
+  { n:'耳机',     skin:0, hair:['pony','#2FA4A0'], fit:['hoodie','#FFB86B'], acc:['phones'] },
+  { n:'棒球小子', skin:3, hair:['short','#2E2B3B'], fit:['tee','#4F7BF0'], acc:['cap','#E5535B'], mouth:'grin' },
+  { n:'双马尾',   skin:0, hair:['twin','#8B5CC9'], fit:['frill','#7FD1D6'], acc:['none'], eyes:'happy' },
+  { n:'爆炸头',   skin:3, hair:['afro','#2E2B3B'], fit:['overalls','#FFB86B','#3DB37A'], acc:['none'], mouth:'open' },
+  { n:'小骑士',   skin:1, hair:['side','#8A5A3C'], fit:['cape','#FFD66B','#E5535B'], acc:['none'] },
+  { n:'酷妹',     skin:2, hair:['bob','#E5535B'], fit:['jacket','#3A3550','#FFD66B'], acc:['none'], eyes:'wink' },
+  { n:'小绅士',   skin:0, hair:['short','#E8B04B'], fit:['jacket','#4F7BF0','#fff'], acc:['glasses'], eyes:'happy' }
 ];
 const AV_N = AVATARS.length;
-function avatarSvg(i, arms){
+function avatarSvg(i){
   i = ((i|0) % AV_N + AV_N) % AV_N;
   const a = AVATARS[i];
   const h = HAIR[a.hair[0]](a.hair[1]);
   const o = OUTFIT[a.fit[0]](a.fit[1], a.fit[2]);
   const x = ACC[a.acc[0]](a.acc[1] || a.hair[1]);
   const body = a.fit[1];
-  const armSvg = arms ? `<g class="arm-l"><path d="M36 94 Q24 100 24 108" fill="none" stroke="${INK}" stroke-width="9" stroke-linecap="round"/><path d="M36 94 Q24 100 24 108" fill="none" stroke="${body}" stroke-width="5" stroke-linecap="round"/><circle cx="24" cy="109" r="4.5" fill="${SKINS[a.skin]}" ${sw}/></g>
-    <g class="arm-r"><path d="M84 94 Q96 100 96 108" fill="none" stroke="${INK}" stroke-width="9" stroke-linecap="round"/><path d="M84 94 Q96 100 96 108" fill="none" stroke="${body}" stroke-width="5" stroke-linecap="round"/><circle cx="96" cy="109" r="4.5" fill="${SKINS[a.skin]}" ${sw}/></g>` : '';
   return chibi({
     body, skin: SKINS[a.skin],
     hairBack: (o.back || '') + (h.back || ''),
     hairFront: h.front || '',
-    extra: (o.extra || '') + armSvg,
+    extra: o.extra || '',
     hat: x.hat || '', front: x.front || '',
     eyes: a.eyes || 'normal', mouth: a.mouth || 'smile', blush: a.blush !== false
   });
@@ -736,13 +635,13 @@ function render(){
   renderModal();
 }
 
-const CASTLE_SVG = (fill, stroke, win, cls = '') => `
+const CASTLE_SVG = (fill, stroke, win) => `
   <g fill="${fill}" stroke="${stroke}" stroke-width="2" stroke-linejoin="round">
     <rect x="140" y="70" width="110" height="90"/><rect x="118" y="44" width="34" height="116"/><rect x="238" y="44" width="34" height="116"/><rect x="176" y="22" width="38" height="138"/>
     <path d="M114 44 L135 10 L156 44Z M234 44 L255 10 L276 44Z M172 22 L195 -14 L218 22Z"/>
     <path d="M140 70 h10 v-8 h10 v8 h10 v-8 h10 v8 h10 M210 70 h10 v-8 h10 v8 h10 v-8 h10 v8"/>
   </g>
-  <g fill="${win}" class="${cls}"><rect x="130" y="70" width="8" height="12" rx="4"/><rect x="250" y="70" width="8" height="12" rx="4"/><rect x="190" y="44" width="10" height="16" rx="5"/><rect x="186" y="110" width="18" height="50" rx="9"/><rect x="156" y="96" width="8" height="12" rx="4"/><rect x="226" y="96" width="8" height="12" rx="4"/></g>`;
+  <g fill="${win}"><rect x="130" y="70" width="8" height="12" rx="4"/><rect x="250" y="70" width="8" height="12" rx="4"/><rect x="190" y="44" width="10" height="16" rx="5"/><rect x="186" y="110" width="18" height="50" rx="9"/><rect x="156" y="96" width="8" height="12" rx="4"/><rect x="226" y="96" width="8" height="12" rx="4"/></g>`;
 
 function coverScene(){
   const TX = 200, TY = 292, RX = 178, RY = 44;
@@ -750,12 +649,12 @@ function coverScene(){
   const seats = [['servant', 74, 74], ['percival', 137, 80], ['merlin', 200, 88], ['assassin', 263, 80], ['morgana', 326, 74]];
   const place = (svg, x, y, w, h) => svg.replace('<svg class="chibi"', `<svg x="${x}" y="${y}" width="${w}" height="${h}" class="chibi"`);
   let chairs = '', chars = '';
-  seats.forEach(([k, x, w], i) => {
+  seats.forEach(([k, x, w]) => {
     const h = w * 126 / 120, e = edgeY(x), y = e - 0.84 * h, cw = w * 0.8, top = y + 0.16 * h - 12;
     if(k === 'merlin') chairs += `<path d="M${x - cw/2} ${e + 4} V${top + 16} Q${x - cw/2} ${top} ${x} ${top - 6} Q${x + cw/2} ${top} ${x + cw/2} ${top + 16} V${e + 4}Z" fill="url(#chair)" stroke="#C9A24A" stroke-width="1.5"/>
       <path d="M${x - cw/2 + 6} ${e} V${top + 20} Q${x - cw/2 + 6} ${top + 8} ${x} ${top + 3} Q${x + cw/2 - 6} ${top + 8} ${x + cw/2 - 6} ${top + 20} V${e}" fill="none" stroke="rgba(201,162,74,.35)" stroke-width="1"/>
       <circle cx="${x}" cy="${top - 9}" r="3.5" fill="#E0B45A"/>`;
-    chars += `<g class="ch" style="animation-delay:${-i * 0.6}s">${place(ART[k](), x - w/2, y, w, h)}</g>`;
+    chars += `${place(ART[k](), x - w/2, y, w, h)}`;
   });
   const cx = TX, cy = TY, R1 = 156, R2 = 38.5, n = 12;
   const pt = a => `${(cx + R1 * Math.cos(a)).toFixed(1)} ${(cy + R2 * Math.sin(a)).toFixed(1)}`;
@@ -769,9 +668,9 @@ function coverScene(){
     <rect x="${x - 2}" y="${y - 8}" width="4" height="8" fill="#C9A24A"/>
     <ellipse cx="${x}" cy="${y - 8}" rx="6" ry="2" fill="#E0B45A"/>
     <rect x="${x - 3.5}" y="${y - 28}" width="7" height="20" rx="2" fill="#FFF3D6"/>
-    <circle cx="${x}" cy="${y - 34}" r="14" fill="url(#halo)" class="halo"/>
-    <path class="flame" d="M${x} ${y - 41} Q${x + 5} ${y - 33} ${x} ${y - 28} Q${x - 5} ${y - 33} ${x} ${y - 41}Z" fill="#FFB43D"/>
-    <path class="flame" d="M${x} ${y - 36} Q${x + 2.2} ${y - 32} ${x} ${y - 29.5} Q${x - 2.2} ${y - 32} ${x} ${y - 36}Z" fill="#FFF0B0"/>`;
+    <circle cx="${x}" cy="${y - 34}" r="14" fill="url(#halo)"/>
+    <path d="M${x} ${y - 41} Q${x + 5} ${y - 33} ${x} ${y - 28} Q${x - 5} ${y - 33} ${x} ${y - 41}Z" fill="#FFB43D"/>
+    <path d="M${x} ${y - 36} Q${x + 2.2} ${y - 32} ${x} ${y - 29.5} Q${x - 2.2} ${y - 32} ${x} ${y - 36}Z" fill="#FFF0B0"/>`;
   const goblet = (x, y) => `<path d="M${x - 6} ${y - 14} Q${x - 6} ${y - 4} ${x} ${y - 3} Q${x + 6} ${y - 4} ${x + 6} ${y - 14}Z" fill="#E0B45A" stroke="#8A6417" stroke-width="1"/>
     <rect x="${x - 1.2}" y="${y - 3}" width="2.4" height="6" fill="#C9A24A"/><ellipse cx="${x}" cy="${y + 3}" rx="5" ry="1.6" fill="#E0B45A"/>
     <ellipse cx="${x}" cy="${y - 14}" rx="6" ry="1.6" fill="#8E2F43"/>`;
@@ -788,18 +687,18 @@ function coverScene(){
     </defs>
     <path d="M0 188 Q50 166 104 180 Q150 164 196 176 Q250 160 300 178 Q350 162 400 184 V192 H0Z" fill="#221D4A"/>
     <rect x="0" y="186" width="400" height="164" fill="url(#lake)"/>
-    <g transform="translate(98.6 102.8) scale(.52)">${CASTLE_SVG('#3B4B7A', '#5D73A8', '#FFE29A', 'win')}</g>
+    <g transform="translate(98.6 102.8) scale(.52)">${CASTLE_SVG('#3B4B7A', '#5D73A8', '#FFE29A')}</g>
     <ellipse cx="200" cy="187" rx="74" ry="7" fill="#1B2246"/>
     <g clip-path="url(#lakeclip)" opacity=".22"><g transform="translate(98.6 271.2) scale(.52 -.52)">${CASTLE_SVG('#3B4B7A', '#5D73A8', '#FFE29A')}</g></g>
-    <g class="ripple" stroke="rgba(190,220,255,.35)" stroke-width="1.6" stroke-linecap="round">
+    <g stroke="rgba(190,220,255,.35)" stroke-width="1.6" stroke-linecap="round">
       <path d="M40 200 H100 M290 206 H360 M150 214 H190 M226 220 H262 M70 224 H120"/>
     </g>
-    <g class="ripple r2" stroke="rgba(255,230,160,.45)" stroke-width="2" stroke-linecap="round">
+    <g stroke="rgba(255,230,160,.45)" stroke-width="2" stroke-linecap="round">
       <path d="M332 196 H352 M326 204 H358 M334 212 H350"/>
     </g>
     ${chairs}
     ${chars}
-    <ellipse cx="200" cy="246" rx="190" ry="70" fill="url(#warm)" class="halo"/>
+    <ellipse cx="200" cy="246" rx="190" ry="70" fill="url(#warm)"/>
     <ellipse cx="200" cy="336" rx="176" ry="12" fill="rgba(0,0,0,.45)"/>
     <path d="M${TX - RX} ${TY} V${TY + 16} A${RX} ${RY} 0 0 0 ${TX + RX} ${TY + 16} V${TY}Z" fill="url(#tedge)" stroke="#1A0F07" stroke-width="1.5"/>
     <path d="M${TX - RX} ${TY + 9} A${RX} ${RY} 0 0 0 ${TX + RX} ${TY + 9}" fill="none" stroke="#C9A24A" stroke-width="1.6" opacity=".8"/>
@@ -831,13 +730,8 @@ function viewHome(){
     </div>
     <div>
       <div class="small muted" style="margin-bottom:6px">选一个形象</div>
-      <div class="pickstage">
-        <div class="spot"></div>
-        <div class="pickav ${S.justPicked ? 'pop' : ''}"><div class="actor act-${AVATARS[((me.avatar|0) % AV_N + AV_N) % AV_N].act}">${avatarSvg(me.avatar, true)}</div></div>
-        ${S.justPicked ? Array.from({length:10}, (_, k) => `<i class="spk" style="--a:${k * 36}deg;--d:${70 + (k % 3) * 14}px;animation-delay:${(k % 2) * .05}s"></i>`).join('') : ''}
-      </div>
       <div class="avatars">${Array.from({length: AV_N}, (_, i) =>
-        `<button data-act="avatar" data-i="${i}" class="${me.avatar === i ? 'on' : ''}" aria-label="${AVATARS[i].n}">${avatarSvg(i)}</button>`).join('')}</div>
+        `<button data-act="avatar" data-i="${i}" class="${me.avatar === i ? 'on' : ''}" aria-label="${AVATARS[i].n}" aria-pressed="${me.avatar === i}">${avatarSvg(i)}</button>`).join('')}</div>
     </div>
   </div>
   <div class="card stack" style="margin-top:16px">
@@ -900,7 +794,7 @@ function viewLobby(){
     <button class="btn small white" data-act="rules">${I.book}规则</button>
   </div>
   <div class="card center">
-    <div class="small muted">房间号（告诉朋友，打开同一个网页输入）</div>
+    <div class="small muted">房间号</div>
     <div class="roomcode fun">${esc(r.code)}</div>
     <div class="row" style="justify-content:center;margin-top:6px">
       <button class="btn small white" data-act="share">${I.link}分享链接</button>
@@ -922,7 +816,7 @@ function viewLobby(){
 
   <div class="card" style="margin-top:16px">
     <h3 class="fun">选你的座位号</h3>
-    <div class="tip" style="margin-top:8px">大家围坐一圈，随便定一个人是 <b>1 号</b>，然后<b>顺时针</b>依次是 2 号、3 号…… 每个人点下面自己的号码。队长会按这个顺序轮换。</div>
+    <div class="tip" style="margin-top:8px">从 1 号开始，按顺时针选座。队长按座位号轮换。</div>
     ${seatPickHtml()}
   </div>
 
@@ -968,89 +862,62 @@ function seatPickHtml(){
 }
 
 function phaseView(){
-  const r = room(), me = meInfo(), n = r.n, q = r.quest_no, size = r.sizes[q-1];
-  const leader = r.leader, isLeader = me.seat === leader;
-  const needTwo = r.fails_needed[q-1] === 2;
+  const r = room(), me = meInfo();
+  const size = r.sizes[r.quest_no - 1];
+  const needTwo = r.fails_needed[r.quest_no - 1] === 2;
+  const questWarning = needTwo ? '<p class="essential">需 2 张失败牌才算失败</p>' : '';
+  const lastChance = r.reject_count === 4 ? '<p class="danger">再否决一次，坏人获胜</p>' : '';
+
   if(r.phase === 'team_build'){
-    const lastChance = r.reject_count === 4;
-    if(isLeader){
-      const ok = S.pick.length === size;
-      return `
-        <div class="kicker">第 ${q} 个任务 · 第 ${r.reject_count+1}/5 次组队</div>
-        <h2 class="fun"><span class="ico">${ICON.crown}</span>你是队长，请选 ${size} 名队员</h2>
-        <p>先和大家讨论，然后<b>点下面的座位</b>选人（可以选自己）。已选 ${S.pick.length}/${size}。</p>
-        ${lastChance ? `<div class="warn" style="margin-top:8px">这是第 5 次组队！如果再被否决，坏人直接获胜。</div>` : ''}
-        ${needTwo ? `<div class="tip" style="margin-top:8px">这个任务需要 <b>2 张失败牌</b> 才算失败。</div>` : ''}
-        <button class="btn block blue" style="margin-top:12px" data-act="propose" ${ok && !S.busy ? '' : 'disabled'}>提交队伍，大家投票</button>`;
-    }
+    const isLeader = me.seat === r.leader;
     return `
-      <div class="kicker">第 ${q} 个任务 · 第 ${r.reject_count+1}/5 次组队</div>
-      <h2 class="fun">队长 ${nm(leader)} 正在组队</h2>
-      <p>这个任务需要 <b>${size} 人</b>。大家可以自由讨论、给建议，最终由队长在手机上提交。</p>
-      ${lastChance ? `<div class="warn" style="margin-top:8px">这是第 5 次组队！如果再被否决，坏人直接获胜。</div>` : ''}
-      ${needTwo ? `<div class="tip" style="margin-top:8px">这个任务需要 <b>2 张失败牌</b> 才算失败。</div>` : ''}`;
+      <h2 class="fun"><span class="ico">${ICON.crown}</span>${isLeader ? `点座位选队员（${S.pick.length}/${size}）` : `${nm(r.leader)} 正在选 ${size} 名队员`}</h2>
+      ${lastChance}${questWarning}`;
   }
   if(r.phase === 'team_vote'){
     const voted = players().filter(p => p.voted).length;
     const mv = me.my_vote;
     return `
-      <div class="kicker">第 ${q} 个任务 · 第 ${r.reject_count+1}/5 次组队</div>
-      <h2 class="fun">${I.ballot}全员投票</h2>
-      <p>队长 ${nm(leader)} 提议的队伍：${names(r.team)}</p>
-      <p class="small muted" style="margin-top:4px">每个人都要投票（包括队长和队员）。超过半数同意才通过，平票算否决。全部投完后同时公开每个人的票。</p>
-      <div class="bigchoice" style="margin-top:12px">
-        <button class="btn green ${mv === true ? 'sel' : ''}" data-act="vote" data-v="1" ${S.busy ? 'disabled' : ''}>${I.ok}同意</button>
-        <button class="btn red ${mv === false ? 'sel' : ''}" data-act="vote" data-v="0" ${S.busy ? 'disabled' : ''}>${I.no}反对</button>
+      <h2 class="fun">${I.ballot}全员投票（${voted}/${r.n}）</h2>
+      <p>队伍：${names(r.team)}</p>
+      ${lastChance}
+      <div class="bigchoice">
+        <button class="btn green ${mv === true ? 'sel' : ''}" data-act="vote" data-v="1" aria-pressed="${mv === true}" ${S.busy ? 'disabled' : ''}>${I.ok}同意</button>
+        <button class="btn red ${mv === false ? 'sel' : ''}" data-act="vote" data-v="0" aria-pressed="${mv === false}" ${S.busy ? 'disabled' : ''}>${I.no}反对</button>
       </div>
-      <p class="center small" style="margin-top:10px">${mv == null ? '你还没投票' : `你投了 <b>${mv ? '同意' : '反对'}</b>，所有人投完前可以改`} · 已投 ${voted}/${n}</p>`;
+      ${mv == null ? '' : '<p class="muted">投票结束前可改票</p>'}`;
   }
   if(r.phase === 'quest'){
     const inTeam = r.team.includes(me.seat);
-    const played = players().filter(p => p.played).length;
     if(inTeam && !me.played){
       const good = me.side === 'good';
       return `
-        <div class="kicker">第 ${q} 个任务 · 执行任务</div>
-        <h2 class="fun">${I.sword}秘密出任务牌</h2>
-        <p>不要让别人看到你的屏幕。${good ? '你是好人，只能出「成功」。' : '你是坏人，可以选择「成功」或「失败」。'}</p>
-        ${needTwo ? `<div class="tip" style="margin-top:8px">本任务需要 <b>2 张失败牌</b> 才会失败。</div>` : ''}
-        <div class="bigchoice" style="margin-top:12px">
-          <button class="btn blue qcard" data-act="play" data-v="1" ${S.busy ? 'disabled' : ''}>${I.spark}成功<small>任务成功</small></button>
-          <button class="btn red qcard" data-act="play" data-v="0" ${good || S.busy ? 'disabled' : ''}>${I.boom}失败<small>${good ? '好人不能出' : '破坏任务'}</small></button>
+        <h2 class="fun">${I.sword}秘密出牌</h2>
+        <p>${good ? '请遮住屏幕。好人只能出成功牌' : '请遮住屏幕再出牌'}</p>
+        ${questWarning}
+        <div class="bigchoice">
+          <button class="btn blue" data-act="play" data-v="1" ${S.busy ? 'disabled' : ''}>${I.spark}成功</button>
+          <button class="btn red" data-act="play" data-v="0" ${good || S.busy ? 'disabled' : ''}>${I.boom}失败</button>
         </div>`;
     }
+    const played = players().filter(p => p.played).length;
     return `
-      <div class="kicker">第 ${q} 个任务 · 执行任务</div>
-      <h2 class="fun">队员正在秘密出牌</h2>
-      <p>队员：${names(r.team)}</p>
-      <p style="margin-top:6px">${inTeam ? '你已经出牌了，' : ''}已出 ${played}/${r.team.length}<span class="dots"></span></p>
-      ${needTwo ? `<div class="tip" style="margin-top:8px">本任务需要 <b>2 张失败牌</b> 才会失败。</div>` : ''}`;
+      <h2 class="fun">${inTeam ? '你已出牌' : '队员正在出牌'}（${played}/${r.team.length}）</h2>
+      ${questWarning}`;
   }
   if(r.phase === 'lady'){
     const holder = r.lady_holder;
-    if(me.seat === holder){
-      return `
-        <div class="kicker">湖中仙女</div>
-        <h2 class="fun"><span class="ico">${ICON.lady()}</span>选择一名玩家查验阵营</h2>
-        <p><b>点下面的座位</b>选一个人。只有你会看到他是好人还是坏人。之前拿过湖中仙女的人不能被查验。</p>
-        <p class="small muted" style="margin-top:4px">查验完，湖中仙女交给被查验的人。你可以如实公布结果，也可以撒谎。</p>`;
-    }
-    return `
-      <div class="kicker">湖中仙女</div>
-      <h2 class="fun"><span class="ico">${ICON.lady()}</span>${nm(holder)} 正在查验</h2>
-      <p>湖中仙女持有者正在选择一名玩家查看阵营，请稍等<span class="dots"></span></p>`;
+    return me.seat === holder ? `
+      <h2 class="fun"><span class="ico">${ICON.lady()}</span>点座位查验阵营</h2>
+      <p>灰色座位不可选，结果仅你可见</p>` : `
+      <h2 class="fun"><span class="ico">${ICON.lady()}</span>${nm(holder)} 正在查验阵营</h2>`;
   }
   if(r.phase === 'assassin'){
-    if(me.role === 'assassin'){
-      return `
-        <div class="kicker">最后的机会</div>
-        <h2 class="fun">${I.sword}刺客，指认梅林</h2>
-        <p>好人完成了 3 个任务！坏人现在<b>亮明身份</b>，可以一起讨论。由你<b>点下面的座位</b>做最终选择——找到梅林，坏人就赢。</p>`;
-    }
-    return `
-      <div class="kicker">最后的机会</div>
-      <h2 class="fun">${I.sword}刺客正在寻找梅林</h2>
-      <p>好人完成了 3 个任务！坏人（红色座位）现在亮明身份，可以公开讨论谁是梅林，由刺客做最终指认。好人请保持沉默。</p>`;
+    return me.role === 'assassin' ? `
+      <h2 class="fun">${I.sword}点座位指认梅林</h2>
+      <p>指认正确，坏人获胜</p>` : `
+      <h2 class="fun">${I.sword}等待刺客指认梅林</h2>
+      ${me.side === 'evil' ? '<p>坏人可公开讨论</p>' : ''}`;
   }
   return '';
 }
@@ -1067,8 +934,8 @@ function seatView(p){
     clickable = true; act = 'pick';
     if(S.pick.includes(p.seat)) cls += ' pick';
   } else if(inTeam){ cls += ' team'; }
-  if(r.phase === 'team_vote') st = p.voted ? '<div class="st yes">已投票</div>' : '<div class="st wait">未投</div>';
-  if(r.phase === 'quest' && inTeam) st = p.played ? '<div class="st yes">已出牌</div>' : '<div class="st wait">出牌中</div>';
+  if(r.phase === 'team_vote' && p.voted) st = '<div class="st yes">已投</div>';
+  if(r.phase === 'quest' && inTeam && p.played) st = '<div class="st yes">已出牌</div>';
   if(r.phase === 'lady' && me.seat === r.lady_holder){
     if(p.seat === me.seat || r.lady_previous.includes(p.seat)) cls += ' dim';
     else { clickable = true; act = 'lady'; }
@@ -1102,8 +969,8 @@ function viewGame(){
     const cls = res ? (res.success ? 'ok' : 'bad') : (i + 1 === q && r.phase !== 'assassin' ? 'cur' : '');
     return `<div class="qt ${cls}">${res ? (res.success ? '✓' : '✗') : sz}<small>${res ? (res.success ? '成功' : res.fails + '张败') : '第' + (i+1) + '轮'}</small>${r.fails_needed[i] === 2 ? '<span class="two">需2败</span>' : ''}</div>`;
   }).join('');
-  const rejects = Array.from({length:5}, (_, i) => `<i class="${i < r.reject_count ? 'on' : ''} ${i === 4 ? 'last' : ''}"></i>`).join('');
-  const role = ROLES[me.role] || null;
+  const canPropose = r.phase === 'team_build' && me.seat === r.leader;
+  const teamReady = S.pick.length === r.sizes[q - 1];
   return `
   <div class="navbar">
     <span class="logo">Avalon</span>
@@ -1112,17 +979,17 @@ function viewGame(){
     <button class="btn small white" data-act="rules" aria-label="规则">${I.book}</button>
     ${me.host ? `<button class="btn small red" data-act="abort" style="box-shadow:none">结束</button>` : ''}
   </div>
-  <div class="card">
+  <div class="card progress">
     <div class="track">${track}</div>
-    <div class="rejects">连续否决 ${rejects} <span>${r.reject_count}/5</span></div>
+    <p class="rejects ${r.reject_count === 4 ? 'danger' : ''}">连续否决 ${r.reject_count}/5</p>
   </div>
-  <div class="card step" style="margin-top:16px">${phaseView()}</div>
-  <div class="seats" style="margin-top:20px">${players().map(seatView).join('')}</div>
-  <p class="small muted center" style="margin-top:12px">座位按顺时针排列，队长按 1→2→3… 的顺序轮换。</p>
+  <div class="card step">${phaseView()}</div>
+  <div class="seats game-seats">${players().map(seatView).join('')}</div>
+  ${canPropose ? `<button class="btn block blue game-submit" data-act="propose" ${teamReady && !S.busy ? '' : 'disabled'}>提交队伍</button>` : ''}
   <div class="mebar"><div class="in">
     <span class="av">${avatarSvg(players().find(p => p.seat === me.seat)?.avatar)}</span>
     <div class="grow"><b>${esc(me.name)}</b><div class="small muted">${me.seat + 1} 号位</div></div>
-    <button class="btn blue" data-act="myrole">${I.lock}查看我的身份</button>
+    <button class="btn blue" data-act="myrole">${I.lock}我的身份</button>
   </div></div>`;
 }
 
@@ -1168,7 +1035,7 @@ function viewEnd(){
     }).join('')}</div>
   </div>
   <div class="stack" style="margin-top:18px">
-    ${me.host ? `<button class="btn block green" data-act="again" ${S.busy ? 'disabled' : ''}>${I.again}再来一局（回到大厅）</button>`
+    ${me.host ? `<button class="btn block green" data-act="again" ${S.busy ? 'disabled' : ''}>${I.again}再来一局</button>`
               : `<div class="card center"><span class="fun dots">等房主开始下一局</span></div>`}
     <button class="btn block white" data-act="leave">离开房间</button>
   </div>`;
@@ -1212,7 +1079,7 @@ function renderModal(){
   if(m.type === 'night'){
     body = `
       <h2 class="fun">${I.moon}第 ${r.game_no} 局开始</h2>
-      <p class="center small muted" style="margin:6px 0 12px">不用闭眼！每个人在自己手机上偷偷看身份，看完点「我记住了」。</p>
+      <p class="center small muted" style="margin:6px 0 12px">请独自查看身份。</p>
       ${roleCard(!!m.open)}
       <button class="btn block blue" style="margin-top:16px" data-act="close">我记住了</button>`;
   } else if(m.type === 'myrole'){
@@ -1224,7 +1091,6 @@ function renderModal(){
       <p class="center">第 ${h.quest} 个任务 · 队长 ${nm(h.leader)}<br>队伍：${names(h.team)}</p>
       <p class="center"><span class="chip green">同意 ${yes}</span> <span class="chip evil">反对 ${h.votes.length - yes}</span></p>
       <div class="vlist">${h.votes.map((v, i) => `<div><span>${i+1}. ${nm(i)}</span><span class="chip ${v ? 'green' : 'evil'}">${v ? '同意' : '反对'}</span></div>`).join('')}</div>
-      <p class="center small muted" style="margin-top:10px">${h.approved ? '队员接下来秘密出任务牌。' : (r.status === 'ended' ? '' : `队长交给下一位：${nm(r.leader)}。`)}</p>
       <button class="btn block" style="margin-top:12px" data-act="close">知道了</button>`;
   } else if(m.type === 'quest'){
     const q = m.q, total = q.team.length;
@@ -1242,11 +1108,11 @@ function renderModal(){
       <h2 class="fun"><span class="ico">${ICON.lady()}</span>查验结果</h2>
       <div style="width:120px;margin:10px auto">${avatarSvg(P(l.target)?.avatar)}</div>
       <p class="center" style="font-size:20px"><b>${nm(l.target)}</b> 是 <span class="chip ${mine}" style="font-size:18px">${mine === 'good' ? '好人' : '坏人'}</span></p>
-      <p class="center small muted">只有你知道这个结果。你可以如实告诉大家，也可以撒谎。湖中仙女已经交给 ${nm(l.target)}。</p>
+      <p class="center small muted">结果仅你可见。湖中仙女已交给 ${nm(l.target)}。</p>
       <button class="btn block" style="margin-top:12px" data-act="close">知道了</button>`
     : `
       <h2 class="fun"><span class="ico">${ICON.lady()}</span>湖中仙女</h2>
-      <p class="center">${nm(l.holder)} 查验了 ${nm(l.target)} 的阵营。<br>只有 ${nm(l.holder)} 知道结果，听听他怎么说吧。</p>
+      <p class="center">${nm(l.holder)} 查验了 ${nm(l.target)}，并将湖中仙女交给对方。</p>
       <button class="btn block" style="margin-top:12px" data-act="close">知道了</button>`;
   } else if(m.type === 'history'){
     const rl = (r.settings && r.settings.roles) || [];
@@ -1388,7 +1254,7 @@ function enterRoom(out){
   S.state = null; S.sig = '';
 }
 const actions = {
-  avatar(d){ readInputs(); S.me.avatar = +d.i; store.set('avalon_me', S.me); S.justPicked = true; render(); S.justPicked = false; },
+  avatar(d){ readInputs(); S.me.avatar = +d.i; store.set('avalon_me', S.me); render(); $app.querySelector('.avatars .on').focus({ preventScroll:true }); },
   create(){
     readInputs();
     if(!S.me.name){ toast('先填一下你的名字'); return; }
