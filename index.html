@@ -129,22 +129,25 @@ button:disabled { cursor: default; }
 
 /* 封面与入房 */
 .home { max-width: 420px; margin: 9px auto 0; }
+.home-cover, .home-form, .home-entry, .mebar {
+  background:
+    linear-gradient(#173734bf, #152f2ddb),
+    #1d3c39 url("./assets/mist/lake-board-v2.jpg") center 72% / cover;
+}
 .illustration-frame {
   position: relative; isolation: isolate;
-  border: 5px solid #d7b37d; border-radius: 17px;
-  box-shadow: 0 0 0 1px #785132, 0 7px 22px #091b19a6;
+  border: 5px solid transparent; border-radius: 12px;
+  background-clip: padding-box;
+  box-shadow: 0 8px 24px #091b1999;
 }
 .illustration-frame::after {
-  content: ""; position: absolute; inset: -5px; z-index: 3; pointer-events: none;
-  border: 1px solid #eecea2; border-radius: inherit;
-  background:
-    linear-gradient(131deg, #ffdf9f8c, transparent 16%, #7446234a 43%, #ffe9b24d 59%, transparent 80%, #a36f3f96) border-box,
-    repeating-linear-gradient(121deg, transparent 0 3px, #7748254a 3px 4px, transparent 4px 7px) border-box;
-  padding: 4px;
-  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  mask-composite: exclude;
+  content: ""; position: absolute; inset: -6px; z-index: 3; pointer-events: none;
+  border: 1px solid transparent;
+  border-image: url("./assets/mist/ornaments/ragged-frame.webp") 10% / 22px stretch;
 }
+.home-cover { padding-bottom: 3px; }
 .hero {
+  position: relative;
   aspect-ratio: 2 / 3;
   background: #183a38;
 }
@@ -159,24 +162,47 @@ button:disabled { cursor: default; }
 .wordmark, .cover-crest { position: absolute; left: 50%; transform: translateX(-50%); pointer-events: none; }
 .wordmark {
   display: block; width: 93%; height: auto; top: 4.1%;
-  font: 900 61px var(--logo); letter-spacing: 1.3px;
+  font: 700 61px "Cinzel", Georgia, serif; letter-spacing: 1.3px;
   filter: drop-shadow(0 3px 3px #102522b0);
 }
 .cover-crest { width: 37%; height: auto; top: 20%; }
 .cover-actions {
-  position: absolute; inset: auto 8% clamp(13px, 4.8vw, 24px);
+  position: absolute; inset: auto 5.5% clamp(12px, 4vw, 20px);
   display: grid; gap: 9px;
 }
-.btn.imprint {
-  min-height: 47px; color: #362615; font-size: 18px;
-  border: 2px solid #b48646; border-radius: 11px 9px 11px 9px;
-  background: var(--paper-texture), linear-gradient(135deg, #efcea0, #edce97 58%, #dbb37d);
-  box-shadow: 0 0 0 1px #5a4028, inset 0 0 0 2px #aa794640, 0 3px 0 #6c4b2d, 0 5px 10px #102522a0;
+.btn.plaque {
+  --plaque-art: url("./assets/mist/ornaments/gilt-paper.webp");
+  --plaque-fallback: linear-gradient(#edc88f, #d9a968);
+  color: #352515; border: 1px solid transparent; border-radius: 7px;
+  border-image: var(--plaque-art) 29% 12% fill / 28% 12% stretch;
+  background: var(--plaque-fallback) center / calc(100% - 14px) calc(100% - 12px) no-repeat;
+  box-shadow: none; filter: drop-shadow(0 2px 2px #0b211eb3);
 }
+.btn.imprint { min-height: 57px; font-size: 21px; }
 .btn.imprint .ico { width: 24px; height: 24px; }
-.home-form { margin-top: 10px; padding: 9px; }
+.home-form, .home-entry {
+  margin: 3px 8px 0; padding: 10px;
+  border: 1px solid #8c8e6e; border-radius: 5px;
+  box-shadow: inset 0 0 0 2px #b29d6b20;
+  border-image: url("./assets/mist/ornaments/ragged-frame.webp") 10% / 9px stretch;
+}
+.home-form label { color: #f1d6a3; }
+.home-form { position: relative; }
+.home-form::before, .home-form::after {
+  content: ""; position: absolute; width: 24px; height: 14px; pointer-events: none;
+  background: url("./assets/mist/crest-v2.png") left center / 77px auto no-repeat;
+  opacity: .68;
+}
+.home-form::before { top: -2px; left: 3px; transform: rotate(23deg); }
+.home-form::after { bottom: -1px; right: 3px; background-position: right center; transform: rotate(23deg); }
 .home-form .av { width: 46px; }
-.home-form .btn { flex: none; padding-inline: 7px; }
+.home-form .btn { flex: none; padding-inline: 7px; border-color: #a98b58; border-radius: 5px; background: #2b4541; }
+.home-form input.field, .home-entry .digit {
+  background: #2c4644; border-color: #9aa58a; color: #fff1d0;
+  border-radius: 5px; box-shadow: inset 0 2px 3px #132d2a80;
+}
+.home-form input.field::placeholder { color: #cbd3bd; }
+.home-form input.field:focus, .home-entry .digit:focus { border-color: #f5d59a; }
 .home-form label, .field-label { display: block; margin-bottom: 3px; font-weight: 700; }
 input.field, .digit {
   width: 100%; min-width: 0; min-height: 44px;
@@ -200,7 +226,8 @@ input.field::placeholder { color: var(--muted); }
   width: 19px; height: 19px; border: 1px solid #794c25; border-radius: 50%;
   background: #f5d59a; color: #352616; font: 700 12px/1 system-ui;
 }
-.home-entry { margin-top: 10px; }
+.home-entry { margin-top: 8px; }
+.home-tools { margin-top: 12px; }
 .join-row { align-items: end; }
 .join-row .btn { flex: none; }
 .codebox { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 5px; }
@@ -249,7 +276,13 @@ input.field::placeholder { color: var(--muted); }
 .seatpick .free, .seatpick .taken { color: var(--muted); }
 
 /* 任务轨道和水纹圆桌 */
-.game-nav { margin-inline: auto; max-width: 442px; }
+.game-nav {
+  margin: 0; padding-inline: 9px; border-bottom: 0;
+  background: linear-gradient(#152f2cb8, #173432df),
+    #1b3634 url("./assets/mist/lake-board-v2.jpg") center 53% / cover;
+}
+.game-nav .logo { font-family: "Cinzel", Georgia, serif; }
+.game-nav .plaque { padding-inline: 13px; }
 .game-menu { position: relative; }
 .game-menu summary { list-style: none; cursor: pointer; }
 .game-menu summary::-webkit-details-marker { display: none; }
@@ -266,6 +299,9 @@ input.field::placeholder { color: var(--muted); }
 .lake-map {
   position: relative; isolation: isolate; aspect-ratio: 1122 / 1402;
   width: 100%; min-height: 423px;
+}
+.lake-board:not(:has(.lake-action-top)) .lake-map:not(.crowded, .dense, [data-players="6"]) {
+  min-height: clamp(423px, min(155cqi, 100svh - 286px), 560px);
 }
 .lake-map.crowded { min-height: 474px; }
 .lake-map[data-players="6"] { min-height: 555px; }
@@ -299,6 +335,7 @@ input.field::placeholder { color: var(--muted); }
   white-space: nowrap;
 }
 .qt .result, .qt .two, .qt .fails { font-size: 11px; }
+.qt-label { background: #ecd5ae url("./assets/mist/ornaments/torn-paper.webp") center / 123% 128%; }
 .qt .result { font-weight: 700; }
 .qt.cur .qt-label { outline: 1px solid #9b6a32; box-shadow: 0 0 0 1px #f1d7a5; }
 .qt.ok .result { color: #24453a; background: #dae4c9; }
@@ -321,14 +358,19 @@ input.field::placeholder { color: var(--muted); }
 .lake-action-top { margin: 8px; }
 .lake-caption { position: relative; margin: -10px auto 0; width: fit-content; max-width: calc(100% - 18px); text-align: center; }
 .lake-map.dense + .lake-caption { margin-top: -28px; }
-.lake-caption .step { padding: 7px 14px; border-color: #b48a53; }
+.lake-caption .step {
+  padding: 9px 17px; border-color: transparent; border-radius: 0; box-shadow: none;
+  border-image: url("./assets/mist/ornaments/torn-paper.webp") 31% 12% fill / 25% 24px stretch;
+  background: linear-gradient(#efce9a, #eac48a) center / calc(100% - 22px) calc(100% - 14px) no-repeat;
+}
 .lake-caption .step h2 { font-size: 17px; }
 .table-submit { padding: 7px 17px 13px; }
-.table-submit .btn {
-  min-height: 48px; color: #fff0d4; background: linear-gradient(165deg, #883f34, #67342e);
-  box-shadow: inset 0 0 0 2px #d29b5d60, 0 2px 0 #50361e;
+.table-submit .btn.plaque {
+  --plaque-art: url("./assets/mist/ornaments/gilt-red.webp");
+  --plaque-fallback: linear-gradient(#823e36, #70342d);
+  min-height: 49px; color: #fff0d4; font-size: 18px;
 }
-.table-submit .btn:disabled { opacity: 1; background: #493b33; color: #e5cfaf; border-color: #7f6c54; box-shadow: none; }
+.table-submit .btn:disabled { opacity: .65; filter: saturate(.65); }
 .lake-board:not(:has(.table-submit)) .lake-caption { margin-bottom: 13px; }
 .lake-board:has(.lake-action-top) .lake-art { border-radius: 0 0 11px 11px; }
 .game-seats {
@@ -346,7 +388,7 @@ input.field::placeholder { color: var(--muted); }
   background: transparent; color: var(--ink); font: inherit; text-align: center;
 }
 .seat .face { position: relative; display: block; width: var(--face-size); margin: 0 auto 2px; }
-.seat .portrait { border: 2px solid #c29857; box-shadow: 0 0 0 1px #654422, 0 3px 7px #112825a6; }
+.public-portrait, .seat .public-portrait { border: 1px solid #b49560; box-shadow: 0 0 0 1px #77928676, 0 2px 5px #0f2823a6; }
 .seat .no, .seat .badge {
   position: absolute; display: grid; place-items: center;
   width: 20px; height: 20px; border: 1px solid #edcc8e; border-radius: 50%; background: #17332e;
@@ -358,7 +400,7 @@ input.field::placeholder { color: var(--muted); }
 .seat .nm {
   display: block; width: max-content; max-width: 100%; margin-inline: auto; padding: 1px 5px;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  border-radius: 5px 3px 5px 3px; background: #eed8ad; color: #302b21; font-weight: 700;
+  border-radius: 3px; background: #eed8ad url("./assets/mist/ornaments/torn-paper.webp") center / 124% 135%; color: #302b21; font-weight: 700;
   font-size: 14px; line-height: 1.25;
 }
 .seat .labels { display: flex; justify-content: center; gap: 2px; min-height: 0; margin-top: 2px; }
@@ -367,7 +409,7 @@ input.field::placeholder { color: var(--muted); }
 .seat .label-evil { color: var(--evil); }
 .seat .label-done { color: var(--good); }
 .seat.me .portrait { border-color: #fff0bf; }
-.seat.pick .portrait, .seat.team .portrait { border-color: #ffdf98; box-shadow: 0 0 0 2px #533614, 0 0 0 4px #e8b968; }
+.seat.pick .portrait, .seat.team .portrait { border-color: #f6d398; box-shadow: 0 0 0 2px #b2955d, 0 0 0 4px #54726b; }
 .seat.dim .portrait { filter: saturate(.35) brightness(.68); }
 .seat.dim .no { border-style: dashed; }
 button.seat:hover .portrait { border-color: #fff0c8; }
@@ -390,9 +432,9 @@ button.seat:focus-visible { outline: 2px solid #fff1bf; outline-offset: 2px; }
 .bigchoice .sel:focus-visible { outline: 3px dashed #663b19; outline-offset: 2px; }
 .symbol { display: inline-block; width: 24px; height: 24px; object-fit: contain; vertical-align: middle; flex: none; }
 .mebar {
-  position: fixed; z-index: 5; inset: auto 0 0; background: #132d2bfa;
+  position: fixed; z-index: 5; inset: auto 0 0;
   padding: 8px max(12px, env(safe-area-inset-right)) calc(8px + env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
-  border-top: 1px solid var(--copper);
+  border-top: 2px solid #b18f58;
 }
 .mebar .in { max-width: 536px; margin: 0 auto; display: flex; align-items: center; gap: 8px; }
 .mebar .av { width: 39px; }
@@ -499,7 +541,7 @@ button.seat:focus-visible { outline: 2px solid #fff1bf; outline-offset: 2px; }
   .home-form .av { width: 40px; }
   .home-form .btn { padding-inline: 5px; }
   .cover-actions { gap: 7px; }
-  .btn.imprint { min-height: 44px; }
+  .btn.imprint { min-height: 48px; font-size: 19px; }
   .qt .two, .qt .fails, .qt .result { padding-inline: 2px; }
 }
 @media (min-width: 600px) {
@@ -556,8 +598,8 @@ const AVATARS = [
 const AV_N = AVATARS.length;
 const AVATAR_CHOICES = [0, 1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12];
 const avatarId = i => ((Number(i) | 0) % AV_N + AV_N) % AV_N;
-const portrait = (src, size) => `<img class="portrait" src="${ASSET}${src}" alt="" width="${size}" height="${size}" decoding="async">`;
-const publicAvatar = i => portrait(`avatars/${String(avatarId(i)).padStart(2, '0')}.jpg`, 48);
+const portrait = (src, size, className = 'portrait') => `<img class="${className}" src="${ASSET}${src}" alt="" width="${size}" height="${size}" decoding="async">`;
+const publicAvatar = i => portrait(`avatar-medallions/${String(avatarId(i)).padStart(2, '0')}.webp`, 48, 'portrait public-portrait');
 const rolePortrait = role => Object.hasOwn(ROLES, role) ? portrait(`roles/${role}.jpg`, 64) : '';
 const symbol = file => `<img class="symbol" src="${ASSET}${file}.png" alt="" width="24" height="24" decoding="async">`;
 const mirrorIcon = `<span class="ico"><img src="${ASSET}lady-mirror.png" alt="" width="18" height="24"></span>`;
@@ -757,38 +799,40 @@ function viewHome(){
   const chosen = avatarId(S.me.avatar);
   const invited = Boolean(new URLSearchParams(location.search).get('room'));
   const busy = S.busy ? 'disabled' : '';
-  const create = `<button class="btn imprint" data-act="create" ${busy}>${I.castle}创建房间</button>`;
+  const create = `<button class="btn plaque imprint" data-act="create" ${busy}>${I.castle}创建房间</button>`;
   const waves = ico('0 0 32 32', '<path d="M3 9c5-5 8 5 13 0s8 5 13 0M3 16c5-5 8 5 13 0s8 5 13 0M3 23c5-5 8 5 13 0s8 5 13 0" fill="none" stroke="#4d5d49" stroke-width="2.6" stroke-linecap="round"/>');
   const joinCover = invited
-    ? `<button class="btn imprint" type="submit" form="join-form" data-act="joininvite" ${busy}>${waves}加入房间</button>`
-    : `<button class="btn imprint" data-act="togglejoin" aria-expanded="${S.joinOpen}" aria-controls="join-entry" ${busy}>${waves}${S.joinOpen ? '收起房间号' : '加入房间'}</button>`;
+    ? `<button class="btn plaque imprint" type="submit" form="join-form" data-act="joininvite" ${busy}>${waves}加入房间</button>`
+    : `<button class="btn plaque imprint" data-act="togglejoin" aria-expanded="${S.joinOpen}" aria-controls="join-entry" ${busy}>${waves}${S.joinOpen ? '收起房间号' : '加入房间'}</button>`;
   return `
   <div class="home">
-    <header class="hero illustration-frame">
-      ${coverScene()}
-      <div class="cover-actions">${invited ? joinCover + create : create + joinCover}</div>
-    </header>
-    <section class="card home-form">
-      <div class="row">
-        <span class="av">${publicAvatar(chosen)}</span>
-        <div class="grow">
-          <label class="small" for="nameInput">你的名字</label>
-          <input id="nameInput" class="field" maxlength="12" placeholder="例如：小周" value="${esc(S.me.name)}" autocomplete="off">
+    <div class="home-cover illustration-frame">
+      <header class="hero">
+        ${coverScene()}
+        <div class="cover-actions">${invited ? joinCover + create : create + joinCover}</div>
+      </header>
+      <section class="card home-form">
+        <div class="row">
+          <span class="av">${publicAvatar(chosen)}</span>
+          <div class="grow">
+            <label class="small" for="nameInput">你的名字</label>
+            <input id="nameInput" class="field" maxlength="12" placeholder="例如：小周" value="${esc(S.me.name)}" autocomplete="off">
+          </div>
+          <button class="btn small white" data-act="avatars" aria-haspopup="dialog" aria-label="更换头像，当前${AVATARS[chosen]}">更换头像</button>
         </div>
-        <button class="btn small white" data-act="avatars" aria-haspopup="dialog" aria-label="更换头像，当前${AVATARS[chosen]}">更换头像</button>
-      </div>
-    </section>
-    <section class="card home-entry" id="join-entry" ${S.joinOpen ? '' : 'hidden'}>
-      ${S.joinOpen ? `<form id="join-form" class="row join-row" novalidate>
-        <div class="grow">
-          <div class="field-label small" id="room-label">${invited ? '邀请房间号' : '房间号'}</div>
-          <div class="codebox" role="group" aria-labelledby="room-label">${[0,1,2,3].map(i => `<input class="digit" data-i="${i}" maxlength="1" inputmode="numeric" pattern="[0-9]*" value="${(S.joinCode[i] || '').trim()}" aria-label="房间号第 ${i+1} 位" autocomplete="off">`).join('')}</div>
-        </div>
-        <button class="btn" type="submit" data-act="join" ${busy}>确认加入</button>
-      </form>` : ''}
-    </section>
-    <div class="center"><button class="btn ghost" data-act="rules">${I.book}游戏规则</button></div>
-    <div class="card">
+      </section>
+      <section class="card home-entry" id="join-entry" ${S.joinOpen ? '' : 'hidden'}>
+        ${S.joinOpen ? `<form id="join-form" class="row join-row" novalidate>
+          <div class="grow">
+            <div class="field-label small" id="room-label">${invited ? '邀请房间号' : '房间号'}</div>
+            <div class="codebox" role="group" aria-labelledby="room-label">${[0,1,2,3].map(i => `<input class="digit" data-i="${i}" maxlength="1" inputmode="numeric" pattern="[0-9]*" value="${(S.joinCode[i] || '').trim()}" aria-label="房间号第 ${i+1} 位" autocomplete="off">`).join('')}</div>
+          </div>
+          <button class="btn plaque" type="submit" data-act="join" ${busy}>确认加入</button>
+        </form>` : ''}
+      </section>
+      <div class="center"><button class="btn ghost" data-act="rules">${I.book}游戏规则</button></div>
+    </div>
+    <div class="card home-tools">
       <div class="toggle" style="padding:0">
         <b class="grow">${I.flask}测试模式</b>
         <button type="button" role="switch" aria-checked="${S.test}" class="switch ${S.test ? 'on' : ''}" data-act="testmode" aria-label="测试模式"></button>
@@ -1061,19 +1105,19 @@ function viewGame(){
   </section>`;
   const density = ps.length >= 9 ? 'dense' : ps.length >= 7 ? 'crowded' : '';
   return `
-  <div class="navbar game-nav">
-    <span class="logo">Avalon</span>
-    <div class="grow"></div>
-    <button class="btn small white" data-act="history">记录</button>
-    <details class="game-menu">
-      <summary class="btn small white" data-act="menu">菜单</summary>
-      <div class="card menu-links">
-        <button class="btn small white" data-act="rules">规则</button>
-        ${me.host ? '<button class="btn small red" data-act="abort">结束本局</button>' : ''}
-      </div>
-    </details>
-  </div>
   <section class="lake-board illustration-frame" aria-label="水纹圆桌">
+    <div class="navbar game-nav">
+      <span class="logo">Avalon</span>
+      <div class="grow"></div>
+      <button class="btn small plaque" data-act="history">记录</button>
+      <details class="game-menu">
+        <summary class="btn small plaque" data-act="menu">菜单</summary>
+        <div class="card menu-links">
+          <button class="btn small white" data-act="rules">规则</button>
+          ${me.host ? '<button class="btn small red" data-act="abort">结束本局</button>' : ''}
+        </div>
+      </details>
+    </div>
     ${actionTop ? `<div class="lake-action-top">${phase}</div>` : ''}
     <div class="lake-map ${density}" data-players="${ps.length}">
       <img class="lake-art" src="${ASSET}lake-board-v2.jpg" alt="" width="1122" height="1402">
@@ -1083,12 +1127,12 @@ function viewGame(){
       <section class="game-seats" aria-label="圆桌座位">${ps.map((p, i) => seatView(p, i, ps.length)).join('')}</section>
     </div>
     ${actionTop ? '' : `<div class="lake-caption">${phase}</div>`}
-    ${canPropose ? `<div class="table-submit"><button class="btn block" data-act="propose" ${teamReady && !S.busy ? '' : 'disabled'}>${I.sword}提交队伍</button></div>` : ''}
+    ${canPropose ? `<div class="table-submit"><button class="btn block plaque" data-act="propose" ${teamReady && !S.busy ? '' : 'disabled'}>${I.sword}提交队伍</button></div>` : ''}
   </section>
   <div class="mebar"><div class="in">
     <span class="av">${publicAvatar(P(me.seat)?.avatar)}</span>
     <div class="grow"><b>${esc(me.name)}</b><div class="small muted">${me.seat + 1} 号位</div></div>
-    <button class="btn" data-act="myrole">${I.lock}我的身份</button>
+    <button class="btn plaque" data-act="myrole">${I.lock}我的身份</button>
   </div></div>`;
 }
 
