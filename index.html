@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#1B1638">
+<meta name="theme-color" content="#132D2B">
 <meta http-equiv="Cache-Control" content="no-cache">
 <title>Avalon</title>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
@@ -13,236 +13,508 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/lxgwwenkai-regular.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/lxgwwenkai-bold.css">
 <style>
-:root{
-  --bg:#1B1638; --card:#272050; --card2:#30285F; --ink:#F3E9D2; --ink2:#B4A9D6;
-  --line:rgba(201,162,74,.75); --gold:#FFD66B; --gold2:#E0A92E; --goldline:#C9A24A;
-  --good:#5B86F5; --good-l:rgba(91,134,245,.24); --evil:#E5535B; --evil-l:rgba(229,83,91,.24);
-  --gold-l:rgba(255,214,107,.15); --green:#3DB37A; --green-l:rgba(61,179,122,.22); --muted:rgba(255,255,255,.1);
-  --r:20px; --shadow:0 6px 18px rgba(0,0,0,.35);
-  --hand:"LXGW WenKai","霞鹜文楷","KaiTi","STKaiti",serif;
-  --logo:"Cinzel Decorative","Cinzel",Georgia,serif;
+:root {
+  color-scheme: dark;
+  --bg: #132d2b;
+  --deep: #102623;
+  --card: #1e3d39;
+  --raised: #284944;
+  --ink: #f6e8cd;
+  --muted: #b8cabe;
+  --line: #55776d;
+  --gold: #f5d59a;
+  --copper: #c49a55;
+  --paper: #f1dcb3;
+  --paper-ink: #2b2f28;
+  --good: #c7ddc0;
+  --evil: #f4ccc0;
+  --hand: "LXGW WenKai", "霞鹜文楷", "KaiTi", "STKaiti", system-ui, sans-serif;
+  --logo: "Cinzel Decorative", "Cinzel", Georgia, serif;
+  --radius: 12px;
+  --shadow: 0 5px 18px #081b1977;
+  --paper-texture: radial-gradient(ellipse at 26% 0%, #fff3d6 0%, transparent 72%),
+    repeating-linear-gradient(112deg, #6c462509 0 1px, transparent 1px 5px);
 }
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0}
-html{background:#130F29}
-body{
-  background:radial-gradient(ellipse at 50% -10%,#3A2F72 0%,#1B1638 55%,#130F29 100%) fixed;
-  color:var(--ink);font-family:var(--hand);font-size:18px;line-height:1.5;min-height:100vh;
-  padding-bottom:env(safe-area-inset-bottom);
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+html { background: var(--bg); scrollbar-gutter: stable; }
+body {
+  background: radial-gradient(ellipse at 50% 0%, #284640, var(--bg) 34rem, var(--deep)) fixed;
+  color: var(--ink);
+  font: 16px/1.48 var(--hand);
+  min-height: 100vh;
 }
-body::before{
-  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.7;
-  background-image:
-    radial-gradient(1.2px 1.2px at 20px 30px,#fff 50%,transparent 51%),
-    radial-gradient(1px 1px at 120px 80px,#fff 50%,transparent 51%),
-    radial-gradient(1.6px 1.6px at 200px 150px,#FFE9A8 50%,transparent 51%),
-    radial-gradient(1px 1px at 60px 190px,#fff 50%,transparent 51%),
-    radial-gradient(1.3px 1.3px at 170px 230px,#fff 50%,transparent 51%);
-  background-size:240px 260px;
+body:has(.mask) { overflow: hidden; }
+#app {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: env(safe-area-inset-top) max(12px, env(safe-area-inset-right)) calc(24px + env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
 }
-#app,#modal,#confirm{position:relative;z-index:1}
-.fun{font-family:var(--hand);font-weight:700;letter-spacing:.5px}
-.small{font-size:16px}
-#app{max-width:560px;margin:0 auto;padding:12px 16px 110px}
-h1,h2,h3{margin:0}
-b,strong{color:#FFE7A6}
-button{font:inherit;color:inherit;cursor:pointer}
-.btn{
-  display:inline-flex;align-items:center;justify-content:center;gap:6px;
-  border:1.5px solid #8A6417;border-radius:16px;background:linear-gradient(#FFE08A,#E0A92E);color:#2A1E05;
-  padding:12px 18px;font-weight:700;font-size:20px;box-shadow:0 4px 0 #7A5410,0 8px 18px rgba(0,0,0,.3);
-  transition:transform .08s, box-shadow .08s;min-height:52px;
+#app:has(.mebar) { padding-bottom: calc(104px + env(safe-area-inset-bottom)); }
+h1, h2, h3 { margin: 0; line-height: 1.25; }
+p { margin-block: .65em; }
+b, strong { color: var(--gold); }
+button, input { font: inherit; }
+button { color: inherit; cursor: pointer; }
+button:disabled { cursor: default; }
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+.fun { font-weight: 700; }
+.small { font-size: 14px; }
+.center { text-align: center; }
+.muted { color: var(--muted); }
+.row { display: flex; gap: 8px; align-items: center; }
+.grow { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.stack > * + * { margin-top: 12px; }
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 48px;
+  padding: 8px 15px;
+  border: 1px solid var(--copper);
+  border-radius: 10px;
+  color: #302414;
+  background: var(--paper-texture), linear-gradient(#eed49f, #d8af70);
+  box-shadow: inset 0 0 0 2px #794c272c, 0 2px 0 #76552e;
+  font-weight: 700;
+  font-size: 17px;
+  line-height: 1.25;
 }
-.btn:active{transform:translateY(3px);box-shadow:0 1px 0 #7A5410}
-.btn[disabled]{opacity:.4;pointer-events:none;filter:saturate(.5)}
-.btn.block{width:100%}
-.btn.blue{background:linear-gradient(#7FA2FF,#4F7BF0);color:#fff;border-color:#2C4FB0;box-shadow:0 4px 0 #2C4FB0,0 8px 18px rgba(0,0,0,.3)}
-.btn.red{background:linear-gradient(#FF7E85,#D9424B);color:#fff;border-color:#9A2830;box-shadow:0 4px 0 #9A2830,0 8px 18px rgba(0,0,0,.3)}
-.btn.green{background:linear-gradient(#5FD39A,#2E9C67);color:#fff;border-color:#1F6E48;box-shadow:0 4px 0 #1F6E48,0 8px 18px rgba(0,0,0,.3)}
-.btn.white{background:rgba(255,255,255,.04);color:var(--gold);border-color:var(--goldline);box-shadow:none}
-.btn.small{min-height:38px;padding:6px 12px;font-size:15px;border-radius:12px}
-.btn.ghost{background:transparent;box-shadow:none;border-color:transparent;color:var(--gold);text-decoration:underline;min-height:auto;padding:6px}
-.card{background:linear-gradient(180deg,rgba(48,40,95,.96),rgba(39,32,80,.96));border:1.5px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow),inset 0 0 0 4px rgba(201,162,74,.08);padding:16px}
-.stack>*+*{margin-top:14px}
-.row{display:flex;gap:10px;align-items:center}
-.row.wrap{flex-wrap:wrap}
-.grow{flex:1}
-.muted{color:var(--ink2)}
-.center{text-align:center}
-input.field{
-  width:100%;font:inherit;font-size:18px;padding:12px 14px;border:1.5px solid #6B5FA0;
-  border-radius:14px;background:#120E28;color:var(--ink);outline:none;
+.btn:active:not(:disabled) { transform: translateY(1px); }
+.btn:disabled, .btn[aria-disabled="true"] { opacity: .55; }
+.btn.block { width: 100%; }
+.btn.small { min-height: 44px; padding: 6px 10px; font-size: 14px; }
+.btn.white, .btn.ghost { background: #24413b; color: var(--ink); box-shadow: none; }
+.btn.ghost { background: transparent; border-color: transparent; color: var(--gold); }
+.btn.red { background: #713e35; color: #fff0d8; box-shadow: inset 0 0 0 2px #f3ca9420; }
+.btn.green { background: #d2e1c9; color: #23483b; border-color: #8daa88; box-shadow: inset 0 0 0 2px #35524420; }
+.card {
+  padding: 13px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: linear-gradient(150deg, var(--raised), var(--card) 60%);
+  box-shadow: inset 0 0 0 2px #afc6ac0d, var(--shadow);
 }
-input.field::placeholder{color:#7D72A8}
-input.field:focus{border-color:var(--gold);box-shadow:0 0 0 4px rgba(255,214,107,.18)}
-input.code{letter-spacing:8px;text-align:center;font-size:24px}
-.codebox{display:flex;gap:8px;min-width:0}
-.digit{flex:1;min-width:0;width:100%;height:56px;text-align:center;font-family:"Cinzel",Georgia,serif;font-size:28px;font-weight:700;color:var(--gold);background:#120E28;border:1.5px solid #6B5FA0;border-radius:12px;outline:none;caret-color:var(--gold);padding:0}
-.digit:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(255,214,107,.2)}
-.chip{display:inline-flex;align-items:center;gap:4px;padding:1px 10px;border-radius:999px;border:1.5px solid var(--line);font-size:15px;background:rgba(255,255,255,.06);white-space:nowrap;color:var(--ink)}
-.chip.good{background:var(--good-l);color:#C2D3FF;border-color:#5B86F5}
-.chip.evil{background:var(--evil-l);color:#FFB8BC;border-color:#E5535B}
-.chip.gold{background:var(--gold-l);color:var(--gold)}
-.chip.green{background:var(--green-l);color:#9BEBC2;border-color:#3DB37A}
-.chibi{display:block;width:100%;height:auto;overflow:visible}
-.logo{font-family:var(--logo);font-weight:900;color:var(--gold);letter-spacing:1px;text-shadow:0 0 18px rgba(255,200,80,.5),0 3px 0 #7A5410;line-height:1}
+.paper {
+  --gold: #5e401e;
+  --ink: var(--paper-ink);
+  --muted: #4c5547;
+  --line: #9c7b4e;
+  color: var(--paper-ink);
+  background: var(--paper-texture), var(--paper);
+}
+.paper :focus-visible { outline-color: #643b19; }
+.paper .btn.white { color: #fff1d7; }
+.paper .card { background: #fff0cf90; box-shadow: none; }
+.ico { display: inline-grid; place-items: center; width: 1.25em; height: 1.25em; vertical-align: -.24em; margin-right: 4px; }
+.btn .ico { margin-right: 0; flex: none; }
+.ico svg, .ico img { width: 100%; height: 100%; object-fit: contain; }
+.portrait {
+  display: block; width: 100%; height: auto; aspect-ratio: 1;
+  object-fit: cover; border-radius: 50%; color: transparent;
+  background: radial-gradient(#7e6b52, #314640);
+}
+.av { display: block; width: 44px; flex: none; }
+.logo { font: 900 20px/1 var(--logo); color: var(--gold); text-shadow: 0 2px 8px #101f1c; }
+.navbar {
+  position: sticky; top: 0; z-index: 4;
+  display: flex; align-items: center; gap: 6px;
+  min-height: 57px; margin: 0 0 10px; padding: 6px 0;
+  background: #132d2bf7; border-bottom: 1px solid var(--line);
+}
+.navbar .mid { flex: 1; text-align: center; }
+.navbar .btn { flex: none; white-space: nowrap; }
+.game-nav .btn { padding-inline: 8px; }
 
-/* 页眉 */
-.navbar{display:flex;align-items:center;gap:8px;margin:0 -16px 14px;padding:10px 16px;background:rgba(19,15,41,.75);border-bottom:1px solid var(--line);backdrop-filter:blur(8px);position:sticky;top:0;z-index:4}
-.navbar .logo{font-size:24px}
-.navbar .btn{white-space:nowrap;flex:none}
-.navbar .btn .ico{margin-right:0}
-.navbar .btn .ico+*{margin-left:4px}
-.navbar .mid{flex:1;text-align:center}
-
-/* 首页 */
-.hero{text-align:center;padding:10px 0 0;position:relative}
-.hero .logo{font-size:60px;margin-top:34px}
-.hero .moon{position:absolute;top:6px;right:8px;width:46px;filter:drop-shadow(0 0 12px rgba(255,226,154,.6))}
-.divider{display:block;width:200px;margin:8px auto 0}
-.scene{display:block;width:calc(100% + 32px);margin:-58px -16px 0;position:relative;z-index:0}
-.hero .logo,.hero .divider,.hero .moon{position:relative;z-index:1}
-.hero .moon{position:absolute}
-@media (prefers-reduced-motion:reduce){*{animation:none!important}}
-.avatars{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
-.avatars button{border:1.5px solid transparent;border-radius:14px;background:rgba(255,255,255,.05);padding:2px}
-.avatars button.on{border-color:var(--gold);background:var(--gold-l);box-shadow:0 0 12px rgba(255,214,107,.35)}
+/* 封面与入房 */
+.home { max-width: 420px; margin: 9px auto 0; }
+.illustration-frame {
+  position: relative; isolation: isolate;
+  border: 5px solid #d7b37d; border-radius: 17px;
+  box-shadow: 0 0 0 1px #785132, 0 7px 22px #091b19a6;
+}
+.illustration-frame::after {
+  content: ""; position: absolute; inset: -5px; z-index: 3; pointer-events: none;
+  border: 1px solid #eecea2; border-radius: inherit;
+  background:
+    linear-gradient(131deg, #ffdf9f8c, transparent 16%, #7446234a 43%, #ffe9b24d 59%, transparent 80%, #a36f3f96) border-box,
+    repeating-linear-gradient(121deg, transparent 0 3px, #7748254a 3px 4px, transparent 4px 7px) border-box;
+  padding: 4px;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+}
+.hero {
+  aspect-ratio: 2 / 3;
+  background: #183a38;
+}
+.hero .scene {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; border-radius: 11px;
+}
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip-path: inset(50%); white-space: nowrap;
+}
+.wordmark, .cover-crest { position: absolute; left: 50%; transform: translateX(-50%); pointer-events: none; }
+.wordmark {
+  display: block; width: 93%; height: auto; top: 4.1%;
+  font: 900 61px var(--logo); letter-spacing: 1.3px;
+  filter: drop-shadow(0 3px 3px #102522b0);
+}
+.cover-crest { width: 37%; height: auto; top: 20%; }
+.cover-actions {
+  position: absolute; inset: auto 8% clamp(13px, 4.8vw, 24px);
+  display: grid; gap: 9px;
+}
+.btn.imprint {
+  min-height: 47px; color: #362615; font-size: 18px;
+  border: 2px solid #b48646; border-radius: 11px 9px 11px 9px;
+  background: var(--paper-texture), linear-gradient(135deg, #efcea0, #edce97 58%, #dbb37d);
+  box-shadow: 0 0 0 1px #5a4028, inset 0 0 0 2px #aa794640, 0 3px 0 #6c4b2d, 0 5px 10px #102522a0;
+}
+.btn.imprint .ico { width: 24px; height: 24px; }
+.home-form { margin-top: 10px; padding: 9px; }
+.home-form .av { width: 46px; }
+.home-form .btn { flex: none; padding-inline: 7px; }
+.home-form label, .field-label { display: block; margin-bottom: 3px; font-weight: 700; }
+input.field, .digit {
+  width: 100%; min-width: 0; min-height: 44px;
+  border: 1px solid #709489; border-radius: 8px;
+  background: var(--deep); color: var(--ink);
+}
+input.field { padding: 7px 8px; }
+input.field::placeholder { color: var(--muted); }
+.avatar-picker { max-width: 370px; }
+.avatars {
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px; margin-top: 14px;
+}
+.avatars button {
+  position: relative; min-height: 44px; padding: 3px;
+  border: 2px solid transparent; border-radius: 50%; background: transparent;
+}
+.avatars button.on { border-color: #915625; box-shadow: inset 0 0 0 2px #ac7c365e; }
+.avatar-check, .team-mark {
+  display: grid; place-items: center; position: absolute; right: 0; bottom: 0;
+  width: 19px; height: 19px; border: 1px solid #794c25; border-radius: 50%;
+  background: #f5d59a; color: #352616; font: 700 12px/1 system-ui;
+}
+.home-entry { margin-top: 10px; }
+.join-row { align-items: end; }
+.join-row .btn { flex: none; }
+.codebox { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 5px; }
+.roomcode, .digit { font-family: "Cinzel", Georgia, serif; font-weight: 700; }
+.digit { text-align: center; font-size: 21px; padding: 0; caret-color: var(--gold); }
 
 /* 大厅 */
-.roomcode{font-size:46px;letter-spacing:12px;text-align:center;line-height:1.1;color:var(--gold);text-shadow:0 0 14px rgba(255,200,80,.4)}
-.plist{list-style:none;margin:0;padding:0}
-.plist li{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px dashed var(--muted)}
-.plist li:last-child{border-bottom:none}
-.plist .av{width:44px;flex:none}
-.seatno{width:30px;height:30px;flex:none;border-radius:50%;border:1.5px solid var(--gold);display:grid;place-items:center;background:var(--gold-l);color:var(--gold);font-size:15px}
-.toggle{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px dashed var(--muted)}
-.toggle:last-child{border-bottom:none}
-.toggle .av{width:46px;flex:none}
-.switch{width:52px;height:30px;border-radius:999px;border:1.5px solid #6B5FA0;background:#120E28;position:relative;flex:none;padding:0}
-.switch::after{content:"";position:absolute;top:3px;left:3px;width:21px;height:21px;border-radius:50%;background:#B4A9D6;transition:left .15s,background .15s}
-.switch.on{background:var(--green);border-color:#2E9C67}
-.switch.on::after{left:25px;background:#fff}
-.switch[disabled]{opacity:.4}
-.comp{display:flex;flex-wrap:wrap;gap:6px}
+.roomcode { color: var(--gold); font-size: 46px; line-height: 1.1; letter-spacing: .18em; padding-left: .18em; }
+.plist { list-style: none; padding: 0; margin: 5px 0 0; }
+.plist li, .toggle { display: flex; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid #9fb6a633; }
+.plist li:last-child, .toggle:last-child { border-bottom: 0; }
+.plist .av, .toggle .av { width: 38px; }
+.plist .mine .portrait { outline: 2px solid var(--copper); outline-offset: 1px; }
+.seatno, .seatpick .n {
+  display: grid; place-items: center; width: 27px; height: 27px; flex: none;
+  border: 1px solid var(--line); border-radius: 50%; color: var(--muted); font: 700 13px/1 system-ui;
+}
+.seatno.occupied, .seatpick .mine .n { border-color: var(--copper); color: var(--gold); }
+.chip {
+  display: inline-flex; align-items: center; gap: 4px; white-space: nowrap;
+  padding: 1px 7px; border: 1px solid var(--line); border-radius: 20px; color: var(--ink); font-size: 13px;
+}
+.chip.good, .chip.green { background: var(--good); border-color: #70886b; color: #245344; }
+.chip.evil { background: var(--evil); border-color: #b57b6f; color: #713b32; }
+.chip.gold { color: var(--gold); border-color: var(--copper); }
+.switch {
+  position: relative; width: 48px; height: 44px; padding: 0;
+  flex: none; border: 0; border-radius: 8px; background: transparent;
+}
+.switch::before, .switch::after { content: ""; position: absolute; }
+.switch::before { inset: 9px 0; border: 1px solid #8ba99c; border-radius: 20px; background: var(--deep); }
+.switch::after { width: 18px; height: 18px; inset: 13px auto auto 4px; border-radius: 50%; background: #bacabb; }
+.switch.on::before { background: #416b54; border-color: var(--gold); }
+.switch.on::after { left: 26px; background: var(--gold); }
+.switch:disabled { opacity: .55; }
+.comp { display: flex; flex-wrap: wrap; gap: 5px; }
+.av.pair { width: 69px !important; display: flex; }
+.av.pair img { width: 50%; }
+.seatpick { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 5px; margin-top: 8px; }
+.seatpick button {
+  display: grid; justify-items: center; align-content: center; gap: 4px; min-width: 0; min-height: 62px;
+  padding: 4px 1px; border: 1px solid var(--line); border-radius: 8px; background: var(--deep);
+}
+.seatpick button.mine { border: 2px solid var(--copper); background: var(--raised); }
+.seatpick .who { font-size: 12px; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.seatpick .free, .seatpick .taken { color: var(--muted); }
 
-/* 游戏 */
-.track{display:grid;grid-template-columns:repeat(5,minmax(0,52px));justify-content:space-between;gap:6px}
-.qt{aspect-ratio:1;border-radius:50%;border:1.5px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(#3A3172,#241D4C);position:relative;font-size:22px;color:var(--ink)}
-.qt small{font-size:12px;line-height:1;color:var(--ink2)}
-.qt.cur{background:radial-gradient(#FFE08A,#E0A92E);color:#2A1E05;box-shadow:0 0 0 4px rgba(255,214,107,.2),0 0 18px rgba(255,214,107,.45);border-color:#8A6417}
-.qt.cur small{color:#5A4210}
-.qt.ok{background:radial-gradient(#7FA2FF,#4F7BF0);color:#fff;border-color:#2C4FB0}
-.qt.bad{background:radial-gradient(#FF7E85,#D9424B);color:#fff;border-color:#9A2830}
-.qt.ok small,.qt.bad small{color:#fff}
-.qt .two{position:absolute;bottom:-9px;background:var(--evil);color:#fff;border-radius:8px;font-size:11px;padding:0 5px;line-height:16px}
-.progress{padding:12px 16px;text-align:center}
-.rejects{margin:12px 0 0;font-size:15px;color:var(--ink2)}
-.rejects.danger{color:#FFC2C5}
-.step{margin:12px 0 0;border-color:var(--gold);padding:12px 14px;overflow-wrap:anywhere}
-.step h2{font-size:22px;line-height:1.3;color:var(--gold)}
-.step p{margin:4px 0 0;font-size:16px}
-.step .essential{color:#FFE7A6}
-.step .danger{color:#FFC2C5}
-.step .bigchoice{margin-top:10px}
-.game-seats{margin-top:14px}
-.game-submit{margin-top:12px}
-.warn{background:var(--evil-l);border:1.5px solid var(--evil);border-radius:12px;padding:8px 12px;color:#FFC2C5;font-size:15px}
-.tip{background:var(--gold-l);border:1.5px dashed var(--gold2);border-radius:12px;padding:8px 12px;font-size:15px}
-.seats{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
-.seat{position:relative;border:1.5px solid var(--line);border-radius:16px;background:var(--card2);padding:6px 4px;text-align:center;box-shadow:0 4px 10px rgba(0,0,0,.3);transition:transform .12s}
-.seat .av{width:100%;max-width:64px;margin:0 auto}
-.seat .nm{font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.seat .no{position:absolute;top:-8px;left:-6px;width:22px;height:22px;border-radius:50%;background:#1B1638;border:1.5px solid var(--gold);color:var(--gold);font-size:12px;display:grid;place-items:center}
-.seat .badges{position:absolute;top:-10px;right:-6px;display:flex;gap:2px}
-.seat .badges span{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--gold);display:grid;place-items:center;background:#1B1638}
-.seat.me{background:linear-gradient(rgba(255,214,107,.22),var(--card2));border-color:var(--gold)}
-.seat.team{background:linear-gradient(rgba(91,134,245,.35),var(--card2));border-color:var(--good)}
-.seat.pick{background:linear-gradient(#7FA2FF,#4F7BF0);color:#fff;border-color:#C2D3FF;transform:translateY(-4px);box-shadow:0 0 16px rgba(91,134,245,.6)}
-.seat.pickable{cursor:pointer}
-.seat.dim{opacity:.35}
-.seat.evil{background:linear-gradient(rgba(229,83,91,.38),var(--card2));border-color:var(--evil)}
-.seat .st{font-size:13px;margin-top:2px}
-.seat .st.yes{color:#7FE0AE}
-.bigchoice{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.bigchoice .btn{min-height:52px;font-size:20px}
-.bigchoice .btn.sel{outline:3px solid var(--gold);outline-offset:3px}
-.dots::after{content:"";display:inline-block;width:1.2em;text-align:left;animation:dots 1.2s steps(4) infinite}
-@keyframes dots{0%{content:""}25%{content:"."}50%{content:".."}75%{content:"..."}}
-.mebar{position:fixed;left:0;right:0;bottom:0;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:rgba(19,15,41,.94);border-top:1px solid var(--line);backdrop-filter:blur(8px);z-index:5}
-.mebar .in{max-width:560px;margin:0 auto;display:flex;align-items:center;gap:10px}
-.mebar .av{width:46px;flex:none}
-.mebar .grow{min-width:0;overflow-wrap:anywhere}
+/* 任务轨道和水纹圆桌 */
+.game-nav { margin-inline: auto; max-width: 442px; }
+.game-menu { position: relative; }
+.game-menu summary { list-style: none; cursor: pointer; }
+.game-menu summary::-webkit-details-marker { display: none; }
+.game-menu summary::after { content: "▾"; font-size: .8em; }
+.game-menu[open] summary::after { content: "▴"; }
+.game-menu .menu-links {
+  position: absolute; right: 0; top: calc(100% + 5px); min-width: 125px;
+  display: grid; gap: 5px; padding: 6px; border-radius: 10px;
+}
+.lake-board {
+  max-width: 442px; margin: 0 auto; container-type: inline-size;
+  background: #142f2d;
+}
+.lake-map {
+  position: relative; isolation: isolate; aspect-ratio: 1122 / 1402;
+  width: 100%; min-height: 423px;
+}
+.lake-map.crowded { min-height: 474px; }
+.lake-map[data-players="6"] { min-height: 555px; }
+.lake-map[data-players="8"] { min-height: 525px; }
+.lake-map.dense { min-height: 580px; }
+.lake-art {
+  position: absolute; z-index: -1; inset: 0; display: block;
+  width: 100%; height: 100%; object-fit: fill;
+  border-radius: 11px 11px 0 0;
+}
+.lake-map::after {
+  content: ""; position: absolute; z-index: -1; inset: 86% 0 0; pointer-events: none;
+  background: linear-gradient(transparent, #142f2d);
+}
+.progress {
+  position: relative; z-index: 1; padding: clamp(13px, 5cqi, 23px) 8px 0;
+  text-align: center; pointer-events: none;
+}
+.track { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); column-gap: 2px; }
+.qt { display: grid; justify-items: center; align-content: start; row-gap: 2px; font-size: 12px; line-height: 1.16; }
+.qt::before {
+  content: ""; display: block; width: clamp(41px, 14.6cqi, 58px); aspect-ratio: 1;
+  border-radius: 45% 43% 24% 23%;
+  background: var(--stone) center / contain no-repeat;
+  filter: drop-shadow(0 2px 1px #142f2d85);
+}
+.qt:not(.ok,.bad)::before { filter: sepia(.48) saturate(1.2) brightness(1.08) drop-shadow(0 2px 1px #142f2d85); }
+.qt.cur::before { filter: sepia(.55) saturate(1.3) brightness(1.12) drop-shadow(0 0 1px #f8d48b) drop-shadow(0 0 2px #d7a353); }
+.qt-label, .qt .result, .qt .two, .qt .fails {
+  padding: 2px 4px; border-radius: 4px; color: #36291c; background: #ecd5ae;
+  white-space: nowrap;
+}
+.qt .result, .qt .two, .qt .fails { font-size: 11px; }
+.qt .result { font-weight: 700; }
+.qt.cur .qt-label { outline: 1px solid #9b6a32; box-shadow: 0 0 0 1px #f1d7a5; }
+.qt.ok .result { color: #24453a; background: #dae4c9; }
+.qt.bad .result, .qt .two, .qt .fails { color: #642d23; background: #f0d4bb; }
+.qt .stone-sign { font-family: system-ui; }
+.step .rejects {
+  display: inline-block; margin: 5px 0 0; padding: 2px 8px; border-radius: 12px;
+  color: #4d432f; background: #b38b501c; font-size: 12px;
+}
+.step .danger { color: #762c23; background: #f3d1b3; font-weight: 700; }
+.step { padding: 9px 11px; overflow-wrap: anywhere; }
+.step h2 { font-size: 17px; color: var(--gold); }
+.step p { margin: 3px 0 0; font-size: 14px; }
+.step .danger { border-radius: 6px; }
+.step .essential { font-weight: 700; }
+.step .bigchoice { margin-top: 8px; }
+.warn, .tip { font-size: 14px; padding: 7px 9px; border-radius: 8px; }
+.warn { color: #ffdfd0; border: 1px solid #de9b86; background: #55362f; }
+.tip { border: 1px dashed var(--copper); background: #c49a551c; }
+.lake-action-top { margin: 8px; }
+.lake-caption { position: relative; margin: -10px auto 0; width: fit-content; max-width: calc(100% - 18px); text-align: center; }
+.lake-map.dense + .lake-caption { margin-top: -28px; }
+.lake-caption .step { padding: 7px 14px; border-color: #b48a53; }
+.lake-caption .step h2 { font-size: 17px; }
+.table-submit { padding: 7px 17px 13px; }
+.table-submit .btn {
+  min-height: 48px; color: #fff0d4; background: linear-gradient(165deg, #883f34, #67342e);
+  box-shadow: inset 0 0 0 2px #d29b5d60, 0 2px 0 #50361e;
+}
+.table-submit .btn:disabled { opacity: 1; background: #493b33; color: #e5cfaf; border-color: #7f6c54; box-shadow: none; }
+.lake-board:not(:has(.table-submit)) .lake-caption { margin-bottom: 13px; }
+.lake-board:has(.lake-action-top) .lake-art { border-radius: 0 0 11px 11px; }
+.game-seats {
+  --face-size: clamp(56px, 21.2cqi, 78px);
+  position: absolute; inset: 0;
+}
+.lake-map[data-players="6"] .game-seats { --face-size: clamp(54px, 20cqi, 74px); }
+.crowded .game-seats { --face-size: clamp(53px, 18cqi, 66px); }
+.dense .game-seats { --face-size: clamp(45px, 15.3cqi, 56px); }
+.seat {
+  position: absolute; left: var(--x); top: var(--y);
+  transform: translate(-50%, calc(var(--face-size) / -2 - 3px));
+  width: calc(var(--face-size) + 8px); min-height: 44px;
+  padding: 2px; border: 1px solid transparent; border-radius: 12px;
+  background: transparent; color: var(--ink); font: inherit; text-align: center;
+}
+.seat .face { position: relative; display: block; width: var(--face-size); margin: 0 auto 2px; }
+.seat .portrait { border: 2px solid #c29857; box-shadow: 0 0 0 1px #654422, 0 3px 7px #112825a6; }
+.seat .no, .seat .badge {
+  position: absolute; display: grid; place-items: center;
+  width: 20px; height: 20px; border: 1px solid #edcc8e; border-radius: 50%; background: #17332e;
+}
+.seat .no { left: -4px; top: -3px; color: var(--ink); font: 700 11px/1 system-ui; }
+.seat .badge { width: 21px; height: 21px; right: -4px; top: -4px; }
+.seat .badge svg { width: 15px; height: 13px; }
+.seat .badge.lady { top: auto; bottom: 0; right: auto; left: -4px; color: var(--gold); font-size: 13px; }
+.seat .nm {
+  display: block; width: max-content; max-width: 100%; margin-inline: auto; padding: 1px 5px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  border-radius: 5px 3px 5px 3px; background: #eed8ad; color: #302b21; font-weight: 700;
+  font-size: 14px; line-height: 1.25;
+}
+.seat .labels { display: flex; justify-content: center; gap: 2px; min-height: 0; margin-top: 2px; }
+.seat .labels span { padding: 0 3px; border-radius: 4px; background: #142f2cf5; font-size: 10px; line-height: 14px; white-space: nowrap; }
+.seat .leader { color: var(--gold); }
+.seat .label-evil { color: var(--evil); }
+.seat .label-done { color: var(--good); }
+.seat.me .portrait { border-color: #fff0bf; }
+.seat.pick .portrait, .seat.team .portrait { border-color: #ffdf98; box-shadow: 0 0 0 2px #533614, 0 0 0 4px #e8b968; }
+.seat.dim .portrait { filter: saturate(.35) brightness(.68); }
+.seat.dim .no { border-style: dashed; }
+button.seat:hover .portrait { border-color: #fff0c8; }
+button.seat:focus-visible { outline: 2px solid #fff1bf; outline-offset: 2px; }
+.proposed {
+  display: flex; flex-wrap: wrap; gap: 5px 6px; list-style: none; margin: 6px 0 0; padding: 0;
+}
+.proposed li {
+  display: flex; align-items: center; gap: 4px; min-width: 0; max-width: 100%; padding: 2px 6px 2px 2px;
+  border: 1px solid #a98a60; border-radius: 20px; background: #ffeacd; font-size: 13px; overflow-wrap: anywhere;
+}
+.proposed .av { width: 29px; }
+.proposed .proposed-seat { color: #584a35; white-space: nowrap; }
+.bigchoice { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.bigchoice .btn { min-height: 50px; padding-inline: 5px; }
+.bigchoice .symbol { width: 31px; height: 31px; }
+.vote-yes { background: #c8d9bd; color: #25392e; border-color: #775a33; }
+.vote-no { background: #23433f; color: #f9eacb; border-color: #8d682d; }
+.bigchoice .sel { outline: 2px solid #663b19; outline-offset: 1px; box-shadow: inset 0 0 0 2px #d6a65c; }
+.bigchoice .sel:focus-visible { outline: 3px dashed #663b19; outline-offset: 2px; }
+.symbol { display: inline-block; width: 24px; height: 24px; object-fit: contain; vertical-align: middle; flex: none; }
+.mebar {
+  position: fixed; z-index: 5; inset: auto 0 0; background: #132d2bfa;
+  padding: 8px max(12px, env(safe-area-inset-right)) calc(8px + env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+  border-top: 1px solid var(--copper);
+}
+.mebar .in { max-width: 536px; margin: 0 auto; display: flex; align-items: center; gap: 8px; }
+.mebar .av { width: 39px; }
+.mebar .btn { flex: none; min-height: 44px; }
 
-/* 弹窗 */
-.mask{position:fixed;inset:0;background:rgba(8,6,20,.7);z-index:20;display:flex;align-items:flex-end;justify-content:center;animation:fade .15s}
-@media (min-width:600px){.mask{align-items:center}}
-.sheet{background:linear-gradient(180deg,#2B2358,#1E1840);width:100%;max-width:520px;max-height:92vh;overflow:auto;border:1.5px solid var(--gold);border-radius:26px 26px 0 0;padding:20px 18px calc(20px + env(safe-area-inset-bottom));animation:up .2s ease-out;box-shadow:0 -10px 40px rgba(0,0,0,.5)}
-@media (min-width:600px){.sheet{border-radius:26px}}
-@keyframes up{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
-@keyframes fade{from{opacity:0}to{opacity:1}}
-.sheet h2{font-size:26px;text-align:center;color:var(--gold)}
-.flip{perspective:900px;cursor:pointer}
-.flip .inner{display:grid;transition:transform .5s;transform-style:preserve-3d}
-.flip.open .inner{transform:rotateY(180deg)}
-.flip .face{grid-area:1/1;min-height:300px;backface-visibility:hidden;-webkit-backface-visibility:hidden;border:1.5px solid var(--gold);border-radius:22px;padding:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
-.flip .back{background:radial-gradient(circle at 50% 40%,#3A2F72,#17122F);color:var(--ink);box-shadow:inset 0 0 0 6px rgba(201,162,74,.15)}
-.flip .back .seal{width:96px;height:96px;border-radius:50%;background:radial-gradient(#FFE08A,#E0A92E);border:2px solid #8A6417;display:grid;place-items:center;font-size:44px;color:#2A1E05;font-family:var(--logo);box-shadow:0 0 24px rgba(255,214,107,.45)}
-.flip .front{transform:rotateY(180deg);background:var(--card2);justify-content:flex-start}
-.flip .front.good{background:linear-gradient(rgba(91,134,245,.45),var(--card2) 55%)}
-.flip .front.evil{background:linear-gradient(rgba(229,83,91,.45),var(--card2) 55%)}
-.rolebig{width:150px;margin:0 auto}
-.knows{width:100%;text-align:left;margin-top:8px;padding-left:20px}
-.knows li{margin:4px 0}
-.qcards{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin:14px 0}
-.qc{width:64px;height:90px;border-radius:12px;border:1.5px solid var(--gold);display:grid;place-items:center;font-size:17px;animation:pop .35s both}
-.qc.s{background:linear-gradient(#7FA2FF,#4F7BF0);color:#fff}
-.qc.f{background:linear-gradient(#FF7E85,#D9424B);color:#fff}
-@keyframes pop{from{transform:scale(.3) rotate(-12deg);opacity:0}to{transform:none;opacity:1}}
-.vlist{display:grid;grid-template-columns:1fr 1fr;gap:6px 12px;margin-top:10px}
-.vlist div{display:flex;justify-content:space-between;align-items:center;gap:6px;border-bottom:1px dashed var(--muted);padding:3px 0;font-size:15px}
-.toast{position:fixed;left:50%;top:16px;transform:translateX(-50%);background:linear-gradient(#FFE08A,#E0A92E);color:#2A1E05;padding:10px 16px;border-radius:14px;z-index:40;max-width:90vw;text-align:center;animation:up .2s;box-shadow:0 8px 24px rgba(0,0,0,.4)}
-.hist{border-left:2px solid var(--line);padding-left:12px;margin:8px 0}
-.hist .h{color:var(--ink)}
-.endbanner{text-align:center;padding:20px 12px;border-radius:24px;border:1.5px solid var(--gold);box-shadow:var(--shadow)}
-.endbanner.good{background:linear-gradient(rgba(91,134,245,.5),var(--card) 70%)}
-.endbanner.evil{background:linear-gradient(rgba(229,83,91,.5),var(--card) 70%)}
-.endbanner h1{font-size:40px;color:var(--gold)}
-.rolesgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:10px}
-.rolesgrid .rc{border:1.5px solid var(--line);border-radius:16px;background:var(--card2);padding:6px;text-align:center}
-.rolesgrid .rc.good{background:linear-gradient(rgba(91,134,245,.35),var(--card2))}
-.rolesgrid .rc.evil{background:linear-gradient(rgba(229,83,91,.35),var(--card2))}
-.rolesgrid .rc .av{width:70px;margin:0 auto}
-.rules h3{margin-top:16px;font-size:19px;color:var(--gold)}
-.rules p,.rules li{font-size:16px}
-.rules table{border-collapse:collapse;width:100%;font-size:14px;margin-top:6px}
-.rules td,.rules th{border:1px solid var(--line);padding:4px;text-align:center;background:rgba(255,255,255,.04)}
-.rules th{background:var(--gold-l);color:var(--gold)}
-.ico{display:inline-block;width:1.25em;height:1.25em;vertical-align:-0.22em;margin-right:4px}
-.ico svg{width:100%;height:100%;display:block;overflow:visible}
-.seat .badges span svg{width:18px;height:18px}
-.av.pair{width:86px!important;display:flex}
-.av.pair>svg{width:50%}
-.testbar{background:#0F0B22;color:#fff;border-radius:16px;padding:10px 12px;margin-bottom:14px;border:1.5px dashed var(--gold)}
-.testbar .ids{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
-.testbar .ids button{border:1.5px solid #B4A9D6;border-radius:999px;background:transparent;color:#fff;padding:2px 10px;font-size:14px}
-.testbar .ids button.on{background:var(--gold);color:#2A1E05;border-color:var(--gold)}
-.testbar .acts{display:flex;flex-wrap:wrap;gap:6px}
-.testbar .acts button{border:1.5px solid var(--gold);border-radius:10px;background:#2B2358;color:var(--gold);padding:4px 10px;font-size:14px}
-.loading{display:grid;place-items:center;min-height:60vh}
-.seatpick{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:10px}
-.seatpick button{border:1.5px solid var(--line);border-radius:14px;background:var(--card2);padding:6px 2px;min-height:76px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--ink)}
-.seatpick button .n{font-size:26px;line-height:1;font-family:var(--logo);color:var(--gold)}
-.seatpick button .who{font-size:13px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:4px}
-.seatpick button.mine{background:linear-gradient(#7FA2FF,#4F7BF0);color:#fff;border-color:#C2D3FF;box-shadow:0 0 14px rgba(91,134,245,.55)}
-.seatpick button.mine .n{color:#fff}
-.seatpick button.taken{background:rgba(255,255,255,.04);color:var(--ink2);opacity:.6}
-.seatpick button.taken .n{color:var(--ink2)}
-.seatpick button.free .who{color:var(--ink2)}
-.roomcode,input.code,.navbar .code{font-family:"Cinzel",Georgia,serif!important;font-weight:700!important}
+/* 弹窗和揭晓 */
+.mask { position: fixed; z-index: 20; inset: 0; background: #081a18bd; display: flex; align-items: end; justify-content: center; }
+.sheet {
+  width: 100%; max-width: 520px; max-height: 92vh; max-height: 92dvh;
+  overflow: auto; overscroll-behavior: contain;
+  border: 1px solid var(--copper); border-radius: 15px 15px 0 0;
+  padding: 15px max(14px, env(safe-area-inset-right)) calc(14px + env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
+  background-color: var(--card); box-shadow: 0 -6px 30px #051816a8;
+}
+.sheet.paper { background-color: var(--paper); }
+.sheet h2 { text-align: center; font-size: 24px; color: var(--gold); }
+.sheet > .btn:last-child { margin-top: 12px; }
+.sheet [tabindex="-1"]:focus { outline: none; }
+.confirm-mask { z-index: 30; align-items: center; padding: 12px; }
+.confirm-mask .sheet { max-width: 400px; border-radius: 12px; }
+.mirror {
+  position: relative; margin: 8px auto 0; width: 151px; aspect-ratio: 244 / 340;
+  background: radial-gradient(ellipse at 49% 43%, #345950 7%, #173b34 45%, transparent 52%);
+}
+.mirror > img { display: block; width: 100%; height: auto; }
+.mirror-content {
+  position: absolute; left: 49%; top: 43%; transform: translate(-50%, -50%);
+  width: 66%; aspect-ratio: 1; display: grid; align-content: center; justify-items: center; gap: 3px;
+  border-radius: 50%; color: #fff0d4; text-align: center; overflow: hidden;
+  background: radial-gradient(#2f554b, #193732);
+}
+.mirror-content .portrait { width: 100%; }
+.mirror-content .seal { color: #f5d59a; font: 900 39px/1 var(--logo); }
+.mirror-content.good { background: #245344; color: var(--good); font-weight: 700; }
+.mirror-content.evil { background: #743b31; color: var(--evil); font-weight: 700; }
+.mirror-content .side-mark { font: 700 23px/1 system-ui; }
+.mirror-content.revealed::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  background: repeating-radial-gradient(circle, #b7cbb7 0 2px, #527b70 5px 11px);
+  animation: ripple-out 280ms ease-out both;
+}
+@keyframes ripple-out { from { opacity: .98; transform: scale(.7); } to { opacity: 0; transform: scale(1.23); } }
+.role-portrait { width: 191px; margin-top: 4px; }
+.role-portrait .revealed::after { animation-duration: 200ms; }
+.role-portrait + h2 { margin-top: -4px; }
+.role-copy { margin-top: 10px; padding: 10px 12px; border: 1px solid var(--copper); border-radius: 10px; }
+.role-copy p { margin: 0 0 7px; }
+.role-copy p:last-child { margin-bottom: 0; }
+.knows { margin: 4px 0; padding-left: 18px; }
+.knows li { margin: 4px 0; }
+.vlist { list-style: none; margin: 6px 0 0; padding: 0; }
+.vlist li { display: flex; align-items: center; gap: 6px; min-height: 32px; border-bottom: 1px solid #78562f42; font-size: 14px; }
+.vlist li:last-child { border-bottom: 0; }
+.vlist .av { width: 24px; }
+.vlist .vote-seat { width: 2.65em; flex: none; white-space: nowrap; color: var(--muted); }
+.vote-mark { display: inline-flex; align-items: center; gap: 3px; padding: 0 5px; white-space: nowrap; border-radius: 10px; font-size: 13px; }
+.vote-mark.yes { background: #d5e0c4; color: #234b3c; }
+.vote-mark.no { background: #2b4943; color: #fff0d0; }
+.vote-mark .symbol { width: 21px; height: 21px; }
+.reveal-votes { animation: fade-in 200ms ease-out both; }
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+.qcards { display: flex; justify-content: center; gap: 10px; margin: 12px 0; }
+.qc {
+  display: grid; min-width: 88px; min-height: 74px; place-items: center; align-content: center; gap: 4px;
+  padding: 3px; border-radius: 9px; border: 1px solid var(--copper); font-weight: 700;
+}
+.qc .symbol { width: 36px; height: 36px; }
+.qc.s { background: var(--good); color: #245344; }
+.qc.f { background: var(--evil); color: #713b32; }
+.hist { border-left: 2px solid var(--line); padding-left: 8px; margin-top: 10px; overflow-wrap: anywhere; }
+.hist + .hist { margin-top: 13px; }
+.endbanner {
+  text-align: center; padding: 18px 12px; border: 1px solid var(--copper); border-radius: var(--radius);
+  background: radial-gradient(ellipse at top, #527162, var(--card) 75%); box-shadow: var(--shadow);
+}
+.endbanner.evil { background: radial-gradient(ellipse at top, #744b3f, var(--card) 75%); }
+.endbanner .av { width: 94px; margin: 0 auto 8px; }
+.endbanner h1 { font-size: 30px; color: var(--gold); }
+.rolesgrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.rolesgrid .rc { border: 1px solid var(--line); border-radius: 10px; text-align: center; padding: 8px 4px; overflow-wrap: anywhere; }
+.rc .portraits { display: flex; justify-content: center; align-items: end; gap: 5px; margin-bottom: 4px; }
+.rc .av { width: 31px; }
+.rc .av.role { width: 53px; border: 1px solid var(--copper); border-radius: 50%; }
+.rules h3 { margin-top: 13px; font-size: 18px; color: var(--gold); }
+.rules p, .rules li { font-size: 15px; }
+.rules table { border-collapse: collapse; width: 100%; font-size: 13px; }
+.rules th, .rules td { border: 1px solid var(--line); padding: 3px 1px; text-align: center; }
+.rules th { background: #754e2519; }
+.rules ol, .rules ul { padding-left: 22px; }
+.toast {
+  position: fixed; z-index: 40; left: 50%; top: max(12px, env(safe-area-inset-top)); transform: translateX(-50%);
+  width: max-content; max-width: 90vw; padding: 8px 13px; text-align: center; overflow-wrap: anywhere;
+  border: 1px solid var(--copper); border-radius: 10px; background: var(--paper); color: var(--paper-ink); box-shadow: var(--shadow);
+}
+.testbar { margin: 8px 0; padding: 9px; border: 1px dashed var(--copper); border-radius: 10px; background: var(--deep); }
+.testbar .ids, .testbar .acts { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px; }
+.test-controls { min-width: 0; margin: 0; padding: 0; border: 0; }
+.testbar button { border: 1px solid var(--line); border-radius: 8px; background: var(--card); min-height: 44px; padding: 4px 8px; font-size: 13px; overflow-wrap: anywhere; }
+.testbar button.on { background: var(--paper); color: var(--paper-ink); border-color: var(--copper); }
+.testbar button:disabled { opacity: .55; }
+.loading { display: grid; place-items: center; min-height: 60vh; }
+.loading .mirror { width: 72px; }
+@media (max-width: 359px) {
+  .home-form .av { width: 40px; }
+  .home-form .btn { padding-inline: 5px; }
+  .cover-actions { gap: 7px; }
+  .btn.imprint { min-height: 44px; }
+  .qt .two, .qt .fails, .qt .result { padding-inline: 2px; }
+}
+@media (min-width: 600px) {
+  #app { padding-inline: 16px; }
+  .mask { align-items: center; }
+  .sheet { border-radius: 15px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .mirror-content.revealed::after { display: none; }
+}
 </style>
 </head>
 <body>
-<div id="app"></div>
+<main id="app"></main>
 <div id="modal"></div>
 <div id="confirm"></div>
 <script>
@@ -274,247 +546,37 @@ async function rpc(fn, args){
   return data;
 }
 
-/* ---------- Q版形象 ---------- */
-const INK = '#3B2F4A', SK = '#FFE1C8';
-const sw = `stroke="${INK}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"`;
-function star(x, y, r, fill){
-  let d = '';
-  for(let i=0;i<10;i++){
-    const a = Math.PI/5*i - Math.PI/2, rr = i%2 ? r*0.45 : r;
-    d += (i?'L':'M') + (x + rr*Math.cos(a)).toFixed(1) + ' ' + (y + rr*Math.sin(a)).toFixed(1);
-  }
-  return `<path d="${d}Z" fill="${fill}" stroke="${INK}" stroke-width="1.5" stroke-linejoin="round"/>`;
-}
-function eyesSvg(kind){
-  if(kind === 'none') return '';
-  if(kind === 'wink') return `<path d="M43 63 Q48 57 53 63" fill="none" stroke="#2B2235" stroke-width="3" stroke-linecap="round"/>
-    <ellipse cx="72" cy="62" rx="4.6" ry="5.6" fill="#2B2235"/><circle cx="73.6" cy="59.6" r="1.7" fill="#fff"/>`;
-  if(kind === 'happy') return `<path d="M43 63 Q48 57 53 63 M67 63 Q72 57 77 63" fill="none" stroke="#2B2235" stroke-width="3" stroke-linecap="round"/>`;
-  const col = kind === 'red' ? '#D9364A' : '#2B2235';
-  const e = `<g><ellipse cx="48" cy="62" rx="4.6" ry="5.6" fill="${col}"/><ellipse cx="72" cy="62" rx="4.6" ry="5.6" fill="${col}"/>
-    <circle cx="49.6" cy="59.6" r="1.7" fill="#fff"/><circle cx="73.6" cy="59.6" r="1.7" fill="#fff"/></g>`;
-  const brows = (kind === 'evil' || kind === 'red')
-    ? `<path d="M40 51 L53 55 M80 51 L67 55" stroke="${INK}" stroke-width="3" stroke-linecap="round"/>` : '';
-  return e + brows;
-}
-function mouthSvg(kind){
-  if(kind === 'none') return '';
-  if(kind === 'cat') return `<path d="M53 72 Q56.5 77 60 72 Q63.5 77 67 72" fill="none" stroke="#6B3A3A" stroke-width="2.5" stroke-linecap="round"/>`;
-  if(kind === 'grin') return `<path d="M52 71 Q60 72 68 71 Q66 81 60 81 Q54 81 52 71Z" fill="#fff" stroke="#6B3A3A" stroke-width="2" stroke-linejoin="round"/>`;
-  if(kind === 'smirk') return `<path d="M54 75 Q61 77 67 71" fill="none" stroke="#6B3A3A" stroke-width="2.5" stroke-linecap="round"/>`;
-  if(kind === 'open') return `<path d="M54 72 Q60 81 66 72 Z" fill="#E8687A" stroke="#6B3A3A" stroke-width="2" stroke-linejoin="round"/>`;
-  return `<path d="M54 73 Q60 79 66 73" fill="none" stroke="#6B3A3A" stroke-width="2.5" stroke-linecap="round"/>`;
-}
-function chibi({body, skin=SK, hairBack='', hairFront='', hat='', front='', extra='', eyes='normal', mouth='smile', blush=true}){
-  return `<svg class="chibi" viewBox="0 -6 120 126" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <ellipse cx="60" cy="115" rx="30" ry="4" fill="rgba(59,47,74,.13)"/>
-    ${hairBack}
-    <path d="M32 115 Q32 86 60 84 Q88 86 88 115 Z" fill="${body}" ${sw}/>
-    ${extra}
-    <circle cx="60" cy="58" r="31" fill="${skin}" ${sw}/>
-    ${hairFront}
-    ${eyesSvg(eyes)}
-    ${blush ? '<ellipse cx="40" cy="70" rx="5.5" ry="3.2" fill="#FF9DB0" opacity=".6"/><ellipse cx="80" cy="70" rx="5.5" ry="3.2" fill="#FF9DB0" opacity=".6"/>' : ''}
-    ${mouthSvg(mouth)}
-    ${hat}${front}
-  </svg>`;
-}
-const bowlHair = c => `<path d="M29 58 Q28 26 60 26 Q92 26 91 58 Q86 44 74 42 Q66 50 52 44 Q40 46 29 58Z" fill="${c}" ${sw}/>`;
-const ART = {
-  merlin: () => chibi({
-    body:'#6E80FF',
-    extra: star(60,103,6,'#FFD66B'),
-    hairFront:`<path d="M30 64 Q27 42 38 36 L44 50 Q36 52 34 68Z" fill="#fff" ${sw}/><path d="M90 64 Q93 42 82 36 L76 50 Q84 52 86 68Z" fill="#fff" ${sw}/>
-      <path d="M41 74 Q43 99 60 104 Q77 99 79 74 Q70 81 60 81 Q50 81 41 74Z" fill="#fff" ${sw}/>`,
-    hat:`<path d="M33 34 Q50 14 57 0 Q61 -6 66 1 Q73 17 87 34Z" fill="#6E80FF" ${sw}/>
-      <ellipse cx="60" cy="35" rx="38" ry="8.5" fill="#5466E8" ${sw}/>${star(55,20,5,'#FFD66B')}${star(70,11,3.5,'#FFD66B')}`,
-    mouth:'smile'
-  }),
-  percival: () => chibi({
-    body:'#5B9BF0',
-    extra:`<path d="M60 92 V112 M51 101 H69" stroke="#fff" stroke-width="4" stroke-linecap="round"/>`,
-    hat:`<path d="M27 58 Q26 21 60 20 Q94 21 93 58 L85 58 Q84 36 60 35 Q36 36 35 58Z" fill="#D6DEEC" ${sw}/>
-      <path d="M36 40 Q60 30 84 40" stroke="#A9B6CC" stroke-width="3" fill="none" stroke-linecap="round"/>
-      <path d="M60 21 Q61 3 80 0 Q74 11 69 21Z" fill="#F06A6A" ${sw}/>`,
-    mouth:'smile'
-  }),
-  servant: () => chibi({
-    body:'#7FB5F5',
-    hairFront: bowlHair('#8A5A3C'),
-    front:`<g transform="translate(76 88)"><path d="M0 0 H22 V12 Q22 24 11 28 Q0 24 0 12Z" fill="#4F7BF0" ${sw}/><path d="M11 5 V22 M4 12 H18" stroke="#FFD66B" stroke-width="3" stroke-linecap="round"/></g>`,
-    mouth:'open'
-  }),
-  assassin: () => chibi({
-    body:'#3B3652',
-    hairBack:`<path d="M22 74 Q18 16 60 14 Q102 16 98 74 Q96 92 86 96 L34 96 Q24 92 22 74Z" fill="#45405E" ${sw}/>`,
-    hairFront:`<path d="M27 66 Q26 26 60 25 Q94 26 93 66 Q90 44 60 42 Q30 44 27 66Z" fill="#544E70" ${sw}/>
-      <path d="M33 69 Q60 77 87 69 Q86 85 60 89 Q34 85 33 69Z" fill="#2E2A42" ${sw}/>`,
-    front:`<g transform="translate(86 96) rotate(28)"><path d="M-2 0 L-2 -18 L1 -23 L4 -18 L4 0Z" fill="#DDE3EE" stroke="${INK}" stroke-width="2"/><rect x="-7" y="0" width="14" height="4" rx="2" fill="#C58B3C" stroke="${INK}" stroke-width="2"/><rect x="-1.5" y="4" width="5" height="9" rx="2" fill="#6B4A2E" stroke="${INK}" stroke-width="2"/></g>`,
-    eyes:'evil', mouth:'none', blush:false
-  }),
-  morgana: () => chibi({
-    body:'#6A44A8',
-    hairBack:`<path d="M26 60 Q21 101 34 109 L86 109 Q99 101 94 60 Q94 26 60 25 Q26 26 26 60Z" fill="#7A4FB8" ${sw}/>`,
-    hairFront:`<path d="M30 56 Q32 32 60 30 Q88 32 90 56 Q80 44 66 42 Q60 50 50 44 Q38 46 30 56Z" fill="#8B5CC9" ${sw}/>`,
-    hat:`<path d="M38 33 Q44 10 62 3 Q74 -1 83 7 Q71 8 71 14 Q76 24 82 33Z" fill="#5E3B96" ${sw}/>
-      <ellipse cx="60" cy="34" rx="40" ry="8" fill="#4B2F7A" ${sw}/>
-      <path d="M58 16 a6.5 6.5 0 1 0 7 8 a5 5 0 1 1 -7 -8z" fill="#FFD66B" stroke="${INK}" stroke-width="1.5"/>`,
-    eyes:'evil', mouth:'smirk'
-  }),
-  mordred: () => chibi({
-    body:'#3A3550',
-    hairBack:`<path d="M30 92 Q24 104 22 115 L98 115 Q96 104 90 92Z" fill="#8E2F43" ${sw}/>`,
-    extra:`<path d="M44 90 L60 100 L76 90" fill="none" stroke="#8E2F43" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>`,
-    hairFront:`<circle cx="60" cy="57" r="32" fill="#4A4560" ${sw}/>
-      <path d="M33 47 Q60 37 87 47" fill="none" stroke="#6B6585" stroke-width="3" stroke-linecap="round"/>
-      <path d="M34 55 H86 Q86 70 70 70 L66 70 L66 86 Q60 89 54 86 L54 70 L50 70 Q34 70 34 55Z" fill="#1E1A2B" ${sw}/>
-      <ellipse cx="47" cy="61" rx="7" ry="4" fill="#E5535B" opacity=".35"/><ellipse cx="73" cy="61" rx="7" ry="4" fill="#E5535B" opacity=".35"/>
-      <ellipse cx="47" cy="61" rx="4" ry="2.4" fill="#FF5A63"/><ellipse cx="73" cy="61" rx="4" ry="2.4" fill="#FF5A63"/>`,
-    hat:`<path d="M60 26 Q62 8 78 4 Q72 12 70 26Z" fill="#E5535B" ${sw}/>
-      <path d="M31 44 Q20 36 22 24 Q29 34 37 37Z" fill="#6B6585" ${sw}/><path d="M89 44 Q100 36 98 24 Q91 34 83 37Z" fill="#6B6585" ${sw}/>`,
-    eyes:'none', mouth:'none', blush:false
-  }),
-  lady: () => chibi({
-    body:'#7FD1D6',
-    hairBack:`<path d="M26 60 Q18 84 26 98 Q20 108 30 112 L90 112 Q100 108 94 98 Q102 84 94 60 Q94 25 60 25 Q26 25 26 60Z" fill="#4FB3C8" ${sw}/>`,
-    extra:`<path d="M38 102 Q44 97 50 102 T62 102 T74 102 T86 102" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/>`,
-    hairFront:`<path d="M29 58 Q30 29 60 28 Q90 29 91 58 Q84 44 70 42 Q64 50 54 44 Q44 42 38 50 Q34 52 29 58Z" fill="#5CC4D6" ${sw}/>`,
-    hat:`<path d="M44 30 Q52 18 60 24 Q68 18 76 30 Q60 26 44 30Z" fill="#FFE7F0" ${sw}/>
-      <circle cx="60" cy="22" r="4.5" fill="#fff" ${sw}/><circle cx="58.5" cy="20.5" r="1.4" fill="#BFE9F0"/>`,
-    front:`<circle cx="60" cy="101" r="11" fill="#BFF0FF" opacity=".55"/><circle cx="60" cy="101" r="8" fill="#E6FBFF" ${sw}/>
-      <path d="M56 98 L58 101 L56 104 M64 97 L64 100" stroke="#5CC4D6" stroke-width="2" stroke-linecap="round"/>`,
-    mouth:'smile'
-  }),
-  oberon: () => chibi({
-    body:'#4E6B5A',
-    hairFront:`<path d="M29 58 Q27 27 60 27 Q93 27 91 58 Q84 40 72 46 Q64 36 54 45 Q42 38 29 58Z" fill="#9AA3B5" ${sw}/>
-      <path d="M31 56 Q46 47 60 55 Q74 47 89 56 Q89 71 74 71 Q66 71 60 65 Q54 71 46 71 Q31 71 31 56Z" fill="#EDE7F7" ${sw}/>`,
-    hat:`<path d="M40 32 Q29 17 35 7 Q40 21 49 27Z" fill="#6B5A86" ${sw}/><path d="M80 32 Q91 17 85 7 Q80 21 71 27Z" fill="#6B5A86" ${sw}/>`,
-    eyes:'evil', mouth:'smirk', blush:false
-  }),
-  minion: () => chibi({
-    body:'#C44B4F',
-    hairBack:`<path d="M24 72 Q20 18 60 16 Q100 18 96 72 Q94 90 86 94 L34 94 Q26 90 24 72Z" fill="#D9575A" ${sw}/>`,
-    hairFront:`<path d="M28 64 Q27 27 60 26 Q93 27 92 64 Q89 43 60 41 Q31 43 28 64Z" fill="#E86A6D" ${sw}/>`,
-    hat:`<path d="M38 26 Q32 10 38 4 Q42 15 47 21Z" fill="#FFE1C8" ${sw}/><path d="M82 26 Q88 10 82 4 Q78 15 73 21Z" fill="#FFE1C8" ${sw}/>`,
-    eyes:'evil', mouth:'smirk'
-  }),
-  unknown: () => chibi({ body:'#C9BFD6', hairFront: bowlHair('#9C8FB0'), eyes:'normal', mouth:'smile' })
-};
+/* ---------- 插画与道具 ---------- */
+const ASSET = './assets/mist/';
+const AVATARS = [
+  '面包师', '观星人', '铁匠', '驯鹰人', '抄书人', '卖梨人',
+  '摆渡人', '草药师', '制图师', '宫廷小丑', '养蜂人', '陶匠',
+  '裁缝', '守钟人', '旅店伙计', '养蜂学徒', '石匠', '牧羊人'
+];
+const AV_N = AVATARS.length;
+const AVATAR_CHOICES = [0, 1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12];
+const avatarId = i => ((Number(i) | 0) % AV_N + AV_N) % AV_N;
+const portrait = (src, size) => `<img class="portrait" src="${ASSET}${src}" alt="" width="${size}" height="${size}" decoding="async">`;
+const publicAvatar = i => portrait(`avatars/${String(avatarId(i)).padStart(2, '0')}.jpg`, 48);
+const rolePortrait = role => Object.hasOwn(ROLES, role) ? portrait(`roles/${role}.jpg`, 64) : '';
+const symbol = file => `<img class="symbol" src="${ASSET}${file}.png" alt="" width="24" height="24" decoding="async">`;
+const mirrorIcon = `<span class="ico"><img src="${ASSET}lady-mirror.png" alt="" width="18" height="24"></span>`;
+const INK = '#33291d';
 const ico = (vb, body) => `<span class="ico"><svg viewBox="${vb}" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">${body}</svg></span>`;
 const isw = `stroke="${INK}" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"`;
 const I = {
   sword: ico('0 0 32 32', `<path d="M20 3 L29 3 L29 12 L13 28 L4 19Z" fill="#DDE3EE" ${isw}/><path d="M6 15 L17 26" ${isw}/><path d="M3 22 L10 29" stroke="#C58B3C" stroke-width="5" stroke-linecap="round"/><path d="M3 22 L10 29" fill="none" ${isw}/>`),
-  moon: ico('0 0 32 32', `<path d="M20 3 A13 13 0 1 0 29 21 A10 10 0 1 1 20 3Z" fill="#FFE29A" ${isw}/>`),
   scroll: ico('0 0 32 32', `<rect x="6" y="5" width="20" height="22" rx="3" fill="#F6E7C8" ${isw}/><path d="M10 11 H22 M10 16 H22 M10 21 H18" stroke="#8B5E34" stroke-width="2" stroke-linecap="round"/>`),
   book: ico('0 0 32 32', `<path d="M4 6 Q10 4 16 7 Q22 4 28 6 V26 Q22 24 16 27 Q10 24 4 26Z" fill="#F6E7C8" ${isw}/><path d="M16 7 V27" ${isw}/>`),
-  ok: ico('0 0 32 32', `<circle cx="16" cy="16" r="13" fill="#3DB37A" ${isw}/><path d="M10 16 L14 20 L22 11" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>`),
-  no: ico('0 0 32 32', `<circle cx="16" cy="16" r="13" fill="#E5535B" ${isw}/><path d="M11 11 L21 21 M21 11 L11 21" stroke="#fff" stroke-width="3.2" stroke-linecap="round"/>`),
-  spark: ico('0 0 32 32', `<path d="M16 2 Q18 14 30 16 Q18 18 16 30 Q14 18 2 16 Q14 14 16 2Z" fill="#FFD66B" ${isw}/>`),
-  boom: ico('0 0 32 32', `<path d="M16 2 L19 11 L28 7 L23 15 L30 20 L21 20 L22 30 L16 23 L10 30 L11 20 L2 20 L9 15 L4 7 L13 11Z" fill="#E5535B" ${isw}/>`),
-  lock: ico('0 0 32 32', `<path d="M10 14 V10 A6 6 0 0 1 22 10 V14" fill="none" ${isw} stroke-width="3"/><rect x="6" y="14" width="20" height="15" rx="3" fill="#FFD66B" ${isw}/><circle cx="16" cy="21" r="2.2" fill="${INK}"/>`),
-  link: ico('0 0 32 32', `<rect x="3" y="11" width="15" height="10" rx="5" fill="none" stroke="#FFD66B" stroke-width="3"/><rect x="14" y="11" width="15" height="10" rx="5" fill="none" stroke="#FFD66B" stroke-width="3"/>`),
-  castle: ico('0 0 32 32', `<path d="M4 29 V12 H9 V16 H13 V8 H19 V16 H23 V12 H28 V29Z" fill="#CDB8E6" ${isw}/><path d="M13 29 V23 Q16 19 19 23 V29" fill="#5E3B96" ${isw}/><path d="M16 8 V2 L21 4 L16 6" fill="#E5535B" ${isw}/>`),
-  ballot: ico('0 0 32 32', `<rect x="9" y="3" width="14" height="14" rx="1.5" fill="#fff" ${isw}/><path d="M12 9 L15 12 L20 6" fill="none" stroke="#3DB37A" stroke-width="2.5" stroke-linecap="round"/><rect x="4" y="15" width="24" height="14" rx="3" fill="#8FB3FF" ${isw}/><path d="M8 15 H24" ${isw}/>`),
-  door: ico('0 0 32 32', `<path d="M8 29 V5 H22 V29" fill="#8B5E34" ${isw}/><circle cx="18" cy="17" r="1.6" fill="#FFD66B"/><path d="M4 29 H28" ${isw}/>`),
-  again: ico('0 0 32 32', `<path d="M26 16 A10 10 0 1 1 22 8" fill="none" stroke="#FFD66B" stroke-width="3.5" stroke-linecap="round"/><path d="M22 2 L23 9 L16 10" fill="none" stroke="#FFD66B" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>`),
-  flask: ico('0 0 32 32', `<path d="M12 3 H20 M13 3 V12 L5 26 Q4 29 8 29 H24 Q28 29 27 26 L19 12 V3" fill="#C3A6F2" ${isw}/><path d="M9 21 H23" stroke="#fff" stroke-width="2"/>`)
+  spark: ico('0 0 32 32', `<path d="M16 2 Q18 14 30 16 Q18 18 16 30 Q14 18 2 16 Q14 14 16 2Z" fill="#F5D59A" ${isw}/>`),
+  lock: ico('0 0 32 32', `<path d="M10 14 V10 A6 6 0 0 1 22 10 V14" fill="none" ${isw} stroke-width="3"/><rect x="6" y="14" width="20" height="15" rx="3" fill="#F5D59A" ${isw}/><circle cx="16" cy="21" r="2.2" fill="${INK}"/>`),
+  link: ico('0 0 32 32', `<rect x="3" y="11" width="15" height="10" rx="5" fill="none" stroke="#F5D59A" stroke-width="3"/><rect x="14" y="11" width="15" height="10" rx="5" fill="none" stroke="#F5D59A" stroke-width="3"/>`),
+  castle: ico('0 0 32 32', `<path d="M4 29 V12 H9 V16 H13 V8 H19 V16 H23 V12 H28 V29Z" fill="#D9B275" ${isw}/><path d="M13 29 V23 Q16 19 19 23 V29" fill="#65583F" ${isw}/><path d="M16 8 V2 L21 4 L16 6" fill="#BD775F" ${isw}/>`),
+  door: ico('0 0 32 32', `<path d="M8 29 V5 H22 V29" fill="#8B5E34" ${isw}/><circle cx="18" cy="17" r="1.6" fill="#F5D59A"/><path d="M4 29 H28" ${isw}/>`),
+  again: ico('0 0 32 32', `<path d="M26 16 A10 10 0 1 1 22 8" fill="none" stroke="#F5D59A" stroke-width="3.5" stroke-linecap="round"/><path d="M22 2 L23 9 L16 10" fill="none" stroke="#F5D59A" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>`),
+  flask: ico('0 0 32 32', `<path d="M12 3 H20 M13 3 V12 L5 26 Q4 29 8 29 H24 Q28 29 27 26 L19 12 V3" fill="#A9C7AF" ${isw}/><path d="M9 21 H23" stroke="#fff" stroke-width="2"/>`)
 };
-const ICON = {
-  crown: `<svg viewBox="0 0 40 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M4 26 L3 8 L13 16 L20 4 L27 16 L37 8 L36 26Z" fill="#FFC23D" stroke="${INK}" stroke-width="3" stroke-linejoin="round"/><circle cx="20" cy="19" r="3" fill="#E5535B" stroke="${INK}" stroke-width="1.5"/></svg>`,
-  lady: () => `<svg viewBox="22 14 76 76" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">${ART.lady().replace(/^<svg[^>]*>|<\/svg>$/g, '')}</svg>`
-};
-/* ---------- 玩家形象：发型 × 服饰 × 配饰 ---------- */
-const SKINS = ['#FFE1C8', '#F7CDA6', '#DDA77C', '#A9714B'];
-const darken = (hex, k = .78) => '#' + [1,3,5].map(i => Math.round(parseInt(hex.slice(i, i+2), 16) * k).toString(16).padStart(2, '0')).join('');
-const HAIR = {
-  bowl:  c => ({ front: bowlHair(c) }),
-  side:  c => ({ front: `<path d="M29 57 Q27 25 62 25 Q93 27 91 57 Q88 40 76 37 Q58 39 44 33 Q36 41 29 57Z" fill="${c}" ${sw}/>` }),
-  short: c => ({ front: `<path d="M30 52 Q29 26 60 26 Q91 26 90 52 Q84 38 70 37 Q62 42 52 37 Q38 38 30 52Z" fill="${c}" ${sw}/>` }),
-  spiky: c => ({ front: `<path d="M29 58 Q27 38 34 31 L28 19 L42 26 L43 11 L54 23 L60 6 L66 23 L77 11 L78 26 L92 19 L86 31 Q93 38 91 58 Q86 46 60 44 Q34 46 29 58Z" fill="${c}" ${sw}/>` }),
-  long:  c => ({ back: `<path d="M27 58 Q23 100 31 110 L89 110 Q97 100 93 58 Q93 25 60 25 Q27 25 27 58Z" fill="${c}" ${sw}/>`,
-                 front: `<path d="M29 61 Q30 29 60 28 Q90 29 91 61 Q85 42 63 39 L60 46 L57 39 Q35 42 29 61Z" fill="${c}" ${sw}/>` }),
-  wavy:  c => ({ back: `<path d="M27 58 Q22 80 28 92 Q22 102 32 110 Q46 104 60 110 Q74 104 88 110 Q98 102 92 92 Q98 80 93 58 Q93 25 60 25 Q27 25 27 58Z" fill="${c}" ${sw}/>`,
-                 front: `<path d="M29 60 Q28 28 60 27 Q92 28 91 56 Q78 36 56 42 Q40 46 29 60Z" fill="${c}" ${sw}/>` }),
-  bob:   c => ({ back: `<path d="M26 60 Q24 86 34 90 L86 90 Q96 86 94 60 Q94 26 60 26 Q26 26 26 60Z" fill="${c}" ${sw}/>`,
-                 front: `<path d="M29 54 Q30 27 60 27 Q90 27 91 54 Q76 46 60 47 Q44 46 29 54Z" fill="${c}" ${sw}/>` }),
-  buns:  c => ({ back: `<circle cx="32" cy="31" r="12" fill="${c}" ${sw}/><circle cx="88" cy="31" r="12" fill="${c}" ${sw}/>`, front: bowlHair(c) }),
-  twin:  c => ({ back: `<path d="M32 44 Q10 58 16 96 Q26 84 34 64Z" fill="${c}" ${sw}/><path d="M88 44 Q110 58 104 96 Q94 84 86 64Z" fill="${c}" ${sw}/>
-                 <circle cx="31" cy="44" r="4" fill="#FF7A99" ${sw}/><circle cx="89" cy="44" r="4" fill="#FF7A99" ${sw}/>`, front: bowlHair(c) }),
-  pony:  c => ({ back: `<path d="M82 38 Q112 46 104 92 Q96 76 84 62Z" fill="${c}" ${sw}/>`, front: bowlHair(c) }),
-  curly: c => {
-    let k = '';
-    for(let a = 160; a >= 20; a -= 20){
-      const r = a * Math.PI / 180;
-      k += `<circle cx="${(60 + 27 * Math.cos(r)).toFixed(1)}" cy="${(57 - 27 * Math.sin(r)).toFixed(1)}" r="10" fill="${c}" ${sw}/>`;
-    }
-    return { front: `<path d="M30 56 Q30 30 60 30 Q90 30 90 56 Q86 42 60 42 Q34 42 30 56Z" fill="${c}"/>` + k };
-  },
-  afro:  c => ({ back: `<circle cx="60" cy="40" r="36" fill="${c}" ${sw}/>`, front: `<path d="M30 54 Q34 36 60 36 Q86 36 90 54 Q74 44 60 46 Q46 44 30 54Z" fill="${c}"/>` })
-};
-const OUTFIT = {
-  tee:      (c) => ({ extra: `<path d="M50 86 Q60 93 70 86" fill="none" stroke="${darken(c)}" stroke-width="2.5" stroke-linecap="round"/>` }),
-  hoodie:   (c) => ({ extra: `<path d="M38 88 Q60 100 82 88 Q80 96 60 99 Q40 96 38 88Z" fill="${darken(c)}" ${sw}/><path d="M54 98 V108 M66 98 V108" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/><circle cx="54" cy="109" r="2" fill="#fff"/><circle cx="66" cy="109" r="2" fill="#fff"/>` }),
-  overalls: (c, c2 = '#4F7BF0') => ({ extra: `<path d="M44 115 V98 H76 V115Z" fill="${c2}" ${sw}/><path d="M44 98 L40 88 M76 98 L80 88" stroke="${c2}" stroke-width="5" stroke-linecap="round"/><circle cx="48" cy="102" r="2.2" fill="#FFD66B"/><circle cx="72" cy="102" r="2.2" fill="#FFD66B"/><rect x="53" y="104" width="14" height="7" rx="2" fill="${darken(c2)}"/>` }),
-  sweater:  (c, c2 = '#fff') => ({ extra: `<path d="M36 100 H84 M35 108 H85" stroke="${c2}" stroke-width="4"/><path d="M48 86 Q60 92 72 86" fill="none" stroke="${darken(c)}" stroke-width="4" stroke-linecap="round"/>` }),
-  bowtie:   (c, c2 = '#E5535B') => ({ extra: `<path d="M50 85 L60 93 L70 85" fill="#fff" ${sw}/><path d="M60 93 L51 88 L51 98Z M60 93 L69 88 L69 98Z" fill="${c2}" ${sw}/><circle cx="60" cy="93" r="2.6" fill="${c2}" ${sw}/><circle cx="60" cy="104" r="1.8" fill="${darken(c)}"/><circle cx="60" cy="111" r="1.8" fill="${darken(c)}"/>` }),
-  scarf:    (c, c2 = '#E5535B') => ({ extra: `<path d="M40 88 Q60 98 80 88 L80 94 Q60 104 40 94Z" fill="${c2}" ${sw}/><path d="M68 96 L74 114 L64 114 L62 98Z" fill="${c2}" ${sw}/><path d="M66 110 H72" stroke="#fff" stroke-width="2"/>` }),
-  jacket:   (c, c2 = '#fff') => ({ extra: `<path d="M52 86 L60 115 L68 86Z" fill="${c2}"/><path d="M52 86 L46 100 L54 102 L60 115 M68 86 L74 100 L66 102 L60 115" fill="none" ${sw}/><circle cx="56" cy="108" r="1.8" fill="${INK}"/>` }),
-  frill:    (c) => ({ extra: `<path d="M44 88 Q48 94 52 89 Q56 95 60 89 Q64 95 68 89 Q72 94 76 88" fill="#fff" ${sw}/><circle cx="60" cy="100" r="3" fill="#fff" ${sw}/>` }),
-  track:    (c) => ({ extra: `<path d="M60 86 V115" stroke="${INK}" stroke-width="2"/><path d="M52 86 L60 90 L68 86" fill="#fff" ${sw}/><path d="M37 98 L37 112 M83 98 L83 112" stroke="#fff" stroke-width="3" stroke-linecap="round"/>` }),
-  cape:     (c, c2 = '#E5535B') => ({ back: `<path d="M34 90 Q20 104 18 115 L102 115 Q100 104 86 90Z" fill="${c2}" ${sw}/>`, extra: `<circle cx="47" cy="90" r="3" fill="#FFD66B" ${sw}/><circle cx="73" cy="90" r="3" fill="#FFD66B" ${sw}/>` })
-};
-const ACC = {
-  none: () => ({}),
-  glasses: () => ({ front: `<circle cx="48" cy="62" r="9" fill="rgba(255,255,255,.25)" ${sw}/><circle cx="72" cy="62" r="9" fill="rgba(255,255,255,.25)" ${sw}/><path d="M57 62 H63" ${sw}/>` }),
-  bow: () => ({ hat: `<g transform="translate(84 34)"><path d="M0 0 L-12 -8 L-12 8Z" fill="#FF7A99" ${sw}/><path d="M0 0 L12 -8 L12 8Z" fill="#FF7A99" ${sw}/><circle r="4" fill="#FF9DB0" ${sw}/></g>` }),
-  beanie: (c = '#7FD1AE') => ({ hat: `<path d="M28 46 Q28 16 60 16 Q92 16 92 46Z" fill="${c}" ${sw}/><path d="M40 22 V44 M52 18 V44 M68 18 V44 M80 22 V44" stroke="${darken(c)}" stroke-width="2"/><rect x="26" y="40" width="68" height="10" rx="5" fill="#fff" ${sw}/><circle cx="60" cy="14" r="7" fill="#fff" ${sw}/>` }),
-  cat: (c) => ({ hat: `<path d="M33 40 L33 14 L52 30Z" fill="${c}" ${sw}/><path d="M87 40 L87 14 L68 30Z" fill="${c}" ${sw}/><path d="M37 32 L37 22 L45 29Z" fill="#FF9DB0"/><path d="M83 32 L83 22 L75 29Z" fill="#FF9DB0"/>` }),
-  flower: () => ({ hat: `<g transform="translate(36 36)">${[0,72,144,216,288].map(a=>`<circle cx="${(6*Math.cos(a*Math.PI/180)).toFixed(1)}" cy="${(6*Math.sin(a*Math.PI/180)).toFixed(1)}" r="5" fill="#fff" stroke="${INK}" stroke-width="1.8"/>`).join('')}<circle r="3.5" fill="#FFC23D" stroke="${INK}" stroke-width="1.5"/></g>` }),
-  headband: () => ({ hat: `<path d="M30 47 Q60 37 90 47 L90 54 Q60 44 30 54Z" fill="#E5535B" ${sw}/>` }),
-  star: () => ({ hat: star(80, 40, 7, '#FFD66B') }),
-  phones: () => ({ hat: `<path d="M28 58 Q27 16 60 16 Q93 16 92 58" fill="none" stroke="${INK}" stroke-width="7.5" stroke-linecap="round"/><path d="M28 58 Q27 16 60 16 Q93 16 92 58" fill="none" stroke="#FF7A99" stroke-width="3.5" stroke-linecap="round"/><rect x="19" y="50" width="15" height="21" rx="7" fill="#FF7A99" ${sw}/><rect x="86" y="50" width="15" height="21" rx="7" fill="#FF7A99" ${sw}/>` }),
-  cap: (c = '#E5535B') => ({ hat: `<path d="M28 46 Q28 17 60 17 Q92 17 92 46Z" fill="${c}" ${sw}/><path d="M60 44 Q92 40 104 50 Q86 54 60 50Z" fill="${darken(c)}" ${sw}/><circle cx="60" cy="18" r="3" fill="${darken(c)}"/>` }),
-  freckles: () => ({ front: `<g fill="#C98B5E"><circle cx="38" cy="66" r="1.4"/><circle cx="42" cy="69" r="1.4"/><circle cx="37" cy="71" r="1.4"/><circle cx="82" cy="66" r="1.4"/><circle cx="78" cy="69" r="1.4"/><circle cx="83" cy="71" r="1.4"/></g>` }),
-  stache: () => ({ front: `<path d="M46 72 Q53 64 60 70 Q67 64 74 72 Q67 76 60 73 Q53 76 46 72Z" fill="#6B4A2E" ${sw}/><path d="M56 79 Q60 82 64 79" fill="none" stroke="#6B3A3A" stroke-width="2.2" stroke-linecap="round"/>` })
-};
-const AVATARS = [
-  { n:'阳光少年', skin:0, hair:['bowl','#8A5A3C'], fit:['tee','#FFB86B'], acc:['none'] },
-  { n:'蝴蝶结',   skin:0, hair:['bob','#2E2B3B'], fit:['frill','#FF9DB0'], acc:['bow'], mouth:'cat' },
-  { n:'毛线帽',   skin:1, hair:['short','#E8B04B'], fit:['scarf','#8FB3FF','#E5535B'], acc:['beanie','#7FD1AE'] },
-  { n:'猫耳',     skin:0, hair:['bowl','#D9575A'], fit:['hoodie','#C3A6F2'], acc:['cat','#D9575A'], mouth:'open' },
-  { n:'小花',     skin:2, hair:['wavy','#7A4FB8'], fit:['overalls','#FFD66B','#4F7BF0'], acc:['flower'] },
-  { n:'书生',     skin:0, hair:['side','#3A3550'], fit:['bowtie','#7FD1AE','#E5535B'], acc:['glasses'] },
-  { n:'丸子头',   skin:0, hair:['buns','#FF8FB1'], fit:['tee','#FFD66B'], acc:['none'], mouth:'cat' },
-  { n:'运动健将', skin:1, hair:['spiky','#F28C38'], fit:['track','#7FD1AE'], acc:['headband'], mouth:'grin' },
-  { n:'星星发卡', skin:0, hair:['long','#2E2B3B'], fit:['jacket','#C3A6F2'], acc:['star'], eyes:'wink' },
-  { n:'卷卷',     skin:2, hair:['curly','#6B4A2E'], fit:['sweater','#FF9DB0'], acc:['freckles'], eyes:'happy', mouth:'open', blush:false },
-  { n:'大叔',     skin:1, hair:['side','#4A4A5A'], fit:['bowtie','#8FB3FF','#E5535B'], acc:['stache'], mouth:'none' },
-  { n:'耳机',     skin:0, hair:['pony','#2FA4A0'], fit:['hoodie','#FFB86B'], acc:['phones'] },
-  { n:'棒球小子', skin:3, hair:['short','#2E2B3B'], fit:['tee','#4F7BF0'], acc:['cap','#E5535B'], mouth:'grin' },
-  { n:'双马尾',   skin:0, hair:['twin','#8B5CC9'], fit:['frill','#7FD1D6'], acc:['none'], eyes:'happy' },
-  { n:'爆炸头',   skin:3, hair:['afro','#2E2B3B'], fit:['overalls','#FFB86B','#3DB37A'], acc:['none'], mouth:'open' },
-  { n:'小骑士',   skin:1, hair:['side','#8A5A3C'], fit:['cape','#FFD66B','#E5535B'], acc:['none'] },
-  { n:'酷妹',     skin:2, hair:['bob','#E5535B'], fit:['jacket','#3A3550','#FFD66B'], acc:['none'], eyes:'wink' },
-  { n:'小绅士',   skin:0, hair:['short','#E8B04B'], fit:['jacket','#4F7BF0','#fff'], acc:['glasses'], eyes:'happy' }
-];
-const AV_N = AVATARS.length;
-function avatarSvg(i){
-  i = ((i|0) % AV_N + AV_N) % AV_N;
-  const a = AVATARS[i];
-  const h = HAIR[a.hair[0]](a.hair[1]);
-  const o = OUTFIT[a.fit[0]](a.fit[1], a.fit[2]);
-  const x = ACC[a.acc[0]](a.acc[1] || a.hair[1]);
-  const body = a.fit[1];
-  return chibi({
-    body, skin: SKINS[a.skin],
-    hairBack: (o.back || '') + (h.back || ''),
-    hairFront: h.front || '',
-    extra: o.extra || '',
-    hat: x.hat || '', front: x.front || '',
-    eyes: a.eyes || 'normal', mouth: a.mouth || 'smile', blush: a.blush !== false
-  });
-}
+const crown = '<svg viewBox="0 0 40 32" aria-hidden="true"><path d="M4 26 3 8l10 8L20 4l7 12 10-8-1 18z" fill="#f5d59a" stroke="#70481f" stroke-width="3" stroke-linejoin="round"/></svg>';
 
 /* ---------- 角色 ---------- */
 const ROLES = {
@@ -542,12 +604,12 @@ const REC = {
 /* ---------- 状态 ---------- */
 const S = {
   session: store.get('avalon_session', null),
-  me: store.get('avalon_me', { name:'', avatar: Math.floor(Math.random()*12) }),
+  me: store.get('avalon_me', { name:'', avatar: AVATAR_CHOICES[Math.floor(Math.random() * AVATAR_CHOICES.length)] }),
   settings: store.get('avalon_settings', { percival:true, morgana:true, mordred:false, oberon:false, lady:false }),
-  state: null, sig: '', busy: false,
+  state: null, sig: '', busy: false, loadError: '',
   pick: [], pickKey: '',
   modal: null, queue: [],
-  joinCode: '',
+  joinCode: '', joinOpen: false,
   test: store.get('avalon_test', false),
   ids: store.get('avalon_test_ids', [])
 };
@@ -555,6 +617,7 @@ const S = {
 /* ---------- 工具 ---------- */
 const $app = document.getElementById('app');
 const $modal = document.getElementById('modal');
+const $confirm = document.getElementById('confirm');
 const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const room = () => S.state && S.state.room;
 const players = () => (S.state && S.state.players) || [];
@@ -565,7 +628,10 @@ const names = arr => (arr || []).map(s => `<b>${nm(s)}</b>`).join('、');
 let toastTimer;
 function toast(msg){
   document.querySelectorAll('.toast').forEach(t => t.remove());
-  const t = document.createElement('div'); t.className = 'toast'; t.textContent = msg;
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.setAttribute('role', 'status');
+  t.textContent = msg;
   document.body.appendChild(t); clearTimeout(toastTimer);
   toastTimer = setTimeout(() => t.remove(), 2800);
 }
@@ -583,24 +649,30 @@ async function act(fn, args, after){
 }
 function leaveLocal(msg){
   S.ids = []; store.set('avalon_test_ids', []);
-  S.session = null; S.state = null; S.sig = ''; S.queue = []; S.modal = null;
+  S.session = null; S.state = null; S.sig = ''; S.queue = []; S.modal = null; S.loadError = '';
+  pendingConfirm = null; renderConfirm();
   store.del('avalon_session'); if(msg) toast(msg); render();
 }
 
 /* ---------- 轮询 ---------- */
+let requestId = 0, appliedId = 0;
 async function refresh(force){
   if(!S.session) return;
-  const tok = S.session.token;
+  const session = S.session, id = ++requestId;
   try{
-    const st = await rpc('avalon_state', { p_token: tok });
-    if(!S.session || S.session.token !== tok) return;
+    const st = await rpc('avalon_state', { p_token: session.token });
+    if(S.session !== session || id < appliedId) return;
+    appliedId = id;
     const prev = S.state;
     S.state = st;
+    S.loadError = '';
     detectEvents(prev, st);
     const sig = JSON.stringify(st);
     if(force || sig !== S.sig){ S.sig = sig; render(); }
   }catch(e){
-    if(e.message === 'NO_PLAYER' && S.session && S.session.token === tok) leaveLocal('房间已经解散了');
+    if(S.session !== session || id < appliedId) return;
+    if(e.message === 'NO_PLAYER') leaveLocal('房间已经解散了');
+    else if(!S.state && S.loadError !== e.message){ S.loadError = e.message; render(); }
   }
 }
 setInterval(() => { if(!document.hidden && !S.busy) refresh(false); }, POLL_MS);
@@ -608,8 +680,14 @@ document.addEventListener('visibilitychange', () => { if(!document.hidden) refre
 
 function detectEvents(prev, st){
   const r = st.room;
+  if(prev && (prev.room.game_no !== r.game_no || (r.status === 'lobby' && prev.room.status !== 'lobby'))){
+    S.queue = [];
+    if(S.modal?.type !== 'rules') S.modal = null;
+    pendingConfirm = null;
+    renderConfirm();
+  }
   const seenKey = `avalon_seen_${r.code}_${r.game_no}_${String(S.session.token).slice(0, 8)}`;
-  if(r.status !== 'lobby' && st.me.role && !store.get(seenKey, false)){
+  if(r.status === 'playing' && st.me.role && !store.get(seenKey, false)){
     store.set(seenKey, true);
     S.queue.push({ type:'night' });
   }
@@ -627,126 +705,104 @@ function closeModal(){
 }
 
 /* ---------- 渲染 ---------- */
+let appMarkup = '';
+function controlKey(el){
+  if(!el || !el.dataset.act) return '';
+  return JSON.stringify(el.dataset);
+}
+function findControl(root, key){
+  if(!key) return null;
+  return Array.from(root.querySelectorAll('[data-act]')).find(el => controlKey(el) === key && !el.disabled);
+}
 function render(){
-  if(!S.session) $app.innerHTML = viewHome();
-  else if(!S.state) $app.innerHTML = `<div class="loading"><div class="center"><div style="width:110px;margin:0 auto">${ART.merlin()}</div><p class="logo" style="font-size:30px;margin-top:10px">Avalon</p><p class="fun dots muted">正在进入房间</p></div></div>`;
-  else if(room().status === 'lobby') $app.innerHTML = testBar() + viewLobby();
-  else $app.innerHTML = testBar() + viewGame();
+  let html;
+  if(!S.session) html = viewHome();
+  else if(!S.state) html = `<div class="loading"><div class="center">
+    ${mirror('<span class="seal" aria-hidden="true">A</span>')}
+    <p class="logo" style="margin-top:10px">Avalon</p>
+    ${S.loadError ? `<p role="status">正在重新连接房间</p><p class="muted small">${esc(S.loadError)}</p><button class="btn white" data-act="leave">离开房间</button>` : '<p class="muted">正在进入房间</p>'}
+  </div></div>`;
+  else html = testBar() + (room().status === 'lobby' ? viewLobby() : viewGame());
+  if(html !== appMarkup){
+    const focused = $app.contains(document.activeElement) ? controlKey(document.activeElement) : '';
+    const menuWasOpen = Boolean($app.querySelector('.game-menu[open]'));
+    $app.innerHTML = html;
+    const gameMenu = $app.querySelector('.game-menu');
+    if(gameMenu) gameMenu.open = menuWasOpen;
+    appMarkup = html;
+    findControl($app, focused)?.focus({ preventScroll:true });
+  }
   renderModal();
 }
 
-const CASTLE_SVG = (fill, stroke, win) => `
-  <g fill="${fill}" stroke="${stroke}" stroke-width="2" stroke-linejoin="round">
-    <rect x="140" y="70" width="110" height="90"/><rect x="118" y="44" width="34" height="116"/><rect x="238" y="44" width="34" height="116"/><rect x="176" y="22" width="38" height="138"/>
-    <path d="M114 44 L135 10 L156 44Z M234 44 L255 10 L276 44Z M172 22 L195 -14 L218 22Z"/>
-    <path d="M140 70 h10 v-8 h10 v8 h10 v-8 h10 v8 h10 M210 70 h10 v-8 h10 v8 h10 v-8 h10 v8"/>
-  </g>
-  <g fill="${win}"><rect x="130" y="70" width="8" height="12" rx="4"/><rect x="250" y="70" width="8" height="12" rx="4"/><rect x="190" y="44" width="10" height="16" rx="5"/><rect x="186" y="110" width="18" height="50" rx="9"/><rect x="156" y="96" width="8" height="12" rx="4"/><rect x="226" y="96" width="8" height="12" rx="4"/></g>`;
-
 function coverScene(){
-  const TX = 200, TY = 292, RX = 178, RY = 44;
-  const edgeY = x => TY - RY * Math.sqrt(Math.max(0, 1 - ((x - TX) / RX) ** 2));
-  const seats = [['servant', 74, 74], ['percival', 137, 80], ['merlin', 200, 88], ['assassin', 263, 80], ['morgana', 326, 74]];
-  const place = (svg, x, y, w, h) => svg.replace('<svg class="chibi"', `<svg x="${x}" y="${y}" width="${w}" height="${h}" class="chibi"`);
-  let chairs = '', chars = '';
-  seats.forEach(([k, x, w]) => {
-    const h = w * 126 / 120, e = edgeY(x), y = e - 0.84 * h, cw = w * 0.8, top = y + 0.16 * h - 12;
-    if(k === 'merlin') chairs += `<path d="M${x - cw/2} ${e + 4} V${top + 16} Q${x - cw/2} ${top} ${x} ${top - 6} Q${x + cw/2} ${top} ${x + cw/2} ${top + 16} V${e + 4}Z" fill="url(#chair)" stroke="#C9A24A" stroke-width="1.5"/>
-      <path d="M${x - cw/2 + 6} ${e} V${top + 20} Q${x - cw/2 + 6} ${top + 8} ${x} ${top + 3} Q${x + cw/2 - 6} ${top + 8} ${x + cw/2 - 6} ${top + 20} V${e}" fill="none" stroke="rgba(201,162,74,.35)" stroke-width="1"/>
-      <circle cx="${x}" cy="${top - 9}" r="3.5" fill="#E0B45A"/>`;
-    chars += `${place(ART[k](), x - w/2, y, w, h)}`;
-  });
-  const cx = TX, cy = TY, R1 = 156, R2 = 38.5, n = 12;
-  const pt = a => `${(cx + R1 * Math.cos(a)).toFixed(1)} ${(cy + R2 * Math.sin(a)).toFixed(1)}`;
-  let wedges = '';
-  for(let k = 0; k < n; k++){
-    const a1 = k / n * 2 * Math.PI, a2 = (k + 1) / n * 2 * Math.PI;
-    wedges += `<path d="M${cx} ${cy} L${pt(a1)} A${R1} ${R2} 0 0 1 ${pt(a2)}Z" fill="${k % 2 ? 'rgba(0,0,0,.16)' : 'rgba(255,230,180,.04)'}" stroke="rgba(201,162,74,.28)" stroke-width="1"/>`;
-  }
-  const candle = (x, y) => `<ellipse cx="${x}" cy="${y + 6}" rx="34" ry="8" fill="url(#pool)"/>
-    <ellipse cx="${x}" cy="${y}" rx="8" ry="2.6" fill="#E0B45A" stroke="#8A6417" stroke-width="1"/>
-    <rect x="${x - 2}" y="${y - 8}" width="4" height="8" fill="#C9A24A"/>
-    <ellipse cx="${x}" cy="${y - 8}" rx="6" ry="2" fill="#E0B45A"/>
-    <rect x="${x - 3.5}" y="${y - 28}" width="7" height="20" rx="2" fill="#FFF3D6"/>
-    <circle cx="${x}" cy="${y - 34}" r="14" fill="url(#halo)"/>
-    <path d="M${x} ${y - 41} Q${x + 5} ${y - 33} ${x} ${y - 28} Q${x - 5} ${y - 33} ${x} ${y - 41}Z" fill="#FFB43D"/>
-    <path d="M${x} ${y - 36} Q${x + 2.2} ${y - 32} ${x} ${y - 29.5} Q${x - 2.2} ${y - 32} ${x} ${y - 36}Z" fill="#FFF0B0"/>`;
-  const goblet = (x, y) => `<path d="M${x - 6} ${y - 14} Q${x - 6} ${y - 4} ${x} ${y - 3} Q${x + 6} ${y - 4} ${x + 6} ${y - 14}Z" fill="#E0B45A" stroke="#8A6417" stroke-width="1"/>
-    <rect x="${x - 1.2}" y="${y - 3}" width="2.4" height="6" fill="#C9A24A"/><ellipse cx="${x}" cy="${y + 3}" rx="5" ry="1.6" fill="#E0B45A"/>
-    <ellipse cx="${x}" cy="${y - 14}" rx="6" ry="1.6" fill="#8E2F43"/>`;
-  return `<svg class="scene" viewBox="0 0 400 350" aria-hidden="true">
-    <defs>
-      <linearGradient id="lake" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#22386A"/><stop offset="1" stop-color="#121434"/></linearGradient>
-      <linearGradient id="chair" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#5A3820"/><stop offset="1" stop-color="#2E1B0E"/></linearGradient>
-      <radialGradient id="ttop" cx="50%" cy="40%" r="70%"><stop offset="0" stop-color="#6E472A"/><stop offset=".7" stop-color="#4A2E19"/><stop offset="1" stop-color="#33200F"/></radialGradient>
-      <linearGradient id="tedge" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#3E2614"/><stop offset="1" stop-color="#1E1209"/></linearGradient>
-      <radialGradient id="warm" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="rgba(255,190,90,.22)"/><stop offset="1" stop-color="rgba(255,190,90,0)"/></radialGradient>
-      <radialGradient id="pool" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="rgba(255,200,110,.45)"/><stop offset="1" stop-color="rgba(255,200,110,0)"/></radialGradient>
-      <radialGradient id="halo" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="rgba(255,210,120,.55)"/><stop offset="1" stop-color="rgba(255,210,120,0)"/></radialGradient>
-      <clipPath id="lakeclip"><rect x="0" y="186" width="400" height="164"/></clipPath>
-    </defs>
-    <path d="M0 188 Q50 166 104 180 Q150 164 196 176 Q250 160 300 178 Q350 162 400 184 V192 H0Z" fill="#221D4A"/>
-    <rect x="0" y="186" width="400" height="164" fill="url(#lake)"/>
-    <g transform="translate(98.6 102.8) scale(.52)">${CASTLE_SVG('#3B4B7A', '#5D73A8', '#FFE29A')}</g>
-    <ellipse cx="200" cy="187" rx="74" ry="7" fill="#1B2246"/>
-    <g clip-path="url(#lakeclip)" opacity=".22"><g transform="translate(98.6 271.2) scale(.52 -.52)">${CASTLE_SVG('#3B4B7A', '#5D73A8', '#FFE29A')}</g></g>
-    <g stroke="rgba(190,220,255,.35)" stroke-width="1.6" stroke-linecap="round">
-      <path d="M40 200 H100 M290 206 H360 M150 214 H190 M226 220 H262 M70 224 H120"/>
-    </g>
-    <g stroke="rgba(255,230,160,.45)" stroke-width="2" stroke-linecap="round">
-      <path d="M332 196 H352 M326 204 H358 M334 212 H350"/>
-    </g>
-    ${chairs}
-    ${chars}
-    <ellipse cx="200" cy="246" rx="190" ry="70" fill="url(#warm)"/>
-    <ellipse cx="200" cy="336" rx="176" ry="12" fill="rgba(0,0,0,.45)"/>
-    <path d="M${TX - RX} ${TY} V${TY + 16} A${RX} ${RY} 0 0 0 ${TX + RX} ${TY + 16} V${TY}Z" fill="url(#tedge)" stroke="#1A0F07" stroke-width="1.5"/>
-    <path d="M${TX - RX} ${TY + 9} A${RX} ${RY} 0 0 0 ${TX + RX} ${TY + 9}" fill="none" stroke="#C9A24A" stroke-width="1.6" opacity=".8"/>
-    <ellipse cx="${TX}" cy="${TY}" rx="${RX}" ry="${RY}" fill="url(#ttop)" stroke="#E0B45A" stroke-width="2.5"/>
-    <ellipse cx="${TX}" cy="${TY}" rx="${RX - 9}" ry="${RY - 3}" fill="none" stroke="#2A170A" stroke-width="2"/>
-    ${wedges}
-    <ellipse cx="${cx}" cy="${cy}" rx="${R1}" ry="${R2}" fill="none" stroke="#C9A24A" stroke-width="1.5" opacity=".85"/>
-    <ellipse cx="${cx}" cy="${cy}" rx="44" ry="11" fill="#1E2A5A" stroke="#E0B45A" stroke-width="2"/>
-    <g transform="translate(${cx} ${cy}) scale(1 .26)">${(() => { let d = ''; for(let i = 0; i < 16; i++){ const a = Math.PI / 8 * i - Math.PI / 2, r = i % 2 ? 11 : 32; d += (i ? 'L' : 'M') + (r * Math.cos(a)).toFixed(1) + ' ' + (r * Math.sin(a)).toFixed(1); } return `<path d="${d}Z" fill="#FFD66B" stroke="#8A6417" stroke-width="2"/>`; })()}</g>
-    <path d="M40 282 A170 38 0 0 1 120 258" fill="none" stroke="rgba(255,235,190,.25)" stroke-width="2" stroke-linecap="round"/>
-    ${candle(138, 286)}${candle(262, 286)}
-    ${goblet(96, 304)}${goblet(304, 304)}
-  </svg>`;
+  return `
+    <img class="scene" src="${ASSET}cover-v2.jpg" alt="" width="1024" height="1536" fetchpriority="high">
+    <h1>
+      <span class="sr-only">Avalon</span>
+      <svg class="wordmark" viewBox="0 0 340 115" aria-hidden="true">
+        <defs>
+          <path id="title-arc" d="M 13,96 Q 170,39 327,96"/>
+          <linearGradient id="title-gold" x2="0" y2="100%">
+            <stop stop-color="#f7e0b3"/><stop offset="1" stop-color="#ddb47b"/>
+          </linearGradient>
+        </defs>
+        <text fill="url(#title-gold)"><textPath href="#title-arc" startOffset="50%" text-anchor="middle">AVALON</textPath></text>
+      </svg>
+    </h1>
+    <img class="cover-crest" src="${ASSET}crest-v2.png" alt="" width="560" height="192">`;
 }
 
 function viewHome(){
-  const me = S.me;
+  const chosen = avatarId(S.me.avatar);
+  const invited = Boolean(new URLSearchParams(location.search).get('room'));
+  const busy = S.busy ? 'disabled' : '';
+  const create = `<button class="btn imprint" data-act="create" ${busy}>${I.castle}创建房间</button>`;
+  const waves = ico('0 0 32 32', '<path d="M3 9c5-5 8 5 13 0s8 5 13 0M3 16c5-5 8 5 13 0s8 5 13 0M3 23c5-5 8 5 13 0s8 5 13 0" fill="none" stroke="#4d5d49" stroke-width="2.6" stroke-linecap="round"/>');
+  const joinCover = invited
+    ? `<button class="btn imprint" type="submit" form="join-form" data-act="joininvite" ${busy}>${waves}加入房间</button>`
+    : `<button class="btn imprint" data-act="togglejoin" aria-expanded="${S.joinOpen}" aria-controls="join-entry" ${busy}>${waves}${S.joinOpen ? '收起房间号' : '加入房间'}</button>`;
   return `
-  <div class="hero">
-    <svg class="moon" viewBox="0 0 40 40" aria-hidden="true"><path d="M26 4 A16 16 0 1 0 36 28 A13 13 0 1 1 26 4Z" fill="#FFE29A"/></svg>
-    <h1 class="logo">Avalon</h1>
-    <svg class="divider" viewBox="0 0 220 24" aria-hidden="true"><path d="M0 12 H84 M136 12 H220" stroke="#C9A24A" stroke-width="1.5"/><circle cx="84" cy="12" r="2.5" fill="#C9A24A"/><circle cx="136" cy="12" r="2.5" fill="#C9A24A"/><path d="M95 12 H128" stroke="#E8EDF5" stroke-width="3.5" stroke-linecap="round"/><path d="M95 12 H128" stroke="#9AA6BC" stroke-width="1" stroke-linecap="round"/><path d="M95 4 V20" stroke="#FFD66B" stroke-width="3.5" stroke-linecap="round"/><path d="M88 12 H94" stroke="#C58B3C" stroke-width="3.5" stroke-linecap="round"/></svg>
-    ${coverScene()}
-  </div>
-  <div class="card stack" style="margin-top:16px">
-    <div>
-      <label class="small muted" for="nameInput">你的名字</label>
-      <input id="nameInput" class="field" maxlength="12" placeholder="例如：小周" value="${esc(me.name)}" autocomplete="off">
+  <div class="home">
+    <header class="hero illustration-frame">
+      ${coverScene()}
+      <div class="cover-actions">${invited ? joinCover + create : create + joinCover}</div>
+    </header>
+    <section class="card home-form">
+      <div class="row">
+        <span class="av">${publicAvatar(chosen)}</span>
+        <div class="grow">
+          <label class="small" for="nameInput">你的名字</label>
+          <input id="nameInput" class="field" maxlength="12" placeholder="例如：小周" value="${esc(S.me.name)}" autocomplete="off">
+        </div>
+        <button class="btn small white" data-act="avatars" aria-haspopup="dialog" aria-label="更换头像，当前${AVATARS[chosen]}">更换头像</button>
+      </div>
+    </section>
+    <section class="card home-entry" id="join-entry" ${S.joinOpen ? '' : 'hidden'}>
+      ${S.joinOpen ? `<form id="join-form" class="row join-row" novalidate>
+        <div class="grow">
+          <div class="field-label small" id="room-label">${invited ? '邀请房间号' : '房间号'}</div>
+          <div class="codebox" role="group" aria-labelledby="room-label">${[0,1,2,3].map(i => `<input class="digit" data-i="${i}" maxlength="1" inputmode="numeric" pattern="[0-9]*" value="${(S.joinCode[i] || '').trim()}" aria-label="房间号第 ${i+1} 位" autocomplete="off">`).join('')}</div>
+        </div>
+        <button class="btn" type="submit" data-act="join" ${busy}>确认加入</button>
+      </form>` : ''}
+    </section>
+    <div class="center"><button class="btn ghost" data-act="rules">${I.book}游戏规则</button></div>
+    <div class="card">
+      <div class="toggle" style="padding:0">
+        <b class="grow">${I.flask}测试模式</b>
+        <button type="button" role="switch" aria-checked="${S.test}" class="switch ${S.test ? 'on' : ''}" data-act="testmode" aria-label="测试模式"></button>
+      </div>
     </div>
-    <div>
-      <div class="small muted" style="margin-bottom:6px">选一个形象</div>
-      <div class="avatars">${Array.from({length: AV_N}, (_, i) =>
-        `<button data-act="avatar" data-i="${i}" class="${me.avatar === i ? 'on' : ''}" aria-label="${AVATARS[i].n}" aria-pressed="${me.avatar === i}">${avatarSvg(i)}</button>`).join('')}</div>
-    </div>
-  </div>
-  <div class="card stack" style="margin-top:16px">
-    <button class="btn block blue" data-act="create" ${S.busy ? 'disabled' : ''}>${I.castle}创建房间</button>
-    <div class="center muted small">—— 或者加入朋友的房间 ——</div>
-    <div class="row">
-      <div class="codebox grow">${[0,1,2,3].map(i => `<input class="digit" data-i="${i}" maxlength="1" inputmode="numeric" pattern="[0-9]*" value="${esc(S.joinCode[i] || '')}" aria-label="房间号第 ${i+1} 位" autocomplete="off">`).join('')}</div>
-      <button class="btn" data-act="join" ${S.busy ? 'disabled' : ''}>加入</button>
-    </div>
-  </div>
-  <div class="center" style="margin-top:14px"><button class="btn ghost" data-act="rules">${I.book}游戏规则</button></div>
-  <div class="card" style="margin-top:14px">
-    <div class="toggle" style="border:none;padding:0"><div class="grow"><b>${I.flask}测试模式</b></div>
-    <button class="switch ${S.test ? 'on' : ''}" data-act="testmode" aria-label="测试模式"></button></div>
   </div>`;
+}
+
+function avatarPicker(){
+  const chosen = avatarId(S.me.avatar);
+  return `<h2>更换头像</h2>
+    <div class="avatars" role="group" aria-label="公开头像">${AVATAR_CHOICES.map(i =>
+      `<button data-act="avatar" data-i="${i}" class="${chosen === i ? 'on' : ''}" aria-label="${AVATARS[i]}" aria-pressed="${chosen === i}">${publicAvatar(i)}${chosen === i ? '<span class="avatar-check" aria-hidden="true">✓</span>' : ''}</button>`).join('')}</div>
+    <button class="btn block white" data-act="close">关闭</button>`;
 }
 
 function seatIssue(ps, n){
@@ -803,13 +859,13 @@ function viewLobby(){
 
   <div class="card" style="margin-top:16px">
     <div class="row"><h3 class="fun grow">玩家（${n}/10）</h3>${n < 5 ? `<span class="chip gold">还差 ${5-n} 人</span>` : ''}</div>
-    <ul class="plist">${ps.slice().sort((a, b) => (a.claimed || 99) - (b.claimed || 99) || a.seat - b.seat).map((p, i) => `
-      <li>
-        <span class="seatno" ${p.claimed ? '' : 'style="background:#fff;color:var(--ink2)"'}>${p.claimed || '?'}</span>
-        <span class="av">${avatarSvg(p.avatar)}</span>
+    <ul class="plist">${ps.slice().sort((a, b) => (a.claimed || 99) - (b.claimed || 99) || a.seat - b.seat).map(p => `
+      <li class="${p.seat === me.seat ? 'mine' : ''}">
+        <span class="seatno ${p.claimed ? 'occupied' : ''}">${p.claimed || '?'}</span>
+        <span class="av">${publicAvatar(p.avatar)}</span>
         <span class="grow"><b>${esc(p.name)}</b>${p.host ? ' <span class="chip gold">房主</span>' : ''}${p.seat === me.seat ? ' <span class="chip">我</span>' : ''}</span>
         ${p.claimed ? '' : '<span class="chip">未选座位</span>'}
-        ${host && !p.host ? `<button class="btn small white" data-act="kick" data-seat="${p.seat}" aria-label="移出">✕</button>` : ''}
+        ${host && !p.host ? `<button class="btn small white" data-act="kick" data-seat="${p.seat}" aria-label="移出 ${esc(p.name)}">✕</button>` : ''}
       </li>`).join('')}
     </ul>
   </div>
@@ -822,15 +878,15 @@ function viewLobby(){
 
   ${!host ? `<div class="card" style="margin-top:16px"><h3 class="fun">角色配置</h3><p class="small muted" style="margin:6px 0 0">房主正在设置本局角色。开局后可以在「记录」里看到本局有哪些角色。</p></div>` : `<div class="card" style="margin-top:16px">
     <div class="row"><h3 class="fun grow">角色配置</h3>${host && REC[n] ? `<button class="btn small white" data-act="rec">${I.spark}按人数推荐</button>` : ''}</div>
-    <div class="toggle"><span class="av pair">${ART.merlin()}${ART.assassin()}</span><div class="grow"><b>梅林 + 刺客</b><div class="small muted">标准规则必备，固定加入</div></div><span class="chip green">必选</span></div>
+    <div class="toggle"><span class="av pair">${rolePortrait('merlin')}${rolePortrait('assassin')}</span><div class="grow"><b>梅林 + 刺客</b><div class="small muted">标准规则必备，固定加入</div></div><span class="chip green">必选</span></div>
     ${toggles.map(([k, label, d]) => `
-      <div class="toggle"><span class="av">${ART[k]()}</span>
+      <div class="toggle"><span class="av">${rolePortrait(k)}</span>
         <div class="grow"><b>${label}</b><div class="small muted">${d}</div></div>
-        <button class="switch ${s[k] ? 'on' : ''}" data-act="set" data-k="${k}" ${host ? '' : 'disabled'} aria-label="${label}"></button>
+        <button role="switch" aria-checked="${!!s[k]}" class="switch ${s[k] ? 'on' : ''}" data-act="set" data-k="${k}" ${host ? '' : 'disabled'} aria-label="${label}"></button>
       </div>`).join('')}
-    <div class="toggle"><span class="av">${ART.lady()}</span>
+    <div class="toggle"><span class="av"><img src="${ASSET}lady-mirror.png" alt="" width="38" height="53"></span>
       <div class="grow"><b>湖中仙女</b><div class="small muted">7 人及以上可用。第 2、3、4 个任务后查验一人阵营</div></div>
-      <button class="switch ${s.lady && n >= 7 ? 'on' : ''}" data-act="set" data-k="lady" ${host && n >= 7 ? '' : 'disabled'} aria-label="湖中仙女"></button>
+      <button role="switch" aria-checked="${!!s.lady && n >= 7}" class="switch ${s.lady && n >= 7 ? 'on' : ''}" data-act="set" data-k="lady" ${host && n >= 7 ? '' : 'disabled'} aria-label="湖中仙女"></button>
     </div>
     ${comp ? `
       <div style="margin-top:12px">
@@ -843,7 +899,7 @@ function viewLobby(){
 
   <div style="margin-top:18px">
     ${host
-      ? `${seatIssue(ps, n) ? `<div class="warn" style="margin-bottom:10px">${seatIssue(ps, n)}</div>` : ''}<button class="btn block green" data-act="start" ${n < 5 || !comp || comp.error || seatIssue(ps, n) || S.busy ? 'disabled' : ''}>开始游戏</button>`
+      ? `${seatIssue(ps, n) ? `<div class="warn" style="margin-bottom:10px">${seatIssue(ps, n)}</div>` : ''}<button class="btn block green" data-act="start" ${n < 5 || !comp || comp.error || seatIssue(ps, n) || S.busy ? 'disabled' : ''}>${S.busy ? '请稍候…' : '开始游戏'}</button>`
       : `<div class="card center"><span class="fun dots">等待房主开始游戏</span></div>`}
   </div>`;
 }
@@ -854,8 +910,8 @@ function seatPickHtml(){
   const cells = Array.from({length: Math.min(n, 10)}, (_, k) => {
     const num = k + 1, owner = ps.find(p => p.claimed === num);
     const cls = owner ? (owner.seat === me.seat ? 'mine' : 'taken') : 'free';
-    return `<button class="${cls}" data-act="claim" data-n="${num}" ${owner && owner.seat !== me.seat ? 'disabled' : ''}>
-      <span class="n">${num}</span><span class="who">${owner ? esc(owner.name) : '空'}</span></button>`;
+    return `<button class="${cls}" data-act="claim" data-n="${num}" aria-pressed="${cls === 'mine'}" aria-label="${num} 号位，${owner ? (cls === 'mine' ? '我' : esc(owner.name)) : '空位'}" ${owner && owner.seat !== me.seat ? 'disabled' : ''}>
+      <span class="n">${num}</span><span class="who">${owner ? (cls === 'mine' ? '我' : esc(owner.name)) : '空位'}</span></button>`;
   }).join('');
   return `<div class="seatpick">${cells}</div>
     <p class="small muted center" style="margin:10px 0 0">${mine ? `你是 <b>${mine} 号</b>，再点一次可以取消` : '你还没选座位号'}</p>`;
@@ -871,21 +927,21 @@ function phaseView(){
   if(r.phase === 'team_build'){
     const isLeader = me.seat === r.leader;
     return `
-      <h2 class="fun"><span class="ico">${ICON.crown}</span>${isLeader ? `点座位选队员（${S.pick.length}/${size}）` : `${nm(r.leader)} 正在选 ${size} 名队员`}</h2>
+      <h2 class="fun"><span class="ico">${crown}</span>${isLeader ? `点座位选队员（${S.pick.length}/${size}）` : `${nm(r.leader)} 正在选 ${size} 名队员`}</h2>
       ${lastChance}${questWarning}`;
   }
   if(r.phase === 'team_vote'){
     const voted = players().filter(p => p.voted).length;
     const mv = me.my_vote;
     return `
-      <h2 class="fun">${I.ballot}全员投票（${voted}/${r.n}）</h2>
-      <p>队伍：${names(r.team)}</p>
-      ${lastChance}
+      <h2 class="fun">组队表决 · 已投 ${voted} / ${r.n}</h2>
+      <ul class="proposed" aria-label="拟议队伍">${r.team.map(seat => `<li><span class="av">${publicAvatar(P(seat)?.avatar)}</span><span class="proposed-seat">${seat + 1} 号</span><span>${nm(seat)}</span></li>`).join('')}</ul>
+      ${lastChance}${questWarning}
       <div class="bigchoice">
-        <button class="btn green ${mv === true ? 'sel' : ''}" data-act="vote" data-v="1" aria-pressed="${mv === true}" ${S.busy ? 'disabled' : ''}>${I.ok}同意</button>
-        <button class="btn red ${mv === false ? 'sel' : ''}" data-act="vote" data-v="0" aria-pressed="${mv === false}" ${S.busy ? 'disabled' : ''}>${I.no}反对</button>
+        <button class="btn vote-yes ${mv === true ? 'sel' : ''}" data-act="vote" data-v="1" aria-pressed="${mv === true}" aria-disabled="${S.busy}">${symbol('vote-sun')}同意</button>
+        <button class="btn vote-no ${mv === false ? 'sel' : ''}" data-act="vote" data-v="0" aria-pressed="${mv === false}" aria-disabled="${S.busy}">${symbol('vote-moon')}反对</button>
       </div>
-      ${mv == null ? '' : '<p class="muted">投票结束前可改票</p>'}`;
+      ${mv == null ? '' : `<p class="muted">你已投${mv ? '同意' : '反对'} · 表决结束前可改票</p>`}`;
   }
   if(r.phase === 'quest'){
     const inTeam = r.team.includes(me.seat);
@@ -896,8 +952,8 @@ function phaseView(){
         <p>${good ? '请遮住屏幕。好人只能出成功牌' : '请遮住屏幕再出牌'}</p>
         ${questWarning}
         <div class="bigchoice">
-          <button class="btn blue" data-act="play" data-v="1" ${S.busy ? 'disabled' : ''}>${I.spark}成功</button>
-          <button class="btn red" data-act="play" data-v="0" ${good || S.busy ? 'disabled' : ''}>${I.boom}失败</button>
+          <button class="btn" data-act="play" data-v="1" ${S.busy ? 'disabled' : ''}>${symbol('quest-success')}成功</button>
+          <button class="btn red" data-act="play" data-v="0" ${good || S.busy ? 'disabled' : ''}>${symbol('quest-failure')}失败</button>
         </div>`;
     }
     const played = players().filter(p => p.played).length;
@@ -908,9 +964,9 @@ function phaseView(){
   if(r.phase === 'lady'){
     const holder = r.lady_holder;
     return me.seat === holder ? `
-      <h2 class="fun"><span class="ico">${ICON.lady()}</span>点座位查验阵营</h2>
+      <h2 class="fun">${mirrorIcon}点座位查验阵营</h2>
       <p>灰色座位不可选，结果仅你可见</p>` : `
-      <h2 class="fun"><span class="ico">${ICON.lady()}</span>${nm(holder)} 正在查验阵营</h2>`;
+      <h2 class="fun">${mirrorIcon}${nm(holder)} 正在查验阵营</h2>`;
   }
   if(r.phase === 'assassin'){
     return me.role === 'assassin' ? `
@@ -922,40 +978,71 @@ function phaseView(){
   return '';
 }
 
-function seatView(p){
+function seatAction(p){
   const r = room(), me = meInfo();
+  if(!p || !r || r.status !== 'playing') return '';
+  if(r.phase === 'team_build' && me.seat === r.leader) return 'pick';
+  if(p.seat === me.seat) return '';
+  if(r.phase === 'lady' && me.seat === r.lady_holder && !r.lady_previous.includes(p.seat)) return 'lady';
+  if(r.phase === 'assassin' && me.role === 'assassin' && !p.evil) return 'kill';
+  return '';
+}
+
+function seatView(p, index, count){
+  const r = room(), me = meInfo(), action = seatAction(p);
   const isMe = p.seat === me.seat;
-  const badges = [];
-  if(r.leader === p.seat && r.phase !== 'assassin' && r.status === 'playing') badges.push(`<span title="队长">${ICON.crown}</span>`);
-  if(r.lady_enabled && r.lady_holder === p.seat && r.status === 'playing') badges.push(`<span title="湖中仙女">${ICON.lady()}</span>`);
-  let cls = 'seat', st = '', clickable = false, act = '';
-  const inTeam = r.team.includes(p.seat);
-  if(r.phase === 'team_build' && me.seat === r.leader){
-    clickable = true; act = 'pick';
-    if(S.pick.includes(p.seat)) cls += ' pick';
-  } else if(inTeam){ cls += ' team'; }
-  if(r.phase === 'team_vote' && p.voted) st = '<div class="st yes">已投</div>';
-  if(r.phase === 'quest' && inTeam && p.played) st = '<div class="st yes">已出牌</div>';
-  if(r.phase === 'lady' && me.seat === r.lady_holder){
-    if(p.seat === me.seat || r.lady_previous.includes(p.seat)) cls += ' dim';
-    else { clickable = true; act = 'lady'; }
-  }
-  if(r.phase === 'assassin'){
-    if(p.evil) cls += ' evil';
-    if(p.evil) st = `<div class="st" style="color:var(--evil)">${p.assassin ? '刺客' : '坏人'}</div>`;
-    if(me.role === 'assassin'){
-      if(p.evil || isMe) cls += ' dim'; else { clickable = true; act = 'kill'; }
-    }
-  }
-  if(isMe && !cls.includes('pick')) cls += ' me';
-  if(clickable) cls += ' pickable';
-  return `<div class="${cls}" ${clickable ? `data-act="${act}" data-seat="${p.seat}" role="button"` : ''}>
-    <span class="no">${p.seat + 1}</span>
-    ${badges.length ? `<span class="badges">${badges.join('')}</span>` : ''}
-    <div class="av">${avatarSvg(p.avatar)}</div>
-    <div class="nm">${esc(p.name)}${isMe ? '（我）' : ''}</div>
-    ${st}
-  </div>`;
+  const leader = r.leader === p.seat && r.phase !== 'assassin';
+  const holder = r.lady_enabled && r.lady_holder === p.seat;
+  const picked = action === 'pick' && S.pick.includes(p.seat);
+  const team = r.phase !== 'team_build' && r.team.includes(p.seat);
+  const dim = !action && ((r.phase === 'lady' && me.seat === r.lady_holder) || (r.phase === 'assassin' && me.role === 'assassin'));
+  const labels = [];
+  if(isMe) labels.push(['', '我']);
+  if(leader) labels.push(['leader', '队长']);
+  if(r.phase === 'team_vote' && p.voted) labels.push(['label-done', '已投']);
+  if(r.phase === 'quest' && team && p.played) labels.push(['label-done', '已出牌']);
+  if(r.phase === 'assassin' && p.evil) labels.push(['label-evil', p.assassin ? '刺客' : '坏人']);
+  const tag = action ? 'button' : 'div';
+  const label = [`${p.seat + 1} 号 ${p.name}`, ...labels.map(([, name]) => name)];
+  if(team || picked) label.push('已入队');
+  if(holder) label.push('湖中仙女');
+  // Match the centre of the painted ripples. Start with two seats across the upper shore.
+  const angle = (index + .5) * 2 * Math.PI / count;
+  const topPair = index === 0 || index === count - 1;
+  const bottomPair = index === 3 || index === 4;
+  const insetPair = (count === 7 && topPair) || (count === 8 && (topPair || bottomPair));
+  const radiusX = count === 6 ? 38.5 : insetPair ? 28.6 : 37;
+  const sideShoulder = count === 10 && (index % 5 === 1 || index % 5 === 3);
+  const radiusY = sideShoulder ? 30.8 : count === 8 ? 27.4 : count >= 9 ? 26.4 : 24.3;
+  const position = `--x:${(50 + radiusX * Math.sin(angle)).toFixed(3)}%;--y:${(56.6 - radiusY * Math.cos(angle)).toFixed(3)}%`;
+  return `<${tag} class="seat ${isMe ? 'me' : ''} ${picked ? 'pick' : ''} ${team ? 'team' : ''} ${dim ? 'dim' : ''}"
+    style="${position}" title="${esc(label.join(' · '))}" ${action ? `type="button" data-act="${action}" data-seat="${p.seat}" aria-label="${esc(label.join('，'))}" ${action === 'pick' ? `aria-pressed="${picked}"` : ''}` : ''}>
+    <span class="face">
+      ${publicAvatar(p.avatar)}<span class="no">${p.seat + 1}</span>
+      ${leader ? `<span class="badge" aria-hidden="true">${crown}</span>` : ''}
+      ${holder ? '<span class="badge lady" aria-label="湖中仙女" role="img">◈</span>' : ''}
+      ${team || picked ? '<span class="team-mark" aria-label="已入队" role="img">✓</span>' : ''}
+    </span>
+    <span class="nm">${esc(p.name)}</span>
+    <span class="labels">${labels.map(([cls, name]) => `<span class="${cls}">${name}</span>`).join('')}</span>
+  </${tag}>`;
+}
+
+function questTrack(r){
+  return Array.from({length: 5}, (_, i) => {
+    const turn = i + 1, size = r.sizes[i];
+    const res = r.quest_results.find(q => q.quest === turn);
+    const current = turn === r.quest_no && r.phase !== 'assassin';
+    const two = r.fails_needed[i] === 2;
+    const cls = res ? (res.success ? 'ok' : 'bad') : (current ? 'cur' : '');
+    const stone = res ? (res.success ? 'quest-success' : 'quest-failure') : 'quest-stone';
+    return `<div class="qt ${cls}" style="--stone:url('${ASSET}${stone}.png')" ${current && !res ? 'aria-current="step"' : ''}>
+      <span class="qt-label"><span class="sr-only">第 ${turn} 轮，</span><span aria-hidden="true">${turn} · </span>${size} 人</span>
+      ${res ? `<b class="result"><span class="stone-sign" aria-hidden="true">${res.success ? '✓' : '✕'}</span> ${res.success ? '成功' : '失败'}</b>` : current ? '<b class="result">当前</b>' : ''}
+      ${res && !res.success ? `<span class="fails">${res.fails} 张失败</span>` : ''}
+      ${two ? '<span class="two">需 2 败</span>' : ''}
+    </div>`;
+  }).join('');
 }
 
 function viewGame(){
@@ -964,32 +1051,44 @@ function viewGame(){
   const q = r.quest_no;
   const keyNow = `${r.game_no}-${q}-${r.reject_count}`;
   if(S.pickKey !== keyNow){ S.pick = []; S.pickKey = keyNow; }
-  const track = r.sizes.map((sz, i) => {
-    const res = r.quest_results[i];
-    const cls = res ? (res.success ? 'ok' : 'bad') : (i + 1 === q && r.phase !== 'assassin' ? 'cur' : '');
-    return `<div class="qt ${cls}">${res ? (res.success ? '✓' : '✗') : sz}<small>${res ? (res.success ? '成功' : res.fails + '张败') : '第' + (i+1) + '轮'}</small>${r.fails_needed[i] === 2 ? '<span class="two">需2败</span>' : ''}</div>`;
-  }).join('');
+  const ps = players().slice().sort((a, b) => a.seat - b.seat);
   const canPropose = r.phase === 'team_build' && me.seat === r.leader;
   const teamReady = S.pick.length === r.sizes[q - 1];
+  const actionTop = r.phase === 'team_vote' || r.phase === 'quest';
+  const phase = `<section class="card paper step" aria-label="当前阶段">
+    ${phaseView()}
+    <p class="rejects ${r.reject_count === 4 ? 'danger' : ''}">连续否决 ${r.reject_count} / 5</p>
+  </section>`;
+  const density = ps.length >= 9 ? 'dense' : ps.length >= 7 ? 'crowded' : '';
   return `
-  <div class="navbar">
+  <div class="navbar game-nav">
     <span class="logo">Avalon</span>
     <div class="grow"></div>
-    <button class="btn small white" data-act="history" aria-label="记录">${I.scroll}</button>
-    <button class="btn small white" data-act="rules" aria-label="规则">${I.book}</button>
-    ${me.host ? `<button class="btn small red" data-act="abort" style="box-shadow:none">结束</button>` : ''}
+    <button class="btn small white" data-act="history">记录</button>
+    <details class="game-menu">
+      <summary class="btn small white" data-act="menu">菜单</summary>
+      <div class="card menu-links">
+        <button class="btn small white" data-act="rules">规则</button>
+        ${me.host ? '<button class="btn small red" data-act="abort">结束本局</button>' : ''}
+      </div>
+    </details>
   </div>
-  <div class="card progress">
-    <div class="track">${track}</div>
-    <p class="rejects ${r.reject_count === 4 ? 'danger' : ''}">连续否决 ${r.reject_count}/5</p>
-  </div>
-  <div class="card step">${phaseView()}</div>
-  <div class="seats game-seats">${players().map(seatView).join('')}</div>
-  ${canPropose ? `<button class="btn block blue game-submit" data-act="propose" ${teamReady && !S.busy ? '' : 'disabled'}>提交队伍</button>` : ''}
+  <section class="lake-board illustration-frame" aria-label="水纹圆桌">
+    ${actionTop ? `<div class="lake-action-top">${phase}</div>` : ''}
+    <div class="lake-map ${density}" data-players="${ps.length}">
+      <img class="lake-art" src="${ASSET}lake-board-v2.jpg" alt="" width="1122" height="1402">
+      <section class="progress" aria-label="任务进度">
+        <div class="track">${questTrack(r)}</div>
+      </section>
+      <section class="game-seats" aria-label="圆桌座位">${ps.map((p, i) => seatView(p, i, ps.length)).join('')}</section>
+    </div>
+    ${actionTop ? '' : `<div class="lake-caption">${phase}</div>`}
+    ${canPropose ? `<div class="table-submit"><button class="btn block" data-act="propose" ${teamReady && !S.busy ? '' : 'disabled'}>${I.sword}提交队伍</button></div>` : ''}
+  </section>
   <div class="mebar"><div class="in">
-    <span class="av">${avatarSvg(players().find(p => p.seat === me.seat)?.avatar)}</span>
+    <span class="av">${publicAvatar(P(me.seat)?.avatar)}</span>
     <div class="grow"><b>${esc(me.name)}</b><div class="small muted">${me.seat + 1} 号位</div></div>
-    <button class="btn blue" data-act="myrole">${I.lock}我的身份</button>
+    <button class="btn" data-act="myrole">${I.lock}我的身份</button>
   </div></div>`;
 }
 
@@ -1008,7 +1107,7 @@ function viewEnd(){
   const goodWin = r.winner === 'good';
   const aborted = !r.winner;
   const iWon = (me.side === r.winner);
-  const ps = players();
+  const ps = players().slice().sort((a, b) => a.seat - b.seat);
   return `
   <div class="navbar">
     <span class="logo">Avalon</span>
@@ -1016,21 +1115,22 @@ function viewEnd(){
     <button class="btn small white" data-act="history">${I.scroll}记录</button>
   </div>
   ${aborted ? `<div class="endbanner" style="background:var(--card)">
-    <div style="width:130px;margin:0 auto">${ART.servant()}</div>
+
     <h1 class="fun">本局已结束</h1>
     <p style="margin:6px 0 0">${endReason(r)}</p>
   </div>` : `<div class="endbanner ${goodWin ? 'good' : 'evil'}">
-    <div style="width:130px;margin:0 auto">${goodWin ? ART.merlin() : ART.assassin()}</div>
+    <div class="av">${rolePortrait(goodWin ? 'merlin' : 'assassin')}</div>
     <h1 class="fun">${goodWin ? '好人胜利！' : '坏人胜利！'}</h1>
     <p style="margin:6px 0 0">${endReason(r)}</p>
     <p class="fun" style="margin:8px 0 0;font-size:20px">${iWon ? I.spark + '你赢了' : '下次加油'}</p>
   </div>`}
-  <div class="card" style="margin-top:16px">
+  <div class="card paper" style="margin-top:16px">
     <h3 class="fun" style="margin-bottom:10px">身份揭晓</h3>
     <div class="rolesgrid">${ps.map(p => {
-      const ro = ROLES[p.role] || { name:'?', side:'' };
-      return `<div class="rc ${ro.side}"><div class="av">${(ART[p.role] || ART.unknown)()}</div>
-        <div class="small"><b>${esc(p.name)}</b></div><div class="small">${ro.name}</div>
+      const ro = ROLES[p.role] || { name:'身份未公布', side:'' };
+      return `<div class="rc">
+        <div class="portraits"><span class="av">${publicAvatar(p.avatar)}</span><span class="av role">${rolePortrait(p.role)}</span></div>
+        <div class="small"><b>${p.seat + 1} 号 ${esc(p.name)}</b></div><div class="chip ${ro.side}">${ro.name}</div>
         ${r.assassin_target === p.seat ? '<span class="chip evil">被刺杀</span>' : ''}</div>`;
     }).join('')}</div>
   </div>
@@ -1043,105 +1143,165 @@ function viewEnd(){
 
 /* ---------- 弹窗 ---------- */
 function roleCard(open){
-  const me = meInfo(), ro = ROLES[me.role];
+  if(!open) return `
+    <h2 class="fun">身份封存</h2>
+    ${mirror('<span class="seal" aria-hidden="true">?</span>', 'role-portrait')}
+    <p class="center muted">请独自查看</p>
+    <button class="btn block" data-act="flip">${I.lock}查看身份</button>`;
+  const me = meInfo(), ro = ROLES[me?.role];
   if(!ro) return '';
   const sees = me.sees || [];
   let know = '';
   if(me.role === 'merlin') know = sees.length
-    ? `<p><b>你看到的坏人：</b></p><ul class="knows">${sees.map(x => `<li><span class="chip evil">坏人</span> ${x.seat+1} 号 ${nm(x.seat)}</li>`).join('')}</ul>${room().settings.mordred ? '<p class="small muted">莫德雷德也在场，但你看不到他。</p>' : ''}`
+    ? `<p><b>你看到的坏人：</b></p><ul class="knows">${sees.map(x => `<li><span class="chip evil">坏人</span> ${x.seat+1} 号 ${nm(x.seat)}</li>`).join('')}</ul>${room().settings?.mordred ? '<p class="small muted">莫德雷德也在场，但你看不到他。</p>' : ''}`
     : '<p>你没看到任何坏人（他们都藏起来了）。</p>';
   else if(me.role === 'percival') know = `<p><b>${sees.length > 1 ? '其中一位是梅林，另一位是莫甘娜：' : '梅林是：'}</b></p><ul class="knows">${sees.map(x => `<li><span class="chip good">${sees.length > 1 ? '梅林？' : '梅林'}</span> ${x.seat+1} 号 ${nm(x.seat)}</li>`).join('')}</ul>`;
   else if(me.role === 'oberon') know = '<p>你看不到其他坏人，他们也看不到你。</p>';
   else if(ro.side === 'evil') know = sees.length
-    ? `<p><b>你的坏人同伴：</b></p><ul class="knows">${sees.map(x => `<li><span class="chip evil">同伴</span> ${x.seat+1} 号 ${nm(x.seat)}</li>`).join('')}</ul>${room().settings.oberon ? '<p class="small muted">奥伯伦也是坏人，但你不知道是谁。</p>' : ''}`
+    ? `<p><b>你的坏人同伴：</b></p><ul class="knows">${sees.map(x => `<li><span class="chip evil">同伴</span> ${x.seat+1} 号 ${nm(x.seat)}</li>`).join('')}</ul>${room().settings?.oberon ? '<p class="small muted">奥伯伦也是坏人，但你不知道是谁。</p>' : ''}`
     : '<p>你没有看到同伴。</p>';
   else know = '<p class="muted">你没有额外信息，靠观察和推理吧。</p>';
   return `
-  <div class="flip ${open ? 'open' : ''}" data-act="flip">
-    <div class="inner">
-      <div class="face back"><div class="seal fun">?</div><p class="fun" style="font-size:22px;margin:16px 0 4px">点击翻开身份</p><p class="small" style="margin:0;opacity:.85">确认旁边没人偷看</p></div>
-      <div class="face front ${ro.side}">
-        <div class="rolebig">${ART[me.role]()}</div>
-        <h2 class="fun" style="margin-top:4px">${ro.name}</h2>
-        <span class="chip ${ro.side}">${SIDE_NAME[ro.side]}</span>
-        <p class="small" style="margin:10px 0 0">${ro.desc}</p>
-        <div style="width:100%;text-align:left;margin-top:8px;border-top:2px dashed var(--muted);padding-top:8px">${know}</div>
-      </div>
-    </div>
+    ${mirror(rolePortrait(me.role), 'role-portrait', 'revealed')}
+    <h2 class="fun">${ro.name}</h2>
+    <div class="center" style="margin-top:5px">${sideChip(ro.side)}</div>
+    <div class="role-copy paper">
+      <p>${ro.desc}</p>
+      ${know}
+    </div>`;
+}
+
+function mirror(content, cls = '', face = ''){
+  return `<div class="mirror ${cls}">
+    <img src="${ASSET}lady-mirror.png" alt="" width="244" height="340">
+    <div class="mirror-content ${face}">${content}</div>
+  </div>`;
+}
+const sideMark = side => side === 'good' ? '✦' : '◆';
+const sideChip = side => `<span class="chip ${side}"><span aria-hidden="true">${sideMark(side)}</span> ${SIDE_NAME[side]}</span>`;
+function ladyLoyalty(l){
+  return l.holder === meInfo()?.seat && (l.loyalty === 'good' || l.loyalty === 'evil') ? l.loyalty : null;
+}
+const ladyTransfer = l => `${nm(l.holder)} 查验了 ${nm(l.target)}，湖中仙女已交给对方。`;
+const voteTitle = h => h.approved ? '组队通过' : '组队被否决';
+function voteBreakdown(h, reveal = false){
+  const yes = h.votes.filter(Boolean).length;
+  return `<div class="${reveal ? 'reveal-votes' : ''}">
+    <p class="small"><span class="vote-mark yes">${symbol('vote-sun')}同意 ${yes}</span>
+      <span class="vote-mark no">${symbol('vote-moon')}反对 ${h.votes.length - yes}</span></p>
+    <ul class="vlist" aria-label="公开票型">${h.votes.map((vote, seat) => `<li>
+      <span class="av">${publicAvatar(P(seat)?.avatar)}</span><span class="vote-seat">${seat + 1} 号</span>
+      <span class="grow">${nm(seat)}</span>
+      <span class="vote-mark ${vote ? 'yes' : 'no'}">${symbol(vote ? 'vote-sun' : 'vote-moon')}${vote ? '同意' : '反对'}</span>
+    </li>`).join('')}</ul>
   </div>`;
 }
 
+let renderedModal = null, renderedOpen = false, modalReturn = '', renderedHistory = '';
+function updateDialogLayers(){
+  $app.inert = !!(S.modal || pendingConfirm);
+  $modal.inert = !!pendingConfirm;
+}
 function renderModal(){
   const m = S.modal;
-  if(!m){ $modal.innerHTML = ''; return; }
+  if(!renderedModal && m && $app.contains(document.activeElement)){
+    modalReturn = controlKey(document.activeElement);
+  }
+  updateDialogLayers();
+  // An existing reveal stays mounted through room polls.
+  if(m === renderedModal && !!m?.open === renderedOpen){
+    if(m?.type === 'history'){
+      const next = historyHtml();
+      if(next !== renderedHistory){
+        $modal.querySelector('.history-log').innerHTML = next;
+        renderedHistory = next;
+      }
+    }
+    return;
+  }
+  renderedModal = m;
+  renderedOpen = !!m?.open;
+  if(!m){
+    $modal.replaceChildren();
+    findControl($app, modalReturn)?.focus({ preventScroll:true });
+    modalReturn = '';
+    return;
+  }
+
   let body = '';
   const r = room();
-  if(m.type === 'night'){
-    body = `
-      <h2 class="fun">${I.moon}第 ${r.game_no} 局开始</h2>
-      <p class="center small muted" style="margin:6px 0 12px">请独自查看身份。</p>
-      ${roleCard(!!m.open)}
-      <button class="btn block blue" style="margin-top:16px" data-act="close">我记住了</button>`;
-  } else if(m.type === 'myrole'){
-    body = `${roleCard(!!m.open)}<button class="btn block white" style="margin-top:16px" data-act="close">收起</button>`;
+  if(m.type === 'night' || m.type === 'myrole'){
+    body = `${m.type === 'night' ? `<p class="small muted center">第 ${r.game_no} 局开始</p>` : ''}${roleCard(m.open)}
+      ${m.type === 'night' ? '<button class="btn white block" data-act="close">我记住了</button>' : m.open ? '<button class="btn block" data-act="close">收起身份</button>' : '<button class="btn white block" data-act="close">关闭</button>'}`;
   } else if(m.type === 'vote'){
-    const h = m.h, yes = h.votes.filter(Boolean).length;
+    const h = m.h;
     body = `
-      <h2 class="fun">${h.approved ? I.ok + '组队通过' : I.no + '组队被否决'}</h2>
-      <p class="center">第 ${h.quest} 个任务 · 队长 ${nm(h.leader)}<br>队伍：${names(h.team)}</p>
-      <p class="center"><span class="chip green">同意 ${yes}</span> <span class="chip evil">反对 ${h.votes.length - yes}</span></p>
-      <div class="vlist">${h.votes.map((v, i) => `<div><span>${i+1}. ${nm(i)}</span><span class="chip ${v ? 'green' : 'evil'}">${v ? '同意' : '反对'}</span></div>`).join('')}</div>
-      <button class="btn block" style="margin-top:12px" data-act="close">知道了</button>`;
+      <h2 class="fun">${voteTitle(h)}</h2>
+      <p class="center small">第 ${h.quest} 个任务 · 队长 ${nm(h.leader)}<br>队伍：${names(h.team)}</p>
+      ${voteBreakdown(h, true)}
+      <button class="btn block" data-act="close">知道了</button>`;
   } else if(m.type === 'quest'){
-    const q = m.q, total = q.team.length;
-    const cards = Array.from({length: total}, (_, i) => i < total - q.fails ? 's' : 'f');
-    for(let i = cards.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); [cards[i], cards[j]] = [cards[j], cards[i]]; }
+    const q = m.q;
     body = `
-      <h2 class="fun">${q.success ? I.spark + '任务成功' : I.boom + '任务失败'}</h2>
-      <p class="center">第 ${q.quest} 个任务 · 队员：${names(q.team)}</p>
-      <div class="qcards">${cards.map((c, i) => `<div class="qc ${c}" style="animation-delay:${i*0.25}s">${c === 's' ? '成功' : '失败'}</div>`).join('')}</div>
-      <p class="center"><b>${q.fails}</b> 张失败牌${q.needed === 2 ? '（本任务需 2 张才失败）' : ''}</p>
-      <button class="btn block" style="margin-top:12px" data-act="close">知道了</button>`;
+      <h2 class="fun">${q.success ? '任务成功' : '任务失败'}</h2>
+      <p class="center">第 ${q.quest} 个任务 · ${q.needed === 2 ? '需 2 张失败牌' : '需 1 张失败牌'}才算失败</p>
+      <div class="qcards">
+        <div class="qc s">${symbol('quest-success')}${q.team.length - q.fails} 张成功</div>
+        <div class="qc f">${symbol('quest-failure')}${q.fails} 张失败</div>
+      </div>
+      <button class="btn block" data-act="close">知道了</button>`;
   } else if(m.type === 'lady'){
-    const l = m.l, mine = l.loyalty;
-    body = mine ? `
-      <h2 class="fun"><span class="ico">${ICON.lady()}</span>查验结果</h2>
-      <div style="width:120px;margin:10px auto">${avatarSvg(P(l.target)?.avatar)}</div>
-      <p class="center" style="font-size:20px"><b>${nm(l.target)}</b> 是 <span class="chip ${mine}" style="font-size:18px">${mine === 'good' ? '好人' : '坏人'}</span></p>
-      <p class="center small muted">结果仅你可见。湖中仙女已交给 ${nm(l.target)}。</p>
-      <button class="btn block" style="margin-top:12px" data-act="close">知道了</button>`
-    : `
-      <h2 class="fun"><span class="ico">${ICON.lady()}</span>湖中仙女</h2>
-      <p class="center">${nm(l.holder)} 查验了 ${nm(l.target)}，并将湖中仙女交给对方。</p>
-      <button class="btn block" style="margin-top:12px" data-act="close">知道了</button>`;
+    const l = m.l, side = ladyLoyalty(l);
+    body = side ? `
+      <h2 class="fun">查验结果</h2>
+      <p class="center">查验了 <b>${nm(l.target)}</b></p>
+      ${mirror(`<span class="side-mark" aria-hidden="true">${sideMark(side)}</span><span>${SIDE_NAME[side]}</span>`, '', `${side} revealed`)}
+      <p class="center small muted">仅你可见 · 湖中仙女已交给 ${nm(l.target)}</p>
+      <button class="btn block" data-act="close">知道了</button>` : `
+      <h2 class="fun">${mirrorIcon}湖中仙女</h2>
+      <p class="center">${ladyTransfer(l)}</p>
+      <button class="btn block" data-act="close">知道了</button>`;
   } else if(m.type === 'history'){
-    const rl = (r.settings && r.settings.roles) || [];
-    body = `<h2 class="fun">${I.scroll}本局记录</h2>${rl.length ? `<p class="center small" style="margin:6px 0 0">本局角色</p><div class="comp" style="justify-content:center;margin-top:4px">${roleChips(rl)}</div>` : ''}${historyHtml()}<button class="btn block white" style="margin-top:12px" data-act="close">关闭</button>`;
+    const rl = r?.settings?.roles || [];
+    renderedHistory = historyHtml();
+    body = `<h2 class="fun">${I.scroll}本局记录</h2>${rl.length ? `<p class="center small">本局角色</p><div class="comp" style="justify-content:center">${roleChips(rl)}</div>` : ''}<div class="history-log">${renderedHistory}</div><button class="btn block white" data-act="close">关闭</button>`;
+  } else if(m.type === 'avatars'){
+    body = avatarPicker();
   } else if(m.type === 'rules'){
-    body = rulesHtml() + `<button class="btn block white" style="margin-top:12px" data-act="close">关闭</button>`;
+    body = rulesHtml() + '<button class="btn block white" data-act="close">关闭</button>';
   }
-  $modal.innerHTML = `<div class="mask" data-act="maskclose"><div class="sheet" role="dialog" aria-modal="true">${body}</div></div>`;
+  const paper = ['vote', 'quest', 'history', 'rules', 'avatars'].includes(m.type);
+  $modal.innerHTML = `<div class="mask" data-act="maskclose"><div class="sheet ${paper ? 'paper' : ''} ${m.type === 'avatars' ? 'avatar-picker' : ''}" role="dialog" aria-modal="true" aria-labelledby="dialog-title">${body}</div></div>`;
+  const heading = $modal.querySelector('h2');
+  if(heading){
+    heading.id = 'dialog-title';
+    heading.tabIndex = -1;
+    if(!pendingConfirm) heading.focus({ preventScroll:true });
+  }
 }
 
 function historyHtml(){
   const r = room();
-  if(!r || !r.history.length) return '<p class="center muted">还没有记录。</p>';
   let html = '';
   for(let q = 1; q <= 5; q++){
     const hs = r.history.filter(h => h.quest === q);
-    if(!hs.length) continue;
     const res = r.quest_results.find(x => x.quest === q);
-    html += `<div class="card" style="margin-top:10px;padding:12px"><div class="row"><b class="fun grow">第 ${q} 个任务</b>${res ? `<span class="chip ${res.success ? 'good' : 'evil'}">${res.success ? '成功' : '失败'} · ${res.fails} 张败</span>` : ''}</div>`;
+    const scans = r.lady_log.filter(l => l.quest === q);
+    if(!hs.length && !res && !scans.length) continue;
+    html += `<section class="card" style="margin-top:10px"><h3>第 ${q} 个任务</h3>
+      ${res ? `<p class="small"><b>${res.success ? '成功' : '失败'}</b> · ${res.team.length - res.fails} 张成功 · ${res.fails} 张失败${res.needed === 2 ? ' · 需 2 败' : ''}</p>` : ''}`;
     hs.forEach(h => {
-      html += `<div class="hist"><div class="h">${h.attempt}. 队长 ${nm(h.leader)} → ${names(h.team)} <span class="chip ${h.approved ? 'green' : 'evil'}">${h.approved ? '通过' : '否决'}</span></div>
-        <div class="small muted">同意：${h.votes.map((v, i) => v ? nm(i) : null).filter(Boolean).join('、') || '无'}<br>反对：${h.votes.map((v, i) => !v ? nm(i) : null).filter(Boolean).join('、') || '无'}</div></div>`;
+      html += `<div class="hist"><b>第 ${h.attempt} 次 · ${voteTitle(h)}</b>
+        <div class="small">队长 ${nm(h.leader)} · 队伍：${names(h.team)}</div>
+        ${voteBreakdown(h)}</div>`;
     });
-    r.lady_log.filter(l => l.quest === q).forEach(l => {
-      html += `<div class="hist small"><span class="ico">${ICON.lady()}</span>${nm(l.holder)} 查验了 ${nm(l.target)}${l.loyalty ? `：<span class="chip ${l.loyalty}">${l.loyalty === 'good' ? '好人' : '坏人'}</span>` : ''}</div>`;
+    scans.forEach(l => {
+      const side = ladyLoyalty(l);
+      html += `<div class="hist small">${mirrorIcon}${ladyTransfer(l)}${side ? ` <span>仅你可见 ${sideChip(side)}</span>` : ''}</div>`;
     });
-    html += `</div>`;
+    html += '</section>';
   }
-  return html;
+  return html || '<p class="center muted">还没有记录。</p>';
 }
 
 function rulesHtml(){
@@ -1197,8 +1357,10 @@ function testBar(){
   if(actor && actor.token !== cur) acts.push(`<button data-act="tswitch" data-t="${actor.token}">切到${actorWhy}（${esc(actor.name)}）</button>`);
   return `<div class="testbar">
     <div class="row"><b class="grow" style="color:#fff">${I.flask}测试模式 · 现在操作的是：${esc(meInfo().name)}</b></div>
-    <div class="ids">${S.ids.map(x => `<button class="${x.token === cur ? 'on' : ''}" data-act="tswitch" data-t="${x.token}">${esc(x.name)}</button>`).join('')}</div>
-    ${acts.length ? `<div class="acts">${acts.join('')}</div>` : ''}
+    <fieldset class="test-controls" aria-label="测试操作" ${S.busy ? 'disabled' : ''}>
+      <div class="ids">${S.ids.map(x => `<button class="${x.token === cur ? 'on' : ''}" data-act="tswitch" data-t="${x.token}">${esc(x.name)}</button>`).join('')}</div>
+      ${acts.length ? `<div class="acts">${acts.join('')}</div>` : ''}
+    </fieldset>
   </div>`;
 }
 function hostId(){
@@ -1208,7 +1370,7 @@ function hostId(){
 function saveIds(){ store.set('avalon_test_ids', S.ids); }
 function rememberMain(){
   if(S.test && S.session && !S.ids.find(x => x.token === S.session.token)){
-    S.ids.unshift({ name: S.me.name, token: S.session.token }); saveIds();
+    S.ids.unshift({ name: S.me.name.trim(), token: S.session.token }); saveIds();
   }
 }
 async function addFake(){
@@ -1217,54 +1379,90 @@ async function addFake(){
   const out = await rpc('avalon_join', { p_code: room().code, p_name: '测试' + k, p_avatar: (k * 5) % AV_N });
   S.ids.push({ name: '测试' + k, token: out.token }); saveIds();
 }
-async function others(fn, argsFor){
+async function others(fn, argsFor, ids = S.ids){
   const cur = S.session.token;
-  for(const x of S.ids){ if(x.token === cur) continue; try{ await rpc(fn, argsFor(x)); }catch(e){} }
+  for(const x of ids){ if(x.token === cur) continue; try{ await rpc(fn, argsFor(x)); }catch(e){} }
 }
 async function tbusy(job){
   if(S.busy) return; S.busy = true; render();
-  try{ await job(); }catch(e){ toast(e.message); }
-  S.busy = false; await refresh(true);
+  try{ await job(); await refresh(true); }
+  catch(e){ toast(e.message); await refresh(true); }
+  finally{ S.busy = false; render(); }
 }
 
 /* ---------- 确认框 ---------- */
 let pendingConfirm = null;
 function ask(msg, okLabel, fn, danger){ pendingConfirm = { msg, okLabel, fn, danger }; renderConfirm(); }
+let confirmReturn = '';
 function renderConfirm(){
-  const el = document.getElementById('confirm');
-  if(!pendingConfirm){ el.innerHTML = ''; return; }
+  if(!pendingConfirm){
+    const hadConfirm = $confirm.hasChildNodes();
+    $confirm.replaceChildren();
+    updateDialogLayers();
+    if(hadConfirm){
+      const target = S.modal ? $modal.querySelector('#dialog-title') : findControl($app, confirmReturn);
+      target?.focus({ preventScroll:true });
+    }
+    confirmReturn = '';
+    return;
+  }
+  confirmReturn = controlKey(document.activeElement);
+  updateDialogLayers();
   const c = pendingConfirm;
-  el.innerHTML = `<div class="mask" style="z-index:30;align-items:center"><div class="sheet" style="border-radius:26px;max-width:400px;margin:16px">
-    <p class="center" style="font-size:20px;margin:6px 0 18px">${esc(c.msg)}</p>
+  $confirm.innerHTML = `<div class="mask confirm-mask"><div class="sheet paper" role="alertdialog" aria-modal="true" aria-labelledby="confirm-title">
+    <p class="center" id="confirm-title" style="font-size:20px;margin:6px 0 18px">${esc(c.msg)}</p>
     <div class="row"><button class="btn white grow" data-act="cfno">取消</button>
-    <button class="btn ${c.danger ? 'red' : 'blue'} grow" data-act="cfyes">${esc(c.okLabel)}</button></div>
+    <button class="btn ${c.danger ? 'red' : ''} grow" data-act="cfyes">${esc(c.okLabel)}</button></div>
   </div></div>`;
+  $confirm.querySelector('[data-act="cfno"]').focus({ preventScroll:true });
 }
 
 /* ---------- 交互 ---------- */
 function readInputs(){
-  const ni = document.getElementById('nameInput'); if(ni) S.me.name = ni.value.trim();
-  const ds = document.querySelectorAll('.digit'); if(ds.length) S.joinCode = Array.from(ds).map(d => d.value.replace(/[^0-9]/g, '')).join('');
+  const ni = document.getElementById('nameInput'); if(ni) S.me.name = ni.value;
+  const ds = document.querySelectorAll('.digit'); if(ds.length) S.joinCode = Array.from(ds).map(d => d.value.replace(/[^0-9]/g, '') || ' ').join('');
   store.set('avalon_me', S.me);
 }
 function enterRoom(out){
   S.session = { code: out.code, token: out.token };
+  S.loadError = '';
   store.set('avalon_session', S.session);
   S.ids = []; saveIds(); rememberMain();
   S.state = null; S.sig = '';
 }
 const actions = {
-  avatar(d){ readInputs(); S.me.avatar = +d.i; store.set('avalon_me', S.me); render(); $app.querySelector('.avatars .on').focus({ preventScroll:true }); },
+  avatars(){
+    readInputs();
+    S.modal = { type:'avatars' };
+    renderModal();
+  },
+  avatar(d){
+    const id = Number(d.i);
+    if(!AVATAR_CHOICES.includes(id)) return;
+    readInputs();
+    S.me.avatar = id;
+    store.set('avalon_me', S.me);
+    closeModal();
+    render();
+  },
+  togglejoin(){
+    readInputs();
+    S.joinOpen = !S.joinOpen;
+    render();
+    if(S.joinOpen) $app.querySelector('.digit')?.focus();
+  },
   create(){
     readInputs();
-    if(!S.me.name){ toast('先填一下你的名字'); return; }
-    act('avalon_create_room', { p_name: S.me.name, p_avatar: S.me.avatar }, enterRoom);
+    const name = S.me.name.trim();
+    if(!name){ toast('先填一下你的名字'); document.getElementById('nameInput')?.focus(); return; }
+    act('avalon_create_room', { p_name: name, p_avatar: avatarId(S.me.avatar) }, enterRoom);
   },
   join(){
     readInputs();
-    if(!S.me.name){ toast('先填一下你的名字'); return; }
-    if(S.joinCode.length !== 4){ toast('房间号是 4 位数字'); return; }
-    act('avalon_join', { p_code: S.joinCode, p_name: S.me.name, p_avatar: S.me.avatar }, enterRoom);
+    const name = S.me.name.trim();
+    if(!name){ toast('先填一下你的名字'); document.getElementById('nameInput')?.focus(); return; }
+    if(!/^\d{4}$/.test(S.joinCode)){ toast('房间号是 4 位数字'); $app.querySelector('.digit')?.focus(); return; }
+    act('avalon_join', { p_code: S.joinCode, p_name: name, p_avatar: avatarId(S.me.avatar) }, enterRoom);
   },
   leave(){
     const me = meInfo();
@@ -1295,11 +1493,16 @@ const actions = {
     let i = 0; for(const x of S.ids){ i++; try{ await rpc('avalon_claim_seat', { p_token: x.token, p_num: i }); }catch(e){} }
   }); },
   tvote(d){ tbusy(() => others('avalon_vote', x => ({ p_token: x.token, p_approve: d.v === '1' }))); },
-  tplay(){ tbusy(() => others('avalon_quest_play', x => ({ p_token: x.token, p_success: true }))); },
+  tplay(){
+    const waiting = new Set(players().filter(p => room().team.includes(p.seat) && !p.played).map(p => p.name));
+    const ids = S.ids.filter(x => waiting.has(x.name));
+    tbusy(() => others('avalon_quest_play', x => ({ p_token: x.token, p_success: true }), ids));
+  },
   tswitch(d){
-    if(d.t === S.session.token) return;
+    if(S.busy || d.t === S.session.token) return;
     S.session = { code: room().code, token: d.t }; store.set('avalon_session', S.session);
-    S.state = null; S.sig = ''; S.queue = []; S.modal = null; S.pick = []; S.pickKey = '';
+    S.state = null; S.sig = ''; S.queue = []; S.modal = null; S.pick = []; S.pickKey = ''; S.loadError = '';
+    pendingConfirm = null; renderConfirm();
     render(); refresh(true);
   },
   cfyes(){ const f = pendingConfirm && pendingConfirm.fn; pendingConfirm = null; renderConfirm(); if(f) f(); },
@@ -1329,7 +1532,9 @@ const actions = {
     act('avalon_start', { p_token: S.session.token, p_settings: { ...S.settings, lady: S.settings.lady && players().length >= 7 } });
   },
   pick(d){
-    const seat = +d.seat, size = room().sizes[room().quest_no - 1];
+    const seat = +d.seat;
+    if(seatAction(P(seat)) !== 'pick') return;
+    const size = room().sizes[room().quest_no - 1];
     const i = S.pick.indexOf(seat);
     if(i >= 0) S.pick.splice(i, 1);
     else if(S.pick.length < size) S.pick.push(seat);
@@ -1344,30 +1549,69 @@ const actions = {
   },
   lady(d){
     const p = P(+d.seat);
-    ask(`查验 ${p ? p.name : ''} 的阵营？`, '查验', () => act('avalon_lady', { p_token: S.session.token, p_target: +d.seat }));
+    if(seatAction(p) !== 'lady') return;
+    ask(`查验 ${p ? p.name : ''} 的阵营？`, '查验', () => {
+      if(seatAction(P(p.seat)) === 'lady') act('avalon_lady', { p_token: S.session.token, p_target: p.seat });
+    });
   },
   kill(d){
     const p = P(+d.seat);
-    ask(`最终指认 ${p ? p.name : ''} 是梅林？这个决定不能撤回。`, '刺杀', () => act('avalon_assassinate', { p_token: S.session.token, p_target: +d.seat }), true);
+    if(seatAction(p) !== 'kill') return;
+    ask(`最终指认 ${p ? p.name : ''} 是梅林？这个决定不能撤回。`, '刺杀', () => {
+      if(seatAction(P(p.seat)) === 'kill') act('avalon_assassinate', { p_token: S.session.token, p_target: p.seat });
+    }, true);
   },
   again(){ act('avalon_back_to_lobby', { p_token: S.session.token }); },
   myrole(){ S.modal = { type:'myrole', open:false }; renderModal(); },
-  flip(){ if(S.modal){ S.modal.open = !S.modal.open; const f = document.querySelector('.flip'); if(f) f.classList.toggle('open', S.modal.open); } },
+  flip(){
+    if(S.modal?.type !== 'night' && S.modal?.type !== 'myrole') return;
+    S.modal.open = true;
+    renderModal();
+  },
   history(){ S.modal = { type:'history' }; renderModal(); },
   rules(){ readInputs(); S.modal = { type:'rules' }; renderModal(); },
   close(){ closeModal(); },
   maskclose(d, el, e){ if(e.target === el && S.modal && S.modal.type !== 'night') closeModal(); }
 };
 document.addEventListener('click', e => {
+  const menu = $app.querySelector('.game-menu[open]');
+  if(menu && !menu.contains(e.target)) menu.open = false;
   const el = e.target.closest('[data-act]');
-  if(!el) return;
+  if(!el || el.getAttribute('aria-disabled') === 'true') return;
+  if(el.type === 'submit' && el.form?.id === 'join-form') return;
   const fn = actions[el.dataset.act];
   if(fn) fn(el.dataset, el, e);
 });
+document.addEventListener('submit', e => {
+  if(e.target.id !== 'join-form') return;
+  e.preventDefault();
+  actions.join();
+});
 document.addEventListener('keydown', e => {
+  const dialog = (pendingConfirm ? $confirm : $modal).querySelector('.sheet');
+  if(dialog){
+    if(e.key === 'Escape'){
+      if(pendingConfirm) actions.cfno();
+      else if(S.modal.type !== 'night') closeModal();
+      e.preventDefault();
+    } else if(e.key === 'Tab'){
+      const buttons = Array.from(dialog.querySelectorAll('button:not(:disabled)'));
+      const first = buttons[0], last = buttons.at(-1);
+      if(!buttons.includes(document.activeElement) || document.activeElement === (e.shiftKey ? first : last)){
+        (e.shiftKey ? last : first)?.focus();
+        e.preventDefault();
+      }
+    }
+    return;
+  }
+  const menu = e.target.closest('.game-menu[open]');
+  if(e.key === 'Escape' && menu){
+    menu.open = false;
+    menu.querySelector('summary').focus();
+    e.preventDefault();
+  }
   if(!e.target.classList || !e.target.classList.contains('digit')) return;
   const ds = document.querySelectorAll('.digit'), i = +e.target.dataset.i;
-  if(e.key === 'Enter') actions.join();
   if(e.key === 'Backspace' && !e.target.value && i > 0){ ds[i - 1].focus(); ds[i - 1].value = ''; e.preventDefault(); }
   if(e.key === 'ArrowLeft' && i > 0) ds[i - 1].focus();
   if(e.key === 'ArrowRight' && i < 3) ds[i + 1].focus();
@@ -1381,12 +1625,26 @@ document.addEventListener('input', e => {
   if(i <= 3 && v) ds[i].focus();
   if(i > 3) ds[3].blur();
 });
+document.addEventListener('paste', e => {
+  if(!e.target.matches('.digit')) return;
+  e.preventDefault();
+  const digits = e.clipboardData.getData('text').replace(/[^0-9]/g, '');
+  if(!digits) return;
+  const fields = Array.from(document.querySelectorAll('.digit'));
+  const start = digits.length >= fields.length ? 0 : +e.target.dataset.i;
+  const end = Math.min(start + digits.length, fields.length);
+  for(let i = start; i < end; i++) fields[i].value = digits[i - start];
+  fields[Math.min(end, fields.length - 1)].focus();
+});
 document.addEventListener('focusin', e => { if(e.target.classList && e.target.classList.contains('digit')) e.target.select(); });
 
 /* ---------- 启动 ---------- */
 (function init(){
   const q = new URLSearchParams(location.search).get('room');
-  if(q) S.joinCode = q.replace(/[^0-9]/g, '').slice(0, 4);
+  if(q){
+    S.joinCode = q.replace(/[^0-9]/g, '').slice(0, 4);
+    S.joinOpen = true;
+  }
   render();
   if(S.session) refresh(true);
 })();
